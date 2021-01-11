@@ -1,13 +1,22 @@
+import styled from "styled-components";
+
+const theme = {
+  color: "limegreen",
+  grey: "grey",
+};
+
 export default function Header() {
   const Container = styled.div`
+    flex: none;
     display: flex;
     align-items: baseline;
     justify-content: center;
+    border-bottom: 1px solid rgba(219, 219, 219);
     padding: 0.5rem;
     h1 {
       margin: 0;
       margin-left: 0.25rem;
-      color: limegreen;
+      color: ${theme.color};
       font-size: 1.5rem;
     }
   `;
@@ -29,7 +38,7 @@ export default function Header() {
           fill="#31C460"
         />
       </svg>
-      <h1>Momohito</h1>
+      <h1>Momojito</h1>
     </Container>
   );
 }
