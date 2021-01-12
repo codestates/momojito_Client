@@ -1,6 +1,6 @@
 import styled, {ThemeContext} from 'styled-components';
 import axios from 'axios';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 
 const Image = styled.div`
   display: flex;
@@ -172,7 +172,18 @@ const InputText = styled.input`
 export default function ChangeInfo() {
 
   const {user, setUser} = useContext(ThemeContext).userContext;
-  
+  const [currentPassword, setCurrentPassword] = useState();
+  const [password, setPassword] = useState();
+  const [passwordCheck, setPasswordCheck] = useState();
+  const [nickname, setNickname] = useState();
+
+  function eTargetValue(e) {
+    setCurrentPassword(e.target.value);
+    setPassword(e.target.value);
+    setPasswordCheck(e.target.value);
+    setNickname(e.target.value);
+  }
+
   function profile() {
     axios.get('http://localhost:3000/mypage/getUserData',{
       headers: {
@@ -180,7 +191,51 @@ export default function ChangeInfo() {
       }
     })
   };
-  
+
+  // useEffect(profile);
+
+  function registerProfileImg() {
+    axios.post('http://localhost:3000/mypage/profileChange',{
+      // profileImg: ,
+      headers: {
+        Authorization: `Bearer ${user.authToken}`
+      }
+    })
+    .then((res)=>{
+      setUser({
+        profileImg: res.body.profileImg
+      })
+    })
+  }
+
+  function updateNickname() {
+    axios.post('http://localhost:3000/mypage/nicknameChange',{
+      nickname,
+      headers: {
+        Authorization: `Bearer ${user.authToken}`
+      }
+    })
+    .then((res)=>{
+      setUser({
+        username: res.body.nickname,
+      })
+    })
+  }
+
+  function updatePassword() {
+    
+    axios.post('http://localhost:3000/mypage/passwordChange',{
+      currentPassword,
+      password,
+      passwordCheck,
+      headers: {
+        Authorization: `Bearer ${user.authToken}`
+      }
+    })
+    .then((res)=>{
+      //if(currentPassword가 일치하지 않을 때)
+    })
+  }
 
   return (
     <div>
@@ -205,16 +260,16 @@ export default function ChangeInfo() {
       }
       
       </Image>
-      <ButtonDiv><button onClick={profile}>등록</button></ButtonDiv>
+      <ButtonDiv><button onClick={registerProfileImg}>등록</button></ButtonDiv>
 
       <Email>이메일 {user.email}</Email>
       <Nickname>닉네임 {!user.username ? <Span>내닉네임</Span> : <Span>{user.username}</Span>}
       <ButtonDiv2><button>변경하기</button></ButtonDiv2>
       </Nickname>
       <Password>비밀번호 변경</Password>
-        <InputText placeholder='현재 비밀번호'/>
-        <InputText placeholder='새 비밀번호'/>
-        <InputText placeholder='새 비밀번호 확인'/>
+        <InputText onChange={eTargetValue} placeholder='현재 비밀번호'/>
+        <InputText onChange={eTargetValue} placeholder='새 비밀번호'/>
+        <InputText onChange={eTargetValue} placeholder='새 비밀번호 확인'/>
       <ButtonDiv3><button>변경하기</button></ButtonDiv3>
     </div>
   )

@@ -2,7 +2,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import styled, { ThemeContext } from "styled-components";
 import axios from 'axios';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 
@@ -97,68 +97,92 @@ export default function SignUp() {
   let [passwordCheck, setPasswordCheck] = useState();
   let [validate, setValidate] = useState();
 
-  function setState(e) {
+  function eTargetValueEmail(e) {
     setEmail(e.target.value);
-    setPassword(e.target.value);
-    setPasswordCheck(e.target.passwordCheck);
   }
+  function eTargetValuePassword(e) {
+    setPassword(e.target.value);
+  }
+  function eTargetValuePasswordCheck(e) {
+    setPasswordCheck(e.target.value);
+  }
+
 
   function validation() {
     if(!email) {
       return 'email을 입력해 주세요.'
     }
-    else if(!email.includes('@') || !email.includes('com')) {
+    else if(!email.includes('@')) {
       return '올바른 형식의 email을 입력해 주세요.'
+    }
+    else if(!password || !passwordCheck) {
+      return '비밀번호를 입력해 주세요.'
     }
     else if(password !== passwordCheck) {
       return '비밀번호가 일치하지 않습니다.'
     }
   }
   
-  function handleSignUp() {
+  function refresh() {
     setValidate(validation);
-    if(email || password || passwordCheck) {
+  }
+
+  useEffect(refresh);
+  function handleSignUp() {
+    
+    if(email && password && passwordCheck) {
       if(password === passwordCheck) {
-        axios.post('http://localhost:3000/auth/signup',{
-          email,
-          password
-        })
-        .then((res)=>{
-          setUser({
-            isLogin: true,
-            username: res.body.username,
-            authToken: res.body.authToken
+        if(document.querySelector('.checkbox').checked === true) {//!
+          axios.post('http://localhost:3000/auth/signup',{
+            email,
+            password
           })
-          router.push('/mainpage/getTopTen');
+          .then((res)=>{
+            //if(이미 존재하는 이메일이 있는 경우)
+            setUser({
+              isLogin: true,
+              username: res.body.username,
+              authToken: res.body.authToken
+            })
+            router.push('/mainpage/getTopTen');
         })
+        }
       }
     }
+  }
+
+  function handleKakao() {
+    axios.post()
+  }
+
+  function handleFacebook() {
+    axios.post()
   }
 
   return (
     <div>
       <Header/>
       <SignUpText>회원가입</SignUpText>
-        <InputText className='email' onChange={setState} placeholder='사용하실 이메일 주소를 입력해주세요.'></InputText>
-        <InputText type='password' className='password' placeholder='사용하실 패스워드를 입력해 주세요.'></InputText>
-        <InputText type='password' className='passwordCheck' placeholder='패스워드를 다시 입력해 주세요.'></InputText>
+        <InputText className='email' onChange={eTargetValueEmail} placeholder='사용하실 이메일 주소를 입력해주세요.'></InputText>
+        <InputText className='password' type='password' onChange={eTargetValuePassword} placeholder='사용하실 패스워드를 입력해 주세요.'></InputText>
+        <InputText className='passwordCheck' type='password' onChange={eTargetValuePasswordCheck} placeholder='패스워드를 다시 입력해 주세요.'></InputText>
       
       <Validation>{!validate ? <div>ㅤ</div> : validate}</Validation>
 
       <Checkbox>
-        <input type='checkbox'></input>
+        <input type='checkbox' className='checkbox'></input>
         <h1>만 19세 미만은 회원가입이 불가합니다.</h1>
       </Checkbox>
 
       <Default onClick={handleSignUp}>
         <h1>회원가입</h1>
       </Default>
-      <Kakao>
+      <Kakao onClick={handleKakao}>
         <img src='/kakao.svg' width='30px' alt=''></img>
         <div>카카오 계정으로 신규 가입</div>
         <div className='blank'></div>
       </Kakao>
-      <Facebook>
+      <Facebook onClick={handleFacebook}>
         <img src='/facebook.png' width='30px' alt=''></img>
         <h1>페이스북 계정으로 신규 가입</h1>
         <div className='blank'></div>
