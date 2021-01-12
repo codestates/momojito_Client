@@ -4,6 +4,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ButtonList from "../components/ButtonList";
 import CardGrid from "../components/CardGrid";
+import ChangeInfo from '../components/ChangeInfo';
 
 export default function MyPage() {
   const [buttonSelected, setButtonSelected] = useState(0);
@@ -16,7 +17,7 @@ export default function MyPage() {
           buttonSelected={buttonSelected}
           setButtonSelected={setButtonSelected}
         ></ButtonList>
-        {buttonSelected === 0 ? "" : <CardGrid></CardGrid>}
+        {buttonSelected === 0 ? <ChangeInfo></ChangeInfo> : <CardGrid></CardGrid>}
       </Body>
       <Footer></Footer>
     </Root>

@@ -1,9 +1,12 @@
 import Header from '../components/Header';
 import styled from 'styled-components';
+import axios from 'axios';
+import { useState } from 'react';
+import { Router } from 'next/router';
 
 const SignUpText = styled.div`
   text-align: center;
-  margin-block-start: 20%;
+  margin-block-start: 30%;
 `;
 
 const InputText = styled.input`
@@ -19,10 +22,17 @@ const Checkbox = styled.div`
   justify-content: center;
   margin-block-start: 20px;
   h1 {
-    margin: auto;
     font-size: 70%;
   }
 `; 
+
+const Validation = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-block-start: 20px;
+  color: red;
+  font-size: 10%;
+`;
 
 const Default = styled.button`
 display: flex;
@@ -73,20 +83,66 @@ const Facebook = styled.button`
 
 export default function SignUp() {
   
+  let [email, setEmail] = useState();
+  let [password, setPassword] = useState();
+  let [passwordCheck, setPasswordCheck] = useState();
+  let [validate, setValidate] = useState();
+
+  function setState(e) {
+    setEmail(e.target.value);
+    setPassword(e.target.value);
+    setPasswordCheck(e.target.passwordCheck);
+  }
+
+  function validation() {
+    if(!email) {
+      return 'email을 입력해 주세요.'
+    }
+    else if(!email.includes('@','com')) {
+      return '올바른 형식의 email을 입력해 주세요.'
+    }
+    else if(password !== passwordCheck) {
+      return '비밀번호가 일치하지 않습니다.'
+    }
+  }
+  
+  function handleSignUp() {
+    setValidate(validation());
+    if(email || password || passwordCheck) {
+      if(password === passwordCheck) {
+        axios.post('http://localhost:3000/auth/signup',{
+          email,
+          password
+        })
+        .then((res)=>{
+          axios.post(' http://localhost:3000/auth/signin',{
+            email,
+            password
+          })
+        })
+        .then((res)=>{
+          Router.push('/mainpage/getTopTen');
+        })
+      }
+    }
+  }
+
   return (
     <div>
       <Header/>
       <SignUpText>회원가입</SignUpText>
-        <InputText placeholder='사용하실 이메일 주소를 입력해주세요.'></InputText>
-        <InputText placeholder='사용하실 패스워드를 입력해 주세요.'></InputText>
-        <InputText placeholder='패스워드를 다시 입력해 주세요.'></InputText>
+        <InputText className='email' onChange={setState} placeholder='사용하실 이메일 주소를 입력해주세요.'></InputText>
+        <InputText className='password' placeholder='사용하실 패스워드를 입력해 주세요.'></InputText>
+        <InputText className='passwordCheck' placeholder='패스워드를 다시 입력해 주세요.'></InputText>
       
+      <Validation>{validate}</Validation>
+
       <Checkbox>
         <input type='checkbox'></input>
         <h1>만 19세 미만은 회원가입이 불가합니다.</h1>
       </Checkbox>
 
-      <Default>
+      <Default onClick={handleSignUp}>
         <h1>회원가입</h1>
       </Default>
       <Kakao>
