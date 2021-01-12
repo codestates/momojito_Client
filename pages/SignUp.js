@@ -26,7 +26,7 @@ const Validation = styled.div`
   justify-content: center;
   margin-block-start: 5%;
   color: red;
-  font-size: 10%;
+  font-size: 80%;
 `;
 
 const Checkbox = styled.div`
