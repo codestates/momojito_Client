@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import styled from "styled-components";
 import StarList from "./StarList";
 import db from "../public/cocktaildb";
@@ -34,9 +35,13 @@ export default function CardGrid({ indexList }) {
 }
 
 function Card({ index }) {
+  const router = useRouter();
   const cocktail = db[index];
+  const handleClick = (e) => {
+    router.push(`/cocktails/${index}`);
+  };
   return (
-    <Container>
+    <Container onClick={handleClick}>
       <img src={`cocktails/${cocktail.id}.jpeg`}></img>
       <H1>{cocktail.name}</H1>
       <H1 className="last">{cocktail.koreanName}</H1>
