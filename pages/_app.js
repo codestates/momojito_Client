@@ -1,7 +1,13 @@
+import { useState } from "react";
 import { ThemeProvider } from "styled-components";
 import { Reset } from "styled-reset";
 
-function MyApp({ Component, pageProps }) {
+export default function MyApp({ Component, pageProps }) {
+  const [user, setUser] = useState({
+    isLogin: false,
+    username: "",
+    authToken: "",
+  });
   return (
     <>
       <Reset />
@@ -9,6 +15,10 @@ function MyApp({ Component, pageProps }) {
         theme={{
           main: "limegreen",
           grey: "grey",
+          userContext: {
+            user: user,
+            setUser: setUser,
+          },
         }}
       >
         <Component {...pageProps} />
@@ -16,5 +26,3 @@ function MyApp({ Component, pageProps }) {
     </>
   );
 }
-
-export default MyApp;
