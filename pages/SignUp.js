@@ -1,8 +1,10 @@
 import Header from '../components/Header';
-import styled from 'styled-components';
+import Footer from '../components/Footer';
+import styled, { ThemeContext } from "styled-components";
 import axios from 'axios';
-import { useState } from 'react';
-import { Router } from 'next/router';
+import { useState, useContext } from 'react';
+import { useRouter } from 'next/router';
+
 
 const SignUpText = styled.div`
   text-align: center;
@@ -14,25 +16,27 @@ const InputText = styled.input`
   margin: auto;
   width: 72.5%;
   height: 30px;
-  margin-block-start: 20px;
+  margin-block-start: 5%;
+  border-radius: 5px;
+  border: 1px solid #31C460;
+`;
+
+const Validation = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-block-start: 5%;
+  color: red;
+  font-size: 10%;
 `;
 
 const Checkbox = styled.div`
   display: flex;
   justify-content: center;
-  margin-block-start: 20px;
+  margin-block-start: 5%;
   h1 {
     font-size: 70%;
   }
 `; 
-
-const Validation = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-block-start: 20px;
-  color: red;
-  font-size: 10%;
-`;
 
 const Default = styled.button`
 display: flex;
@@ -40,9 +44,10 @@ justify-content: center;
 align-items: center;
 background-color: #000000;
 border-radius: 0.25rem;
+border: none;
 width: 75%;
 height: 36px;
-margin-left: 12.5%;//?
+margin: auto;//?
 margin-block-start: 20px;
 h1 {
   color: white;
@@ -54,9 +59,10 @@ const Kakao = styled.button`
   justify-content: space-between;
   background-color: #FFE812;
   border-radius: 0.25rem;
+  border: none;
   width: 75%;
   align-items: center;
-  margin-left: 12.5%;
+  margin: auto;
   margin-block-start: 20px;
   .blank {
     width: 30px
@@ -71,7 +77,8 @@ const Facebook = styled.button`
   height: 36px;
   background-color: #1E4799;
   border-radius: 5px;
-  margin-left: 12.5%;
+  border: none;
+  margin: auto;
   margin-block-start: 20px;
   h1 {
     color: white;
@@ -82,7 +89,9 @@ const Facebook = styled.button`
 `;
 
 export default function SignUp() {
-  
+  const router = useRouter();
+  const { user, setUser } = useContext(ThemeContext).userContext;
+
   let [email, setEmail] = useState();
   let [password, setPassword] = useState();
   let [passwordCheck, setPasswordCheck] = useState();
@@ -98,7 +107,7 @@ export default function SignUp() {
     if(!email) {
       return 'email을 입력해 주세요.'
     }
-    else if(!email.includes('@','com')) {
+    else if(!email.includes('@') || !email.includes('com')) {
       return '올바른 형식의 email을 입력해 주세요.'
     }
     else if(password !== passwordCheck) {
@@ -107,7 +116,7 @@ export default function SignUp() {
   }
   
   function handleSignUp() {
-    setValidate(validation());
+    setValidate(validation);
     if(email || password || passwordCheck) {
       if(password === passwordCheck) {
         axios.post('http://localhost:3000/auth/signup',{
@@ -115,13 +124,12 @@ export default function SignUp() {
           password
         })
         .then((res)=>{
-          axios.post(' http://localhost:3000/auth/signin',{
-            email,
-            password
+          setUser({
+            isLogin: true,
+            username: res.body.username,
+            authToken: res.body.authToken
           })
-        })
-        .then((res)=>{
-          Router.push('/mainpage/getTopTen');
+          router.push('/mainpage/getTopTen');
         })
       }
     }
@@ -132,10 +140,10 @@ export default function SignUp() {
       <Header/>
       <SignUpText>회원가입</SignUpText>
         <InputText className='email' onChange={setState} placeholder='사용하실 이메일 주소를 입력해주세요.'></InputText>
-        <InputText className='password' placeholder='사용하실 패스워드를 입력해 주세요.'></InputText>
-        <InputText className='passwordCheck' placeholder='패스워드를 다시 입력해 주세요.'></InputText>
+        <InputText type='password' className='password' placeholder='사용하실 패스워드를 입력해 주세요.'></InputText>
+        <InputText type='password' className='passwordCheck' placeholder='패스워드를 다시 입력해 주세요.'></InputText>
       
-      <Validation>{validate}</Validation>
+      <Validation>{!validate ? <div>ㅤ</div> : validate}</Validation>
 
       <Checkbox>
         <input type='checkbox'></input>
@@ -155,6 +163,7 @@ export default function SignUp() {
         <h1>페이스북 계정으로 신규 가입</h1>
         <div className='blank'></div>
       </Facebook>
+      <Footer/>
     </div>
   )
 }
