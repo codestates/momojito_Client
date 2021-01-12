@@ -1,7 +1,8 @@
 import styled from "styled-components";
 
 const Body = styled.div`
-  flex-grow: 1;
+  flex: 1;
+  overflow: auto;
 `;
 
 const Root = styled.div`

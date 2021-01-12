@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled, { ThemeContext } from "styled-components";
 import { useRouter } from "next/router";
-
+import { useContext } from "react";
 const Container = styled.div`
   flex: none;
   display: flex;
@@ -22,6 +22,7 @@ const Button = styled.button`
 
 export default function Footer() {
   const router = useRouter();
+  const userContext = useContext(ThemeContext).userContext;
   return (
     <Container>
       <Button onClick={(e) => router.push("/")}>
@@ -39,7 +40,11 @@ export default function Footer() {
           />
         </svg>
       </Button>
-      <Button onClick={(e) => router.push("/test")}>
+      <Button
+        onClick={(e) => {
+          userContext.setUser({ isLogin: true, username: "papo" });
+        }}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

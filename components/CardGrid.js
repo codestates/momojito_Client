@@ -1,18 +1,10 @@
 import styled from "styled-components";
 import StarList from "./StarList";
+import db from "../public/cocktaildb";
 const Container_card = styled.div`
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 `;
-export default function CardGrid() {
-  return (
-    <Container_card>
-      {["무제.001", "무제.002", "무제.003", "무제.004"].map((v) => (
-        <Card name={v} key={v}></Card>
-      ))}
-    </Container_card>
-  );
-}
 
 const Container = styled.div`
   padding: 1rem;
@@ -31,14 +23,24 @@ const Container = styled.div`
 const H1 = styled.h1`
   text-align: center;
 `;
+export default function CardGrid({ indexList }) {
+  return (
+    <Container_card>
+      {indexList.map((v) => (
+        <Card index={v} key={v}></Card>
+      ))}
+    </Container_card>
+  );
+}
 
-function Card({ name }) {
+function Card({ index }) {
+  const cocktail = db[index];
   return (
     <Container>
-      <img src={`cocktails/${name}.jpeg`}></img>
-      <H1>{name}</H1>
-      <H1 className="last">(Cosmopolitan)</H1>
-      <StarList></StarList>
+      <img src={`cocktails/${cocktail.id}.jpeg`}></img>
+      <H1>{cocktail.name}</H1>
+      <H1 className="last">{cocktail.koreanName}</H1>
+      <StarList rating={cocktail.rating}></StarList>
     </Container>
   );
 }
