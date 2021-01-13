@@ -1,12 +1,21 @@
-import styled from "styled-components";
+import { useRouter } from "next/router";
+import { useContext } from "react";
+import styled, { ThemeContext } from "styled-components";
+import Button from "./Button";
 
 const Container = styled.div`
   flex: none;
+  border-bottom: 1px solid rgba(219, 219, 219);
+  padding: 0.5rem;
+  display: ${(props) => (props.theme.userContext.user.isLogin ? "" : "flex")};
+  justify-content: ${(props) =>
+    props.theme.userContext.user.isLogin ? "" : "space-between"};
+`;
+
+const Logo = styled.div`
   display: flex;
   align-items: baseline;
   justify-content: center;
-  border-bottom: 1px solid rgba(219, 219, 219);
-  padding: 0.5rem;
   h1 {
     margin: 0;
     margin-left: 0.25rem;
@@ -15,9 +24,43 @@ const Container = styled.div`
   }
 `;
 
+const ButtonPart = styled.div`
+  display: flex;
+`;
+
 export default function Header() {
+  const { user, setUser } = useContext(ThemeContext).userContext;
+  const router = useRouter();
   return (
     <Container>
+      {user.isLogin ? (
+        <LogoPart></LogoPart>
+      ) : (
+        <>
+          <LogoPart></LogoPart>
+          <ButtonPart>
+            <Button onClick={(e) => router.push("/signin")} primary selected>
+              Log in
+            </Button>
+            <Button
+              onClick={(e) => router.push("/signup")}
+              primary
+              selected
+              m="0 0.5rem"
+            >
+              {" "}
+              Sign up
+            </Button>
+          </ButtonPart>
+        </>
+      )}
+    </Container>
+  );
+}
+
+function LogoPart() {
+  return (
+    <Logo>
       <svg
         width="22"
         height="22"
@@ -35,6 +78,6 @@ export default function Header() {
         />
       </svg>
       <h1>Momojito</h1>
-    </Container>
+    </Logo>
   );
 }
