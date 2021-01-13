@@ -1,19 +1,21 @@
 import Button from "../components/Button";
-import styled from "styled-components";
-import SwiperCore, { Pagination, Autoplay } from "swiper";
+import styled, { css } from "styled-components";
+import SwiperCore, { Navigation, Pagination, Autoplay } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-SwiperCore.use([Pagination, Autoplay]);
+SwiperCore.use([Navigation, Pagination, Autoplay]);
 const Divwithbg = styled.div`
-  background-image: linear-gradient(
+  background-image: ${(props) =>
+    props.heading
+      ? css`linear-gradient(
       180deg,
       #000000 0%,
       rgba(255, 255, 255, 0.09375) 100%,
       rgba(255, 255, 255, 0) 100%
-    ),
-    ${(props) => props.url};
+    ), ${props.url}`
+      : props.url};
   background-size: cover;
-  width: 100%;
-  height: 200px;
+  width: 375px;
+  height: ${(props) => (props.heading ? "200px" : "375px")};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -38,7 +40,7 @@ const Divwithbg = styled.div`
 
 function Slide({ url, heading }) {
   return (
-    <Divwithbg url={url}>
+    <Divwithbg url={url} heading={heading}>
       {heading ? (
         <div className="">
           <h1>{heading}</h1>
@@ -53,7 +55,7 @@ function Slide({ url, heading }) {
 
 export default function Carousel({ carouselList }) {
   return (
-    <Swiper pagination autoplay={{ delay: 5000 }}>
+    <Swiper autoplay={{ delay: 5000 }}>
       {carouselList.map(({ url, heading }) => (
         <SwiperSlide key={url}>
           <Slide url={url} heading={heading}></Slide>

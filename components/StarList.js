@@ -4,6 +4,7 @@ import styled, { ThemeContext } from "styled-components";
 const Container = styled.div`
   display: flex;
   justify-content: center;
+  margin-top: -5px;
 `;
 
 export default function StarList({ rating }) {
