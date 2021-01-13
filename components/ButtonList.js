@@ -16,7 +16,6 @@ export default function ButtonList({
     <Container>
       {buttonList.map((v, i) => (
         <Button
-          primary
           key={v}
           selected={i === buttonSelected}
           onClick={(e) => {
