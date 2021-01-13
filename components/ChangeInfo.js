@@ -289,8 +289,8 @@ export default function ChangeInfo() {
       <ButtonDiv2><button>변경하기</button></ButtonDiv2>
       </Nickname>
       <Password>비밀번호 변경</Password>
-        <InputText type='password' onChange={eTargetValueCurrentPassword} placeholder='  새 비밀번호'/>
         <InputText type='password' onChange={eTargetValuePassword} placeholder='  현재 비밀번호'/>
+        <InputText type='password' onChange={eTargetValueCurrentPassword} placeholder='  새 비밀번호'/>
         <InputText type='password' onChange={eTargetValuePasswordCheck} placeholder='  새 비밀번호 확인'/>
       <ButtonDiv3><button>변경하기</button></ButtonDiv3>
     </div>

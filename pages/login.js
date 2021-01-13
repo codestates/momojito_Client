@@ -137,6 +137,16 @@ export default function Login() {
     //     email,
     //     password
     //   })
+    //   .then((res)=>{
+    //     if(존재하지 않는 아이디의 경우) {
+    //       setValidate('존재하지 않는 아이디 입니다.');
+    //       return validate;
+    //     }
+    //     else if(비밀번호가 틀린 경우) {
+    //       setValidate('올바른 비밀번호를 입력해 주세요.');
+    //       return validate;
+    //     }
+    //   })
     // }
   }
 
