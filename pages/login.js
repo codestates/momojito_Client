@@ -13,17 +13,17 @@ const SignInText = styled.div`
 const InputText = styled.input`
   display: flex;
   margin: auto;
-  width: 72.5%;
+  width: 75%;
   height: 30px;
-  margin-block-start: 5%;
+  margin-block-start: 3%;
   border-radius: 5px;
-  border: 1px solid #31C460;
+  border: 1px solid grey;
 `;
 
 const Validation = styled.div`
   display: flex;
   justify-content: center;
-  margin-block-start: 5%;
+  margin-block-start: 3%;
   color: red;
   font-size: 80%;
 `;
@@ -39,10 +39,13 @@ border: none;
 width: 75%;
 height: 36px;
 margin: auto;//?
-margin-block-start: 20px;
+margin-block-start: 3%;
 h1 {
   color: white;
 }
+:hover {
+    cursor: pointer;
+  }
 `;
 
 const Kakao = styled.button`
@@ -57,6 +60,9 @@ const Kakao = styled.button`
   margin-block-start: 20px;
   .blank {
     width: 30px
+  }
+  :hover {
+    cursor: pointer;
   }
 `;
 
@@ -76,6 +82,9 @@ const Facebook = styled.button`
   }
   .blank {
     width: 30px;
+  }
+  :hover {
+    cursor: pointer;
   }
 `;
 
@@ -147,8 +156,8 @@ export default function Login() {
     <div>
       <Header/>
       <SignInText>로그인</SignInText>
-        <InputText onChange={eTargetValueEmail} placeholder='이메일 주소를 입력해 주세요.'></InputText>
-        <InputText onChange={eTargetValuePassword} placeholder='비밀번호를 입력해 주세요.'></InputText>
+        <InputText onChange={eTargetValueEmail} placeholder='  이메일 주소를 입력해 주세요.'></InputText>
+        <InputText onChange={eTargetValuePassword} placeholder='  비밀번호를 입력해 주세요.'></InputText>
       
       <Validation>{!validate ? <div>ㅤ</div> : validate}</Validation>
       

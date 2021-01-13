@@ -30,11 +30,13 @@ const ButtonDiv = styled.div`
     border-radius: 5px;
     transition: all 0.5s;
     color: #31C460;
+    margin: 1.5%;
   }
 
   button:hover {
     background-color: #31C460;
     color: white;
+    cursor: pointer;
   }
   button:before {
     content: '';
@@ -68,11 +70,13 @@ const ButtonDiv2 = styled.div`
     transition: all 0.5s;
     border: 1px solid #31C460;
     color: #31C460;
+    vertical-align: 18%;//내려가있는거 올리기
   }
 
   button:hover {
     background-color: #31C460;
     color: white;
+    cursor: pointer;
   }
   button:before {
     content: '';
@@ -112,6 +116,7 @@ const ButtonDiv3 = styled.div`
   button:hover {
     background-color: #31C460;
     color: white;
+    cursor: pointer;
   }
   button:before {
     content: '';
@@ -166,7 +171,7 @@ const InputText = styled.input`
   height: 30px;
   margin-block-start: 5%;
   border-radius: 5px;
-  border: 1px solid #31C460;
+  border: 1px solid grey;
 `;
 
 export default function ChangeInfo() {
@@ -177,10 +182,16 @@ export default function ChangeInfo() {
   const [passwordCheck, setPasswordCheck] = useState();
   const [nickname, setNickname] = useState();
 
-  function eTargetValue(e) {
+  function eTargetValueCurrentPassword(e) {
     setCurrentPassword(e.target.value);
+  }
+  function eTargetValuePassword(e) {
     setPassword(e.target.value);
+  }
+  function eTargetValuePasswordCheck(e) {
     setPasswordCheck(e.target.value);
+  }
+  function eTargetValueNickname(e) {
     setNickname(e.target.value);
   }
 
@@ -205,6 +216,14 @@ export default function ChangeInfo() {
       setUser({
         profileImg: res.body.profileImg
       })
+    })
+  }
+
+  function removeProfileImg() {
+    axios.post('http://localhost:3000/mypage/profileDelete', {
+      headers: {
+        Authorization: `Bearer ${user.authToken}`
+      }
     })
   }
 
@@ -247,7 +266,7 @@ export default function ChangeInfo() {
         xmlns="http://www.w3.org/2000/svg" 
         fill="none" 
         viewBox="0 0 24 24" 
-        stroke="currentColor"
+        stroke="#31C460"
         >
         <path strokeLinecap="round" 
         strokeLinejoin="round" 
@@ -260,16 +279,19 @@ export default function ChangeInfo() {
       }
       
       </Image>
-      <ButtonDiv><button onClick={registerProfileImg}>등록</button></ButtonDiv>
+      <ButtonDiv>
+        <button onClick={registerProfileImg}>등록</button>
+        <button onClick={removeProfileImg}>삭제</button>
+      </ButtonDiv>
 
       <Email>이메일 {user.email}</Email>
       <Nickname>닉네임 {!user.username ? <Span>내닉네임</Span> : <Span>{user.username}</Span>}
       <ButtonDiv2><button>변경하기</button></ButtonDiv2>
       </Nickname>
       <Password>비밀번호 변경</Password>
-        <InputText onChange={eTargetValue} placeholder='현재 비밀번호'/>
-        <InputText onChange={eTargetValue} placeholder='새 비밀번호'/>
-        <InputText onChange={eTargetValue} placeholder='새 비밀번호 확인'/>
+        <InputText type='password' onChange={eTargetValueCurrentPassword} placeholder='  새 비밀번호'/>
+        <InputText type='password' onChange={eTargetValuePassword} placeholder='  현재 비밀번호'/>
+        <InputText type='password' onChange={eTargetValuePasswordCheck} placeholder='  새 비밀번호 확인'/>
       <ButtonDiv3><button>변경하기</button></ButtonDiv3>
     </div>
   )

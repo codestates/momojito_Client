@@ -14,27 +14,38 @@ const SignUpText = styled.div`
 const InputText = styled.input`
   display: flex;
   margin: auto;
-  width: 72.5%;
+  width: 75%;
   height: 30px;
-  margin-block-start: 5%;
+  margin-block-start: 3%;
   border-radius: 5px;
-  border: 1px solid #31C460;
+  border: 1px solid grey;
 `;
 
 const Validation = styled.div`
   display: flex;
   justify-content: center;
-  margin-block-start: 5%;
+  margin-block-start: 3%;
   color: red;
   font-size: 80%;
+
 `;
 
 const Checkbox = styled.div`
   display: flex;
   justify-content: center;
-  margin-block-start: 5%;
+  margin-block-start: 3%;
   h1 {
     font-size: 70%;
+    margin-left: 1%;
+  }
+  .checkbox {
+    zoom: 1.5;
+    margin: 0 auto;//
+    margin-right: 0;
+    margin-left: 0;
+  }
+  .checkbox:hover {
+    cursor: pointer;
   }
 `; 
 
@@ -52,6 +63,9 @@ margin-block-start: 20px;
 h1 {
   color: white;
 }
+:hover {
+    cursor: pointer;
+  }
 `;
 
 const Kakao = styled.button`
@@ -66,6 +80,9 @@ const Kakao = styled.button`
   margin-block-start: 20px;
   .blank {
     width: 30px
+  }
+  :hover {
+    cursor: pointer;
   }
 `;
 
@@ -85,6 +102,9 @@ const Facebook = styled.button`
   }
   .blank {
     width: 30px;
+  }
+  :hover {
+    cursor: pointer;
   }
 `;
 
@@ -121,14 +141,13 @@ export default function SignUp() {
     else if(password !== passwordCheck) {
       return '비밀번호가 일치하지 않습니다.'
     }
-  }
-  
-  function refresh() {
-    setValidate(validation);
+    else if(document.querySelector('.checkbox').checked !== true) {
+      return '회원가입 정책에 동의해 주세요.'
+    }
   }
 
-  useEffect(refresh);
   function handleSignUp() {
+    setValidate(validation);
     
     if(email && password && passwordCheck) {
       if(password === passwordCheck) {
@@ -163,9 +182,9 @@ export default function SignUp() {
     <div>
       <Header/>
       <SignUpText>회원가입</SignUpText>
-        <InputText className='email' onChange={eTargetValueEmail} placeholder='사용하실 이메일 주소를 입력해주세요.'></InputText>
-        <InputText className='password' type='password' onChange={eTargetValuePassword} placeholder='사용하실 패스워드를 입력해 주세요.'></InputText>
-        <InputText className='passwordCheck' type='password' onChange={eTargetValuePasswordCheck} placeholder='패스워드를 다시 입력해 주세요.'></InputText>
+        <InputText className='email' onChange={eTargetValueEmail} placeholder='  사용하실 이메일 주소를 입력해주세요.'></InputText>
+        <InputText className='password' type='password' onChange={eTargetValuePassword} placeholder='  사용하실 패스워드를 입력해 주세요.'></InputText>
+        <InputText className='passwordCheck' type='password' onChange={eTargetValuePasswordCheck} placeholder='  패스워드를 다시 입력해 주세요.'></InputText>
       
       <Validation>{!validate ? <div>ㅤ</div> : validate}</Validation>
 
@@ -174,7 +193,7 @@ export default function SignUp() {
         <h1>만 19세 미만은 회원가입이 불가합니다.</h1>
       </Checkbox>
 
-      <Default onClick={handleSignUp}>
+      <Default className='default' onClick={handleSignUp}>
         <h1>회원가입</h1>
       </Default>
       <Kakao onClick={handleKakao}>
