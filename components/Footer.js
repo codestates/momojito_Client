@@ -42,7 +42,7 @@ export default function Footer() {
       </Button>
       <Button
         onClick={(e) => {
-          userContext.setUser({ isLogin: true, username: "papo" });
+          router.push("/quiz")
         }}
       >
         <svg
