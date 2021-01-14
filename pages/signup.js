@@ -1,12 +1,12 @@
-import styled from "styled-components";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import styled, { ThemeContext } from "styled-components";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Root, Body } from "../components/PageUtils";
 
-const SignInText = styled.div`
+const SignUpText = styled.div`
   text-align: center;
   margin-block-start: 30%;
 `;
@@ -29,6 +29,25 @@ const Validation = styled.div`
   font-size: 80%;
 `;
 
+const Checkbox = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-block-start: 3%;
+  h1 {
+    font-size: 70%;
+    margin-left: 1%;
+  }
+  .checkbox {
+    zoom: 1.5;
+    margin: 0 auto; //
+    margin-right: 0;
+    margin-left: 0;
+  }
+  .checkbox:hover {
+    cursor: pointer;
+  }
+`;
+
 const Default = styled.button`
   display: flex;
   justify-content: center;
@@ -39,7 +58,7 @@ const Default = styled.button`
   width: 75%;
   height: 36px;
   margin: auto; //?
-  margin-block-start: 3%;
+  margin-block-start: 20px;
   h1 {
     color: white;
   }
@@ -50,8 +69,8 @@ const Default = styled.button`
 
 const Kakao = styled.button`
   display: flex;
-  background-color: #ffe812;
   justify-content: space-between;
+  background-color: #ffe812;
   border-radius: 0.25rem;
   border: none;
   width: 75%;
@@ -88,30 +107,14 @@ const Facebook = styled.button`
   }
 `;
 
-const Bottom = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-block-start: 5%;
-  h1 {
-    color: grey;
-    font-size: 60%;
-  }
-  h2 {
-    text-decoration: underline;
-    font-size: 60%;
-    margin-left: 1%;
-    :hover {
-      cursor: pointer;
-    }
-  }
-`;
+export default function SignUp() {
+  const router = useRouter();
+  const { user, setUser } = useContext(ThemeContext).userContext;
 
-export default function Login() {
   let [email, setEmail] = useState();
   let [password, setPassword] = useState();
+  let [passwordCheck, setPasswordCheck] = useState();
   let [validate, setValidate] = useState();
-
-  const router = useRouter();
 
   function eTargetValueEmail(e) {
     setEmail(e.target.value);
@@ -119,33 +122,48 @@ export default function Login() {
   function eTargetValuePassword(e) {
     setPassword(e.target.value);
   }
+  function eTargetValuePasswordCheck(e) {
+    setPasswordCheck(e.target.value);
+  }
 
   function validation() {
     if (!email) {
-      return "가입하신 이메일 주소를 입력해 주세요.";
-    } else if (!password) {
+      return "email을 입력해 주세요.";
+    } else if (!email.includes("@")) {
+      return "올바른 형식의 email을 입력해 주세요.";
+    } else if (!password || !passwordCheck) {
       return "비밀번호를 입력해 주세요.";
+    } else if (password !== passwordCheck) {
+      return "비밀번호가 일치하지 않습니다.";
+    } else if (document.querySelector(".checkbox").checked !== true) {
+      return "회원가입 정책에 동의해 주세요.";
     }
   }
 
-  function handleSignIn() {
+  function handleSignUp() {
     setValidate(validation);
-    // if(email && password) {
-    //   axios.post('http://localhost:3000/auth/signin', {
-    //     email,
-    //     password
-    //   })
-    //   .then((res)=>{
-    //     if(존재하지 않는 아이디의 경우) {
-    //       setValidate('존재하지 않는 아이디 입니다.');
-    //       return validate;
-    //     }
-    //     else if(비밀번호가 틀린 경우) {
-    //       setValidate('올바른 비밀번호를 입력해 주세요.');
-    //       return validate;
-    //     }
-    //   })
-    // }
+
+    if (email && password && passwordCheck) {
+      if (password === passwordCheck) {
+        if (document.querySelector(".checkbox").checked === true) {
+          //!
+          axios
+            .post("http://localhost:3000/auth/signup", {
+              email,
+              password,
+            })
+            .then((res) => {
+              //if(이미 존재하는 이메일이 있는 경우)
+              setUser({
+                isLogin: true,
+                username: res.body.username,
+                authToken: res.body.authToken,
+              });
+              router.push("/mainpage/getTopTen");
+            });
+        }
+      }
+    }
   }
 
   function handleKakao() {
@@ -156,28 +174,38 @@ export default function Login() {
     axios.post();
   }
 
-  function redirection() {
-    router.push("/signup");
-  }
-
   return (
     <Root>
       <Body>
         <Header />
-        <SignInText>로그인</SignInText>
+        <SignUpText>회원가입</SignUpText>
         <InputText
+          className="email"
           onChange={eTargetValueEmail}
-          placeholder="  이메일 주소를 입력해 주세요."
+          placeholder="  사용하실 이메일 주소를 입력해주세요."
         ></InputText>
         <InputText
+          className="password"
+          type="password"
           onChange={eTargetValuePassword}
-          placeholder="  비밀번호를 입력해 주세요."
+          placeholder="  사용하실 패스워드를 입력해 주세요."
+        ></InputText>
+        <InputText
+          className="passwordCheck"
+          type="password"
+          onChange={eTargetValuePasswordCheck}
+          placeholder="  패스워드를 다시 입력해 주세요."
         ></InputText>
 
         <Validation>{!validate ? <div>ㅤ</div> : validate}</Validation>
 
-        <Default onClick={handleSignIn}>
-          <h1>로그인</h1>
+        <Checkbox>
+          <input type="checkbox" className="checkbox"></input>
+          <h1>만 19세 미만은 회원가입이 불가합니다.</h1>
+        </Checkbox>
+
+        <Default className="default" onClick={handleSignUp}>
+          <h1>회원가입</h1>
         </Default>
         <Kakao onClick={handleKakao}>
           <img src="/kakao.svg" width="30px" alt=""></img>
@@ -189,11 +217,6 @@ export default function Login() {
           <h1>페이스북 계정으로 신규 가입</h1>
           <div className="blank"></div>
         </Facebook>
-
-        <Bottom>
-          <h1>회원이 아니신가요?</h1>
-          <h2 onClick={redirection}>회원가입</h2>
-        </Bottom>
       </Body>
       <Footer />
     </Root>
