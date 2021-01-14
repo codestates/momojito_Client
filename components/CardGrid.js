@@ -25,6 +25,7 @@ const H1 = styled.h1`
   text-align: center;
 `;
 export default function CardGrid({ indexList }) {
+  indexList= [1];
   return (
     <Container_card>
       {indexList.map((v) => (
