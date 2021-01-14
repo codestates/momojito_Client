@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 const Button = styled.button`
   margin: ${(props) => (props.m ? props.m : "")};
+  font-size: ${(props) => (props.s ? props.s : "")};
   padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
   border-color: green;

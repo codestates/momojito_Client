@@ -17,7 +17,8 @@ const Container = styled.div`
     height: 375px;
     margin-bottom: 0.5rem;
   }
-  .nameheart {
+  .nameheart,
+  .signature {
     display: flex;
     align-items: center;
     text-align: left;
@@ -27,6 +28,10 @@ const Container = styled.div`
       margin-left: 2rem;
       width: 15px;
       height: 15px;
+    }
+    button {
+      margin-left: 1rem;
+      margin-bottom: 0.5rem;
     }
   }
   .stars {
@@ -47,6 +52,14 @@ const Container = styled.div`
     padding: 0.5rem 1rem;
     line-height: 1.5rem;
   }
+  .recommend {
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    h1 {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+    }
+  }
 `;
 export default function Cocktail({ id }) {
   const cocktail = db[id];
@@ -63,6 +76,16 @@ export default function Cocktail({ id }) {
               },
             ]}
           ></Carousel>
+          {cocktail.barname ? (
+            <div className="signature">
+              <h1>{cocktail.barname}</h1>
+              <div className="barloc">
+                <Button s="0.5rem">{cocktail.barlocation}</Button>
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
           <div className="nameheart">
             <h1>{`${cocktail.koreanName}(${cocktail.name})`}</h1>
             <svg
@@ -91,7 +114,32 @@ export default function Cocktail({ id }) {
             ></ButtonList>
           </div>
           <p>{cocktail.description}</p>
-          <div className=""></div>
+          <div className="recommend">
+            <h1>
+              {cocktail.barname
+                ? `${cocktail.barname}에서 찍은 다른 사진`
+                : "이곳에서 드시겠어요?"}
+            </h1>
+            <Carousel
+              carouselList={[
+                {
+                  url: 'url("/bar0.jpeg");',
+                  heading: "JASE",
+                  buttonText: "홍대",
+                },
+                {
+                  url: 'url("/bar1.jpeg");',
+                  heading: "PAVOX",
+                  buttonText: "강남",
+                },
+                {
+                  url: 'url("/bar2.jpeg");',
+                  heading: "청춘예찬",
+                  buttonText: "성신여대",
+                },
+              ]}
+            ></Carousel>
+          </div>
         </Container>
       </Body>
       <Footer></Footer>

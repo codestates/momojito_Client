@@ -14,7 +14,7 @@ const Divwithbg = styled.div`
     ), ${props.url}`
       : props.url};
   background-size: cover;
-  width: 375px;
+  width: ${(props) => (props.heading ? "100%" : "375px")};
   height: ${(props) => (props.heading ? "200px" : "375px")};
   display: flex;
   align-items: center;
@@ -38,13 +38,13 @@ const Divwithbg = styled.div`
   }
 `;
 
-function Slide({ url, heading }) {
+function Slide({ url, heading, buttonText = "지금 이동하기" }) {
   return (
     <Divwithbg url={url} heading={heading}>
       {heading ? (
         <div className="">
           <h1>{heading}</h1>
-          <Button selected>지금 이동하기</Button>
+          <Button selected>{buttonText}</Button>
         </div>
       ) : (
         ""
@@ -56,9 +56,9 @@ function Slide({ url, heading }) {
 export default function Carousel({ carouselList }) {
   return (
     <Swiper autoplay={{ delay: 5000 }}>
-      {carouselList.map(({ url, heading }) => (
+      {carouselList.map(({ url, heading, buttonText }) => (
         <SwiperSlide key={url}>
-          <Slide url={url} heading={heading}></Slide>
+          <Slide url={url} heading={heading} buttonText={buttonText}></Slide>
         </SwiperSlide>
       ))}
     </Swiper>

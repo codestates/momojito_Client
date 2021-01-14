@@ -35,9 +35,9 @@ export default function Home() {
         {buttonSelected === 0 ? (
           <CardGrid indexList={[1, 3, 5]}></CardGrid>
         ) : buttonSelected === 1 ? (
-          <CardGrid indexList={[2, 4]}></CardGrid>
+          <CardGrid indexList={[4, 5]} type="signature"></CardGrid>
         ) : (
-          <CardGrid indexList={[3]}></CardGrid>
+          <CardGrid indexList={[3]} type="ranking"></CardGrid>
         )}
       </Body>
       <Footer></Footer>
