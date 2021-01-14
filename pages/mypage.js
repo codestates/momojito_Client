@@ -17,7 +17,7 @@ export default function MyPage() {
           buttonSelected={buttonSelected}
           setButtonSelected={setButtonSelected}
         ></ButtonList>
-        {buttonSelected === 0 ? <ChangeInfo></ChangeInfo> : <CardGrid></CardGrid>}
+        {buttonSelected === 0 ? <ChangeInfo></ChangeInfo> : <CardGrid indexList={[1]}></CardGrid>}
       </Body>
       <Footer></Footer>
     </Root>

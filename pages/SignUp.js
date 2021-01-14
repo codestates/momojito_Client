@@ -152,18 +152,21 @@ export default function SignUp() {
     if(email && password && passwordCheck) {
       if(password === passwordCheck) {
         if(document.querySelector('.checkbox').checked === true) {//!
-          axios.post('http://localhost:3000/auth/signup',{
+          axios.post('http://localhost:5000/auth/signup',{
             email,
             password
           })
           .then((res)=>{
             //if(이미 존재하는 이메일이 있는 경우)
-            setUser({
-              isLogin: true,
-              username: res.body.username,
-              authToken: res.body.authToken
-            })
-            router.push('/mainpage/getTopTen');
+            // setUser({
+            //   isLogin: true,
+            //   username: res.body.username,
+            //   authToken: res.body.authToken
+            // })
+            // if(회원가입 성공한 경우) {
+            //   router.push('/mypage');
+            // }
+            router.push('/mypage');
         })
         }
       }

@@ -132,22 +132,25 @@ export default function Login() {
 
   function handleSignIn() {
     setValidate(validation);
-    // if(email && password) {
-    //   axios.post('http://localhost:3000/auth/signin', {
-    //     email,
-    //     password
-    //   })
-    //   .then((res)=>{
-    //     if(존재하지 않는 아이디의 경우) {
-    //       setValidate('존재하지 않는 아이디 입니다.');
-    //       return validate;
-    //     }
-    //     else if(비밀번호가 틀린 경우) {
-    //       setValidate('올바른 비밀번호를 입력해 주세요.');
-    //       return validate;
-    //     }
-    //   })
-    // }
+    if(email && password) {
+      axios.post('http://localhost:5000/auth/signin', {
+        email,
+        password
+      },{
+        withCredentials: true
+      })
+      .then((res)=>{
+        router.push('/mypage');
+        // if(존재하지 않는 아이디의 경우) {
+        //   setValidate('존재하지 않는 아이디 입니다.');
+        //   return validate;
+        // }
+        // else if(비밀번호가 틀린 경우) {
+        //   setValidate('올바른 비밀번호를 입력해 주세요.');
+        //   return validate;
+        // }
+      })
+    }
   }
 
   function handleKakao() {
@@ -158,8 +161,8 @@ export default function Login() {
     axios.post()
   }
   
-  function redirection() {
-    router.push('/auth/signup');
+  const redirection = (e) => {
+    router.push('/signup');
   }
 
   return (
@@ -167,7 +170,7 @@ export default function Login() {
       <Header/>
       <SignInText>로그인</SignInText>
         <InputText onChange={eTargetValueEmail} placeholder='  이메일 주소를 입력해 주세요.'></InputText>
-        <InputText onChange={eTargetValuePassword} placeholder='  비밀번호를 입력해 주세요.'></InputText>
+        <InputText type='password' onChange={eTargetValuePassword} placeholder='  비밀번호를 입력해 주세요.'></InputText>
       
       <Validation>{!validate ? <div>ㅤ</div> : validate}</Validation>
       

@@ -7,6 +7,7 @@ import CardGrid from "../components/CardGrid";
 import ButtonList from "../components/ButtonList";
 import styled from "styled-components";
 
+
 const Carousel = styled.img`
   width: 375px;
   height: 200px;
