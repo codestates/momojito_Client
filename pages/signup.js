@@ -179,7 +179,7 @@ export default function SignUp() {
   `;
   return (
     <PageUtils>
-      <Conatiner>
+      <Container>
         <SignUpText>회원가입</SignUpText>
         <InputText
           className="email"
@@ -219,7 +219,7 @@ export default function SignUp() {
           <h1>페이스북 계정으로 신규 가입</h1>
           <div className="blank"></div>
         </Facebook>
-      </Conatiner>
+      </Container>
     </PageUtils>
   );
 }
