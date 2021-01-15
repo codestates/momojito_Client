@@ -14,7 +14,7 @@ const SignUpText = styled.div`
 const InputText = styled.input`
   display: flex;
   margin: auto;
-  width: 75%;
+  width: 300px;
   height: 30px;
   margin-block-start: 3%;
   border-radius: 5px;
@@ -55,7 +55,7 @@ const Default = styled.button`
   background-color: #000000;
   border-radius: 0.25rem;
   border: none;
-  width: 75%;
+  width: 300px;
   height: 36px;
   margin: auto; //?
   margin-block-start: 20px;
@@ -67,13 +67,35 @@ const Default = styled.button`
   }
 `;
 
+
+const Naver = styled.button`
+  display: flex;
+  background-color: #23B366;
+  justify-content: space-between;
+  border-radius: 0.25rem;
+  border: none;
+  width: 300px;
+  align-items: center;
+  margin: auto;
+  margin-block-start: 20px;
+  .blank {
+    width: 30px;
+  }
+  :hover {
+    cursor: pointer;
+  }
+  h1 {
+    color: white;
+  }
+`;
+
 const Kakao = styled.button`
   display: flex;
   justify-content: space-between;
   background-color: #ffe812;
   border-radius: 0.25rem;
   border: none;
-  width: 75%;
+  width: 300px;
   align-items: center;
   margin: auto;
   margin-block-start: 20px;
@@ -89,7 +111,7 @@ const Facebook = styled.button`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 75%;
+  width: 300px;
   height: 36px;
   background-color: #1e4799;
   border-radius: 5px;
@@ -166,6 +188,11 @@ export default function SignUp() {
     }
   }
 
+  function handleNaver() {
+    axios.post();
+  }
+
+
   function handleKakao() {
     axios.post();
   }
@@ -207,8 +234,13 @@ export default function SignUp() {
         <Default className="default" onClick={handleSignUp}>
           <h1>회원가입</h1>
         </Default>
+        <Naver onClick={handleNaver}>
+          <img src='/naver.png' width='30px' alt=''></img>
+          <h1>네이버 계정으로 신규 가입</h1>
+          <div className='blank'></div>
+        </Naver>
         <Kakao onClick={handleKakao}>
-          <img src="/kakao.svg" width="30px" alt=""></img>
+          <img src="/kakao.png" width="30px" alt=""></img>
           <div>카카오 계정으로 신규 가입</div>
           <div className="blank"></div>
         </Kakao>
