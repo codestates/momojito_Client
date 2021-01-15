@@ -12,7 +12,7 @@ const SignInText = styled.div`
 const InputText = styled.input`
   display: flex;
   margin: auto;
-  width: 75%;
+  width: 300px;
   height: 30px;
   margin-block-start: 3%;
   border-radius: 5px;
@@ -34,7 +34,7 @@ const Default = styled.button`
   background-color: #000000;
   border-radius: 0.25rem;
   border: none;
-  width: 75%;
+  width: 300px;
   height: 36px;
   margin: auto; //?
   margin-block-start: 3%;
@@ -46,13 +46,34 @@ const Default = styled.button`
   }
 `;
 
+const Naver = styled.button`
+  display: flex;
+  background-color: #23B366;
+  justify-content: space-between;
+  border-radius: 0.25rem;
+  border: none;
+  width: 300px;
+  align-items: center;
+  margin: auto;
+  margin-block-start: 20px;
+  .blank {
+    width: 30px;
+  }
+  :hover {
+    cursor: pointer;
+  }
+  h1 {
+    color: white;
+  }
+`;
+
 const Kakao = styled.button`
   display: flex;
   background-color: #ffe812;
   justify-content: space-between;
   border-radius: 0.25rem;
   border: none;
-  width: 75%;
+  width: 300px;
   align-items: center;
   margin: auto;
   margin-block-start: 20px;
@@ -68,9 +89,9 @@ const Facebook = styled.button`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 75%;
+  width: 300px;
   height: 36px;
-  background-color: #1e4799;
+  background-color: #3A579C;
   border-radius: 5px;
   border: none;
   margin: auto;
@@ -128,22 +149,29 @@ export default function Login() {
 
   function handleSignIn() {
     setValidate(validation);
-    // if(email && password) {
-    //   axios.post('http://localhost:3000/auth/signin', {
-    //     email,
-    //     password
-    //   })
-    //   .then((res)=>{
-    //     if(존재하지 않는 아이디의 경우) {
-    //       setValidate('존재하지 않는 아이디 입니다.');
-    //       return validate;
-    //     }
-    //     else if(비밀번호가 틀린 경우) {
-    //       setValidate('올바른 비밀번호를 입력해 주세요.');
-    //       return validate;
-    //     }
-    //   })
-    // }
+    if(email && password) {
+      axios.post('http://localhost:5000/auth/signin', {
+        email,
+        password
+      },{
+        withCredentials: true
+      })
+      .then((res)=>{
+        router.push('/mypage');
+        // if(존재하지 않는 아이디의 경우) {
+        //   setValidate('존재하지 않는 아이디 입니다.');
+        //   return validate;
+        // }
+        // else if(비밀번호가 틀린 경우) {
+        //   setValidate('올바른 비밀번호를 입력해 주세요.');
+        //   return validate;
+        // }
+      })
+    }
+  }
+
+  function handleNaver() {
+    axios.post();
   }
 
   function handleKakao() {
@@ -176,7 +204,7 @@ export default function Login() {
         <h1>로그인</h1>
       </Default>
       <Kakao onClick={handleKakao}>
-        <img src="/kakao.svg" width="30px" alt=""></img>
+        <img src="/kakao.png" width="30px" alt=""></img>
         <div>카카오 계정으로 신규 가입</div>
         <div className="blank"></div>
       </Kakao>

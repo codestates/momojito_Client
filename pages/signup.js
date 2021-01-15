@@ -12,7 +12,7 @@ const SignUpText = styled.div`
 const InputText = styled.input`
   display: flex;
   margin: auto;
-  width: 75%;
+  width: 300px;
   height: 30px;
   margin-block-start: 3%;
   border-radius: 5px;
@@ -53,7 +53,7 @@ const Default = styled.button`
   background-color: #000000;
   border-radius: 0.25rem;
   border: none;
-  width: 75%;
+  width: 300px;
   height: 36px;
   margin: auto; //?
   margin-block-start: 20px;
@@ -71,7 +71,7 @@ const Kakao = styled.button`
   background-color: #ffe812;
   border-radius: 0.25rem;
   border: none;
-  width: 75%;
+  width: 300px;
   align-items: center;
   margin: auto;
   margin-block-start: 20px;
@@ -87,7 +87,7 @@ const Facebook = styled.button`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 75%;
+  width: 300px;
   height: 36px;
   background-color: #1e4799;
   border-radius: 5px;
@@ -172,14 +172,9 @@ export default function SignUp() {
     axios.post();
   }
 
-  const Container = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  `;
+  
   return (
     <PageUtils>
-      <Container>
         <SignUpText>회원가입</SignUpText>
         <InputText
           className="email"
@@ -210,7 +205,7 @@ export default function SignUp() {
           <h1>회원가입</h1>
         </Default>
         <Kakao onClick={handleKakao}>
-          <img src="/kakao.svg" width="30px" alt=""></img>
+          <img src="/kakao.png" width="30px" alt=""></img>
           <div>카카오 계정으로 신규 가입</div>
           <div className="blank"></div>
         </Kakao>
@@ -219,7 +214,6 @@ export default function SignUp() {
           <h1>페이스북 계정으로 신규 가입</h1>
           <div className="blank"></div>
         </Facebook>
-      </Container>
     </PageUtils>
   );
 }

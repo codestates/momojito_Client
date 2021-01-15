@@ -681,7 +681,7 @@ browserslist@4.14.6:
   resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-4.14.6.tgz#97702a9c212e0c6b6afefad913d3a1538e348457"
   integrity sha512-zeFYcUo85ENhc/zxHbiIp0LGzzTrE2Pv2JhxvS7kpUb9Q9D38kUX6Bie7pGutJ/5iF5rOxE7CepAuWD56xJ33A==
   dependencies:
-    caniuse-lite "^1.0.30001154"
+    caniuse-lite "^1.0.50001154"
     electron-to-chromium "^1.3.585"
     escalade "^3.1.1"
     node-releases "^1.1.65"
@@ -777,9 +777,9 @@ camelcase@^6.0.0:
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-6.2.0.tgz#924af881c9d525ac9d87f40d964e5cea982a1809"
   integrity sha512-c7wVvbw3f37nuobQNtgsgG9POC9qMbNuMQmTCqZv23b6MIz0fcYpBiOlv9gEN/hdLdnZTDQhg6e9Dq5M1vKvfg==
 
-caniuse-lite@^1.0.30001093, caniuse-lite@^1.0.30001113, caniuse-lite@^1.0.30001154:
-  version "1.0.30001173"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001173.tgz#3c47bbe3cd6d7a9eda7f50ac016d158005569f56"
+caniuse-lite@^1.0.50001093, caniuse-lite@^1.0.50001113, caniuse-lite@^1.0.50001154:
+  version "1.0.50001173"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.50001173.tgz#3c47bbe3cd6d7a9eda7f50ac016d158005569f56"
   integrity sha512-R3aqmjrICdGCTAnSXtNyvWYMK3YtV5jwudbq0T7nN9k4kmE4CBuwPqyJ+KBzepSTh0huivV2gLbSMEzTTmfeYw==
 
 chalk@2.4.2, chalk@^2.0.0, chalk@^2.4.2:
@@ -1125,7 +1125,7 @@ cssnano-preset-simple@1.2.1:
   resolved "https://registry.yarnpkg.com/cssnano-preset-simple/-/cssnano-preset-simple-1.2.1.tgz#8976013114b1fc4718253d30f21aaed1780fb80e"
   integrity sha512-B2KahOIFTV6dw5Ioy9jHshTh/vAYNnUB2enyWRgnAEg3oJBjI/035ExpePaMqS2SwpbH7gCgvQqwpMBH6hTJSw==
   dependencies:
-    caniuse-lite "^1.0.30001093"
+    caniuse-lite "^1.0.50001093"
     postcss "^7.0.32"
 
 cssnano-simple@1.2.1:
@@ -2442,7 +2442,7 @@ next@10.0.5:
     babel-plugin-transform-react-remove-prop-types "0.4.24"
     browserslist "4.14.6"
     buffer "5.6.0"
-    caniuse-lite "^1.0.30001113"
+    caniuse-lite "^1.0.50001113"
     chalk "2.4.2"
     chokidar "3.4.3"
     crypto-browserify "3.12.0"

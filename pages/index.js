@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import PageUtils from "../components/PageUtils";
 import CardGrid from "../components/CardGrid";
 import ButtonList from "../components/ButtonList";
@@ -7,6 +8,7 @@ import CocktailInfo from "../components/CocktailInfo";
 import { useRouter } from "next/router";
 import Modal from "react-modal";
 Modal.setAppElement("#__next");
+
 
 export default function Home() {
   const [buttonSelected, setButtonSelected] = useState(0);

@@ -1,6 +1,7 @@
 import styled, {ThemeContext} from 'styled-components';
 import axios from 'axios';
 import { useContext, useState, useEffect } from 'react';
+import HoverButton from './HoverButton';
 
 const Image = styled.div`
   display: flex;
@@ -19,8 +20,14 @@ const ButtonDiv = styled.div`
   display: flex;
   justify-content: center;
   position: relative;
+`;
 
-  button {
+const ButtonDiv1 = styled.div`
+  display: flex;
+  justify-content: center;
+  position: relative;
+
+  label {
     overflow: hidden;
     position: relative;
     display: inline-block;
@@ -31,14 +38,16 @@ const ButtonDiv = styled.div`
     transition: all 0.5s;
     color: #31C460;
     margin: 1.5%;
+    font-size: 70%; width:20%; height:70%;
+    padding-top: 1%;
   }
 
-  button:hover {
+  label:hover {
     background-color: #31C460;
     color: white;
     cursor: pointer;
   }
-  button:before {
+  label:before {
     content: '';
     z-index: -1;
     position: absolute;
@@ -48,10 +57,6 @@ const ButtonDiv = styled.div`
     left: 0;
     top: 0;
     width: 100%;
-    height: 0;
-  }
-  button:hover:before {
-    height: 200%;
   }
 `;
 
@@ -71,6 +76,8 @@ const ButtonDiv2 = styled.div`
     border: 1px solid #31C460;
     color: #31C460;
     vertical-align: 18%;//내려가있는거 올리기
+    font-size: 60%;
+    padding-top: 3%;
   }
 
   button:hover {
@@ -88,10 +95,6 @@ const ButtonDiv2 = styled.div`
     left: 0;
     top: 0;
     width: 100%;
-    height: 0;
-  }
-  button:hover:before {
-    height: 200%;
   }
 `;
 
@@ -111,6 +114,8 @@ const ButtonDiv3 = styled.div`
     border-radius: 5px;
     transition: all 0.5s;
     color: #31C460;
+    font-size: 60%;
+    padding-top: 0.3%;
   }
 
   button:hover {
@@ -128,10 +133,6 @@ const ButtonDiv3 = styled.div`
     left: 0;
     top: 0;
     width: 100%;
-    height: 0;
-  }
-  button:hover:before {
-    height: 200%;
   }
 `;
 
@@ -153,7 +154,7 @@ const Nickname = styled.div`
 
 const Span = styled.span`
   margin: auto;
-  color: #31C460;
+  color: black;
 `;
 
 const Password = styled.div`
@@ -182,6 +183,9 @@ export default function ChangeInfo() {
   const [passwordCheck, setPasswordCheck] = useState();
   const [nickname, setNickname] = useState();
 
+  const [content, setContent] = useState();
+  const [uploadedImg, setUploadedImg] = useState({filePath: null});
+
   function eTargetValueCurrentPassword(e) {
     setCurrentPassword(e.target.value);
   }
@@ -195,46 +199,42 @@ export default function ChangeInfo() {
     setNickname(e.target.value);
   }
 
-  function profile() {
-    axios.get('http://localhost:3000/mypage/getUserData',{
-      headers: {
-        Authorization: `Bearer ${user.authToken}`
-      }
+  function getUserData() {
+    axios.get('http://localhost:5000/mypage/getUserData',{
+      withCredentials: true
     })
   };
 
-  // useEffect(profile);
 
-  function registerProfileImg() {
-    axios.post('http://localhost:3000/mypage/profileChange',{
-      // profileImg: ,
-      headers: {
-        Authorization: `Bearer ${user.authToken}`
-      }
-    })
-    .then((res)=>{
-      setUser({
-        profileImg: res.body.profileImg
-      })
-    })
-  }
 
   function removeProfileImg() {
-    axios.post('http://localhost:3000/mypage/profileDelete', {
-      headers: {
-        Authorization: `Bearer ${user.authToken}`
-      }
+    axios.post('http://localhost:5000/mypage/profileDelete', {
+      withCredentials: true
+    })
+    .then((res)=>{
+      setUser({profileImg: null});
     })
   }
 
-  function updateNickname() {
-    axios.post('http://localhost:3000/mypage/nicknameChange',{
-      nickname,
-      headers: {
-        Authorization: `Bearer ${user.authToken}`
-      }
+  function updateNickname(e) {
+    // if(닉네임이 8글자를 초과할 경우) {
+    //   -> 모달창 '닉네임은 최대 8자까지 가능합니다.'
+    // }
+    axios.post('http://localhost:5000/mypage/nicknameChange',{
+      nickname
+    },{
+      withCredentials: true
     })
     .then((res)=>{
+      // if(이미 존재하는 닉네임이 있는 경우) {
+          // -> 모달창 '이미 존재하는 닉네임 입니다'
+      // }
+      // else {
+      //   setUser({
+      //     username: res.body.nickname,
+      //   });
+      //   -> 모달창 '닉네임을 성공적으로 변경 하였습니다.'
+      // }
       setUser({
         username: res.body.nickname,
       })
@@ -243,23 +243,61 @@ export default function ChangeInfo() {
 
   function updatePassword() {
     
-    axios.post('http://localhost:3000/mypage/passwordChange',{
+    axios.post('http://localhost:5000/mypage/passwordChange',{
       currentPassword,
       password,
-      passwordCheck,
-      headers: {
-        Authorization: `Bearer ${user.authToken}`
-      }
+      passwordCheck
+    },{
+      withCredentials: true
     })
     .then((res)=>{
       //if(currentPassword가 일치하지 않을 때)
+      //else(일치하면?) -> 모달창 '패스워드가 성공적으로 변경되었습니다'
     })
   }
 
+  const onChange = e => {
+    setContent(e.target.files[0]);
+    // onSubmit(e.target.files[0]);
+  };
+  
+  
+  const forSubmit = () => {
+    if(content) {
+      onSubmit();
+    }
+  }
+  useEffect(forSubmit,[content]);
+
+  const onSubmit = () => {
+    // e.preventDefault();
+    const formData = new FormData();
+    formData.append("uploadImg", content);
+
+    axios
+    .post("http://localhost:5000/mypage/profileChange", formData, {withCredentials: true})
+    .then(res => {
+      setUploadedImg({filePath: res.data.imageUrl});
+      setUser({profileImg: res.data.imageUrl});
+    })
+  };
+
   return (
     <div>
-      <Image>
-      {!user.profileImg?
+      <ButtonDiv>
+        <form onSubmit={onSubmit}>
+
+        {
+          user.profileImg ?
+          (
+            <Image>
+              <Profile src={user.profileImg} alt="">
+              </Profile>
+            </Image>
+          )
+        :
+          (
+        <Image>
         <svg
         width='40%'
         height='40%' 
@@ -274,17 +312,23 @@ export default function ChangeInfo() {
         d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" 
         />
         </svg>
-      :
-        <Profile src={user.profileImg} alt=''></Profile>
-      }
-      
-      </Image>
-      <ButtonDiv>
-        <button onClick={registerProfileImg}>등록</button>
-        <button onClick={removeProfileImg}>삭제</button>
+        </Image>
+          )
+        }
+
+        <div>
+        </div>
+        <ButtonDiv1>
+        {/* <label class="btn fileUpload btn-default">https://stackoverflow.com/a/57051918/14914253 */}
+        <label class="btn fileUpload btn-default">
+            등록<input type="file" onChange={onChange} hidden/>
+        </label>
+        <label onClick={removeProfileImg}>삭제</label>
+        </ButtonDiv1>
+        </form>
       </ButtonDiv>
 
-      <Email>이메일 {user.email}</Email>
+      <Email>이메일 <Span>{user.email}</Span></Email>
       <Nickname>닉네임 {!user.username ? <Span>내닉네임</Span> : <Span>{user.username}</Span>}
       <ButtonDiv2><button>변경하기</button></ButtonDiv2>
       </Nickname>

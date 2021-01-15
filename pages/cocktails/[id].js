@@ -1,6 +1,9 @@
 import CocktailInfo from "../../components/CocktailInfo";
 import PageUtils from "../../components/PageUtils";
 import db from "../../public/cocktaildb";
+import Carousel from "../../components/Carousel";
+import Button from "../../components/Button";
+import ButtonList from "../../components/ButtonList";
 
 export default function CocktailInfoPage({ id }) {
   return (
