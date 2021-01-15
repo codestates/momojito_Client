@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Root, Body } from "../components/PageUtils";
+import PageUtils from "../components/PageUtils";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import quizdata from "../public/quizdb";
@@ -83,51 +83,48 @@ function quiz() {
 
   let q = quizdata[count];
   return (
-    <Root>
+    <PageUtils>
       <Head>
-      <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+        <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
       </Head>
-      <Header></Header>
-      <Body>
-        <QuizHeader>✏️ 칵테일 능력평가</QuizHeader>
-        {!resultOn ? (
-          <>
-            <StatusBar>
-              <div className="count">
-                {q.id}/{quizdata.length}
-              </div>
-              {/* <div className="bar"></div> */}
-              <ProgressBar percentage={percentage}></ProgressBar>
-            </StatusBar>
-            <QuizBody>
-              <div className="quiz-content question">
-                <p>{q.question}</p>
-              </div>
-              <div className="quiz-content">
-                <AnswerList>
-                  {q.answers.map((answer) => {
-                    return (
-                      <Answer
-                        count={count}
-                        setCount={setCount}
-                        answer={answer}
-                        score={q.score}
-                        totalScore={totalScore}
-                        setScore={setScore}
-                        setResultOn={setResultOn}
-                      ></Answer>
-                    );
-                  })}
-                </AnswerList>
-              </div>
-            </QuizBody>
-          </>
-        ) : (
-          <Result totalScore={totalScore}></Result>
-        )}
-      </Body>
-      <Footer></Footer>
-    </Root>
+
+      <QuizHeader>✏️ 칵테일 능력평가</QuizHeader>
+      {!resultOn ? (
+        <>
+          <StatusBar>
+            <div className="count">
+              {q.id}/{quizdata.length}
+            </div>
+            {/* <div className="bar"></div> */}
+            <ProgressBar percentage={percentage}></ProgressBar>
+          </StatusBar>
+          <QuizBody>
+            <div className="quiz-content question">
+              <p>{q.question}</p>
+            </div>
+            <div className="quiz-content">
+              <AnswerList>
+                {q.answers.map((answer) => {
+                  return (
+                    <Answer
+                      count={count}
+                      setCount={setCount}
+                      answer={answer}
+                      score={q.score}
+                      totalScore={totalScore}
+                      setScore={setScore}
+                      setResultOn={setResultOn}
+                    ></Answer>
+                  );
+                })}
+              </AnswerList>
+            </div>
+          </QuizBody>
+        </>
+      ) : (
+        <Result totalScore={totalScore}></Result>
+      )}
+    </PageUtils>
   );
 }
 
@@ -269,48 +266,45 @@ function Result({ totalScore }) {
   );
 }
 
-const kakaoKey = '75d977bf235fda941972e4be5835408a'
+const kakaoKey = "75d977bf235fda941972e4be5835408a";
 
-function KakaoShareButton({result}) {
-
+function KakaoShareButton({ result }) {
   useEffect(() => {
-    createKakaoButton()
-  }, [])
+    createKakaoButton();
+  }, []);
 
-  console.log(result.imgsrc)
+  console.log(result.imgsrc);
   const createKakaoButton = () => {
     // kakao sdk script이 정상적으로 불러와졌으면 window.Kakao로 접근이 가능합니다
     if (window.Kakao) {
-      const kakao = window.Kakao
+      const kakao = window.Kakao;
       // 중복 initialization 방지
       if (!kakao.isInitialized()) {
         // 두번째 step 에서 가져온 javascript key 를 이용하여 initialize
-        kakao.init(kakaoKey)
+        kakao.init(kakaoKey);
       }
       kakao.Link.createDefaultButton({
         // Render 부분 id=kakao-link-btn 을 찾아 그부분에 렌더링을 합니다
-        container: '#kakao-link-btn',
-        objectType: 'feed',
+        container: "#kakao-link-btn",
+        objectType: "feed",
         content: {
-          title: '나의 술알못 테스트 결과는?',
+          title: "나의 술알못 테스트 결과는?",
           description: result.text,
-          imageUrl: 'http://mud-kage.kakao.co.kr/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg', // i.e. process.env.FETCH_URL + '/logo.png'
+          imageUrl:
+            "http://mud-kage.kakao.co.kr/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg", // i.e. process.env.FETCH_URL + '/logo.png'
           link: {
             mobileWebUrl: window.location.href,
             webUrl: window.location.href,
           },
         },
-      })
-
-
+      });
     }
-  }
+  };
   return (
     <button className="btn" id="kakao-link-btn">
       카카오톡 공유하기
     </button>
-  )
+  );
 }
-
 
 export default quiz;
