@@ -151,22 +151,25 @@ export default function Login() {
 
   function handleSignIn() {
     setValidate(validation);
-    // if(email && password) {
-    //   axios.post('http://localhost:3000/auth/signin', {
-    //     email,
-    //     password
-    //   })
-    //   .then((res)=>{
-    //     if(존재하지 않는 아이디의 경우) {
-    //       setValidate('존재하지 않는 아이디 입니다.');
-    //       return validate;
-    //     }
-    //     else if(비밀번호가 틀린 경우) {
-    //       setValidate('올바른 비밀번호를 입력해 주세요.');
-    //       return validate;
-    //     }
-    //   })
-    // }
+    if(email && password) {
+      axios.post('http://localhost:5000/auth/signin', {
+        email,
+        password
+      },{
+        withCredentials: true
+      })
+      .then((res)=>{
+        router.push('/mypage');
+        // if(존재하지 않는 아이디의 경우) {
+        //   setValidate('존재하지 않는 아이디 입니다.');
+        //   return validate;
+        // }
+        // else if(비밀번호가 틀린 경우) {
+        //   setValidate('올바른 비밀번호를 입력해 주세요.');
+        //   return validate;
+        // }
+      })
+    }
   }
 
   function handleNaver() {

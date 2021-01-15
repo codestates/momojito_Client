@@ -17,11 +17,15 @@ export default function MyPage() {
           buttonSelected={buttonSelected}
           setButtonSelected={setButtonSelected}
         ></ButtonList>
+<<<<<<< HEAD
         {buttonSelected === 0 ? (
           <ChangeInfo></ChangeInfo>
         ) : (
           <CardGrid indexList={[0, 1, 2, 3, 4, 5]} type="mypage"></CardGrid>
         )}
+=======
+        {buttonSelected === 0 ? <ChangeInfo></ChangeInfo> : <CardGrid indexList={[1]}></CardGrid>}
+>>>>>>> aeb2b47445fcc16f5a2f0e9369c5076bcfb52fdc
       </Body>
       <Footer></Footer>
     </Root>

@@ -4,7 +4,18 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import CardGrid from "../components/CardGrid";
 import ButtonList from "../components/ButtonList";
+<<<<<<< HEAD
 import Carousel from "../components/Carousel";
+=======
+import styled from "styled-components";
+
+
+const Carousel = styled.img`
+  width: 375px;
+  height: 200px;
+`;
+
+>>>>>>> aeb2b47445fcc16f5a2f0e9369c5076bcfb52fdc
 export default function Home() {
   const [buttonSelected, setButtonSelected] = useState(0);
   return (
