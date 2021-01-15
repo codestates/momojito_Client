@@ -4,7 +4,7 @@ import Button from "./Button";
 const Container = styled.div`
   display: flex;
   padding: 1rem;
-  justify-content: ${(props) => (props.all ? "flex-start" : "space-around")};
+  justify-content: ${(props) => (props.all ? "flex-start" : "center")};
 `;
 
 export default function ButtonList({
@@ -17,7 +17,7 @@ export default function ButtonList({
     <Container all={all}>
       {buttonList.map((v, i) => (
         <Button
-          m={all ? "0 0.25rem" : ""}
+          m={all ? "0 0.25rem" : "0 0.5rem"}
           key={v}
           selected={all ? true : i === buttonSelected}
           onClick={(e) => {

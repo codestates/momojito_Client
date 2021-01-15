@@ -1,4 +1,4 @@
-import { Root, Body } from "../components/PageUtils";
+import PageUtils from "../components/PageUtils";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import CardGrid from "../components/CardGrid";
@@ -21,18 +21,14 @@ export default function WorldCup() {
   const handleLeft = (e) => {};
   const handleRight = (e) => {};
   return (
-    <Root>
-      <Header></Header>
-      <Body>
-        <H1>칵테일 이상형 월드컵 {2 ** Math.floor(remain.length / 2)}강</H1>
-        <Container_Big className="">
-          <Card index={0} handleClick={handleLeft}></Card>
-          <H1>VS</H1>
-          <Card index={1} handleClick={handleRight}></Card>
-        </Container_Big>
-      </Body>
-      <Footer></Footer>
-    </Root>
+    <PageUtils>
+      <H1>칵테일 이상형 월드컵 {2 ** Math.floor(remain.length / 2)}강</H1>
+      <Container_Big className="">
+        <Card index={0} handleClick={handleLeft}></Card>
+        <H1>VS</H1>
+        <Card index={1} handleClick={handleRight}></Card>
+      </Container_Big>
+    </PageUtils>
   );
 }
 

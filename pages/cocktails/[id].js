@@ -1,7 +1,5 @@
 import styled from "styled-components";
-import { Root, Body } from "../../components/PageUtils";
-import Header from "../../components/Header.js";
-import Footer from "../../components/Footer.js";
+import PageUtils from "../../components/PageUtils";
 import StarList from "../../components/StarList";
 import db from "../../public/cocktaildb";
 import Carousel from "../../components/Carousel";
@@ -65,85 +63,81 @@ export default function Cocktail({ id }) {
   const cocktail = db[id];
   const carouselImages = [{ url: 'url("/bar0.jpeg");' }];
   return (
-    <Root>
-      <Header></Header>
-      <Body>
-        <Container>
+    <PageUtils>
+      <Container>
+        <Carousel
+          carouselList={[
+            {
+              url: `url("/cocktails/${id}.jpeg");`,
+            },
+          ]}
+        ></Carousel>
+        {cocktail.barname ? (
+          <div className="signature">
+            <h1>{cocktail.barname}</h1>
+            <div className="barloc">
+              <Button s="0.5rem">{cocktail.barlocation}</Button>
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
+        <div className="nameheart">
+          <h1>{`${cocktail.koreanName}(${cocktail.name})`}</h1>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+            />
+          </svg>
+        </div>
+        <div className="stars">
+          <StarList rating={cocktail.rating}></StarList>
+          <h2>평균별점 {cocktail.rating}</h2>
+          <Button>평가하기</Button>
+        </div>
+        <div className="ingredients">
+          <ButtonList
+            all
+            buttonList={cocktail.ingredients.split(",")}
+          ></ButtonList>
+        </div>
+        <p>{cocktail.description}</p>
+        <div className="recommend">
+          <h1>
+            {cocktail.barname
+              ? `${cocktail.barname}에서 찍은 다른 사진`
+              : "이곳에서 드시겠어요?"}
+          </h1>
           <Carousel
             carouselList={[
               {
-                url: `url("/cocktails/${id}.jpeg");`,
+                url: 'url("/bar0.jpeg");',
+                heading: "JASE",
+                buttonText: "홍대",
+              },
+              {
+                url: 'url("/bar1.jpeg");',
+                heading: "PAVOX",
+                buttonText: "강남",
+              },
+              {
+                url: 'url("/bar2.jpeg");',
+                heading: "청춘예찬",
+                buttonText: "성신여대",
               },
             ]}
           ></Carousel>
-          {cocktail.barname ? (
-            <div className="signature">
-              <h1>{cocktail.barname}</h1>
-              <div className="barloc">
-                <Button s="0.5rem">{cocktail.barlocation}</Button>
-              </div>
-            </div>
-          ) : (
-            ""
-          )}
-          <div className="nameheart">
-            <h1>{`${cocktail.koreanName}(${cocktail.name})`}</h1>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-              />
-            </svg>
-          </div>
-          <div className="stars">
-            <StarList rating={cocktail.rating}></StarList>
-            <h2>평균별점 {cocktail.rating}</h2>
-            <Button>평가하기</Button>
-          </div>
-          <div className="ingredients">
-            <ButtonList
-              all
-              buttonList={cocktail.ingredients.split(",")}
-            ></ButtonList>
-          </div>
-          <p>{cocktail.description}</p>
-          <div className="recommend">
-            <h1>
-              {cocktail.barname
-                ? `${cocktail.barname}에서 찍은 다른 사진`
-                : "이곳에서 드시겠어요?"}
-            </h1>
-            <Carousel
-              carouselList={[
-                {
-                  url: 'url("/bar0.jpeg");',
-                  heading: "JASE",
-                  buttonText: "홍대",
-                },
-                {
-                  url: 'url("/bar1.jpeg");',
-                  heading: "PAVOX",
-                  buttonText: "강남",
-                },
-                {
-                  url: 'url("/bar2.jpeg");',
-                  heading: "청춘예찬",
-                  buttonText: "성신여대",
-                },
-              ]}
-            ></Carousel>
-          </div>
-        </Container>
-      </Body>
-      <Footer></Footer>
-    </Root>
+        </div>
+      </Container>
+    </PageUtils>
   );
 }
 
