@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { useMediaQuery } from "react-responsive";
 import styled from "styled-components";
 import Button from "./Button";
 import StarList from "./StarList";
@@ -54,20 +55,32 @@ const H1 = styled.h1`
   padding: 0.25rem;
   text-align: center;
 `;
-export default function CardGrid({ indexList, type }) {
+export default function CardGrid({ indexList, type, setPastquery }) {
   return (
     <Container_card>
       {indexList.map((v, i) => (
-        <Card type={type} index={v} key={v} i={i}></Card>
+        <Card
+          type={type}
+          index={v}
+          key={v}
+          i={i}
+          setPastquery={setPastquery}
+        ></Card>
       ))}
     </Container_card>
   );
 }
-function Card({ index, type, i }) {
+function Card({ index, type, i, setPastquery }) {
   const router = useRouter();
+  const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
   const cocktail = db[index];
   const handleClick = (e) => {
-    router.push(`/cocktails/${index}`);
+    if (isDesktop) {
+      setPastquery(index);
+      router.push(`/?cocktailId=${index}`, `/cocktails/${index}`);
+    } else {
+      router.push(`/cocktails/${index}`);
+    }
   };
   return (
     <Container onClick={handleClick}>

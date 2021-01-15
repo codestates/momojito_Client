@@ -3,13 +3,40 @@ import PageUtils from "../components/PageUtils";
 import CardGrid from "../components/CardGrid";
 import ButtonList from "../components/ButtonList";
 import Carousel from "../components/Carousel";
+import CocktailInfo from "../components/CocktailInfo";
 import { useRouter } from "next/router";
+import Modal from "react-modal";
+Modal.setAppElement("#__next");
 
 export default function Home() {
   const [buttonSelected, setButtonSelected] = useState(0);
+  const [pastquery, setPastquery] = useState("");
   const router = useRouter();
   return (
     <PageUtils>
+      <Modal
+        closeTimeoutMS={250}
+        isOpen={!!router.query.cocktailId}
+        onRequestClose={() => router.push("/")}
+        contentLabel="Cocktail Modal"
+        style={{
+          overlay: {
+            backgroundColor: "rgba(255, 255, 255, 0)",
+            zIndex: 10,
+          },
+          content: {
+            top: "42px",
+            bottom: "69px",
+            right: "0px",
+            left: "auto",
+            width: "375px",
+          },
+        }}
+      >
+        <CocktailInfo
+          id={router.query.cocktailId ? router.query.cocktailId : pastquery}
+        ></CocktailInfo>
+      </Modal>
       <Carousel
         carouselList={[
           {
@@ -41,11 +68,19 @@ export default function Home() {
         setButtonSelected={setButtonSelected}
       ></ButtonList>
       {buttonSelected === 0 ? (
-        <CardGrid indexList={[1, 3, 5]}></CardGrid>
+        <CardGrid indexList={[1, 3, 5]} setPastquery={setPastquery}></CardGrid>
       ) : buttonSelected === 1 ? (
-        <CardGrid indexList={[4, 5]} type="signature"></CardGrid>
+        <CardGrid
+          indexList={[4, 5]}
+          type="signature"
+          setPastquery={setPastquery}
+        ></CardGrid>
       ) : (
-        <CardGrid indexList={[3]} type="ranking"></CardGrid>
+        <CardGrid
+          indexList={[3]}
+          type="ranking"
+          setPastquery={setPastquery}
+        ></CardGrid>
       )}
     </PageUtils>
   );

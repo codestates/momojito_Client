@@ -1,5 +1,6 @@
-import styled from "styled-components";
+import styled, { ThemeContext } from "styled-components";
 import { useRouter } from "next/router";
+import { useContext } from "react";
 const Container = styled.div`
   display: none;
   padding: 1rem;
@@ -29,6 +30,7 @@ const Container = styled.div`
 `;
 
 export default function Sidebar() {
+  const userContext = useContext(ThemeContext).userContext;
   const router = useRouter();
   return (
     <Container>
@@ -47,7 +49,13 @@ export default function Sidebar() {
       <div onClick={(e) => router.push("/test")} className="small">
         칵테일 성향테스트
       </div>
-      <div onClick={(e) => router.push("/mypage")} className="big">
+      <div
+        onClick={(e) => {
+          if (userContext.user.isLogin) router.push("/mypage");
+          else router.push("/signin");
+        }}
+        className="big"
+      >
         My page
       </div>
     </Container>
