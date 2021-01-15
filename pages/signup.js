@@ -208,7 +208,7 @@ export default function SignUp() {
           <h1>회원가입</h1>
         </Default>
         <Kakao onClick={handleKakao}>
-          <img src="/kakao.svg" width="30px" alt=""></img>
+          <img src="/kakao.png" width="30px" alt=""></img>
           <div>카카오 계정으로 신규 가입</div>
           <div className="blank"></div>
         </Kakao>

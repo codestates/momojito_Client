@@ -199,11 +199,9 @@ export default function ChangeInfo() {
     setNickname(e.target.value);
   }
 
-  function profile() {
+  function getUserData() {
     axios.get('http://localhost:5000/mypage/getUserData',{
-      headers: {
-        Authorization: `Bearer ${user.authToken}`
-      }
+      withCredentials: true
     })
   };
 
@@ -273,18 +271,14 @@ export default function ChangeInfo() {
 
   const onSubmit = () => {
     // e.preventDefault();
-    console.log('----->',content);
     const formData = new FormData();
     formData.append("uploadImg", content);
 
     axios
     .post("http://localhost:5000/mypage/profileChange", formData, {withCredentials: true})
     .then(res => {
-      console.log('=======>>>>>>>',res);
       setUploadedImg({filePath: res.data.imageUrl});
       setUser({profileImg: res.data.imageUrl});
-      console.log('profileImg----->>>>>>',user.profileImg)
-      // alert("The file is successfully uploaded");-> 모달창으로 변경
     })
   };
 
