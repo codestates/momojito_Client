@@ -1,10 +1,8 @@
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import styled, { ThemeContext } from "styled-components";
 import axios from "axios";
 import { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
-import { Root, Body } from "../components/PageUtils";
+import PageUtils from "../components/PageUtils";
 
 const SignUpText = styled.div`
   text-align: center;
@@ -174,10 +172,14 @@ export default function SignUp() {
     axios.post();
   }
 
+  const Container = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  `;
   return (
-    <Root>
-      <Body>
-        <Header />
+    <PageUtils>
+      <Container>
         <SignUpText>회원가입</SignUpText>
         <InputText
           className="email"
@@ -217,8 +219,7 @@ export default function SignUp() {
           <h1>페이스북 계정으로 신규 가입</h1>
           <div className="blank"></div>
         </Facebook>
-      </Body>
-      <Footer />
-    </Root>
+      </Container>
+    </PageUtils>
   );
 }

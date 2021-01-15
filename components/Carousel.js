@@ -38,13 +38,15 @@ const Divwithbg = styled.div`
   }
 `;
 
-function Slide({ url, heading, buttonText = "지금 이동하기" }) {
+function Slide({ url, heading, buttonText = "지금 이동하기", handleClick }) {
   return (
     <Divwithbg url={url} heading={heading}>
       {heading ? (
         <div className="">
           <h1>{heading}</h1>
-          <Button selected>{buttonText}</Button>
+          <Button selected onClick={handleClick}>
+            {buttonText}
+          </Button>
         </div>
       ) : (
         ""
@@ -56,11 +58,33 @@ function Slide({ url, heading, buttonText = "지금 이동하기" }) {
 export default function Carousel({ carouselList }) {
   return (
     <Swiper autoplay={{ delay: 5000 }}>
-      {carouselList.map(({ url, heading, buttonText }) => (
+      {carouselList.map(({ url, heading, buttonText, handleClick }) => (
         <SwiperSlide key={url}>
-          <Slide url={url} heading={heading} buttonText={buttonText}></Slide>
+          <Slide
+            url={url}
+            heading={heading}
+            buttonText={buttonText}
+            handleClick={handleClick}
+          ></Slide>
         </SwiperSlide>
       ))}
     </Swiper>
   );
 }
+
+const CarouselExtended = function ({ carouselList }) {
+  return (
+    <div>
+      {carouselList.map(({ url, heading, buttonText, handleClick }) => (
+        <Slide
+          url={url}
+          heading={heading}
+          buttonText={buttonText}
+          handleClick={handleClick}
+        ></Slide>
+      ))}
+    </div>
+  );
+};
+
+export { CarouselExtended };

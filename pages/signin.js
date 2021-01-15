@@ -1,10 +1,8 @@
 import styled from "styled-components";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { Root, Body } from "../components/PageUtils";
+import PageUtils from "../components/PageUtils";
 
 const SignInText = styled.div`
   text-align: center;
@@ -189,46 +187,37 @@ export default function Login() {
   }
 
   return (
-    <Root>
-      <Body>
-        <Header />
-        <SignInText>로그인</SignInText>
-        <InputText
-          onChange={eTargetValueEmail}
-          placeholder="  이메일 주소를 입력해 주세요."
-        ></InputText>
-        <InputText
-          onChange={eTargetValuePassword}
-          placeholder="  비밀번호를 입력해 주세요."
-        ></InputText>
+    <PageUtils>
+      <SignInText>로그인</SignInText>
+      <InputText
+        onChange={eTargetValueEmail}
+        placeholder="  이메일 주소를 입력해 주세요."
+      ></InputText>
+      <InputText
+        onChange={eTargetValuePassword}
+        placeholder="  비밀번호를 입력해 주세요."
+      ></InputText>
 
-        <Validation>{!validate ? <div>ㅤ</div> : validate}</Validation>
+      <Validation>{!validate ? <div>ㅤ</div> : validate}</Validation>
 
-        <Default onClick={handleSignIn}>
-          <h1>로그인</h1>
-        </Default>
-        <Naver onClick={handleNaver}>
-          <img src='/naver.png' width='30px' alt=''></img>
-          <h1>네이버 계정으로 신규 가입</h1>
-          <div className='blank'></div>
-        </Naver>
-        <Kakao onClick={handleKakao}>
-          <img src="/kakao.png" width="30px" alt=""></img>
-          <div>카카오 계정으로 신규 가입</div>
-          <div className="blank"></div>
-        </Kakao>
-        <Facebook onClick={handleFacebook}>
-          <img src="/facebook.png" width="25px" alt=""></img>
-          <h1>페이스북 계정으로 신규 가입</h1>
-          <div className="blank"></div>
-        </Facebook>
+      <Default onClick={handleSignIn}>
+        <h1>로그인</h1>
+      </Default>
+      <Kakao onClick={handleKakao}>
+        <img src="/kakao.svg" width="30px" alt=""></img>
+        <div>카카오 계정으로 신규 가입</div>
+        <div className="blank"></div>
+      </Kakao>
+      <Facebook onClick={handleFacebook}>
+        <img src="/facebook.png" width="30px" alt=""></img>
+        <h1>페이스북 계정으로 신규 가입</h1>
+        <div className="blank"></div>
+      </Facebook>
 
-        <Bottom>
-          <h1>회원이 아니신가요?</h1>
-          <h2 onClick={redirection}>회원가입</h2>
-        </Bottom>
-      </Body>
-      <Footer />
-    </Root>
+      <Bottom>
+        <h1>회원이 아니신가요?</h1>
+        <h2 onClick={redirection}>회원가입</h2>
+      </Bottom>
+    </PageUtils>
   );
 }
