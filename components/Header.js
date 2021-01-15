@@ -39,17 +39,8 @@ export default function Header() {
         <>
           <LogoPart></LogoPart>
           <ButtonPart>
-            <Button onClick={(e) => router.push("/signin")} primary selected>
+            <Button onClick={(e) => router.push("/signin")} selected>
               Log in
-            </Button>
-            <Button
-              onClick={(e) => router.push("/signup")}
-              primary
-              selected
-              m="0 0.5rem"
-            >
-              {" "}
-              Sign up
             </Button>
           </ButtonPart>
         </>
