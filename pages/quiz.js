@@ -1,14 +1,12 @@
-/** @format */
-
-import { useState, useContext } from "react";
+import { useState, useEffect } from "react";
 import { Root, Body } from "../components/PageUtils";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import quizdata from "../public/quizdb";
 import styled from "styled-components";
 import { useRouter } from "next/router";
-import ProgressBar from "../components/ProgressBar"
-import Button from '../components/Button'
+import ProgressBar from "../components/ProgressBar";
+import Head from "next/head";
 
 const QuizHeader = styled.div`
   margin-top: 70px;
@@ -65,7 +63,11 @@ const AnswerBtn = styled.button`
   background-color: white;
   cursor: pointer;
 
-  &:hover {
+  //   &:hover {
+  //     border-color: #36cc3c;
+  //     background-color: #edfbd5;
+  //   }
+  &:active {
     border-color: #36cc3c;
     background-color: #edfbd5;
   }
@@ -74,15 +76,17 @@ const AnswerBtn = styled.button`
 function quiz() {
   const [count, setCount] = useState(0);
   const [totalScore, setScore] = useState(0);
-  const [resultOn, setResultOn] = useState(false); 
+  const [resultOn, setResultOn] = useState(false);
+  const percentage = (count / quizdata.length) * 100;
 
-  const percentage = (count/quizdata.length)*100
   console.log(totalScore);
 
   let q = quizdata[count];
-
   return (
     <Root>
+      <Head>
+      <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+      </Head>
       <Header></Header>
       <Body>
         <QuizHeader>✏️ 칵테일 능력평가</QuizHeader>
@@ -156,12 +160,10 @@ function Answer({
   );
 }
 
-
-
 const ResultBox = styled.div`
   margin: auto;
   margin-top: 30px;
-  width: 250px;
+  width: 350px;
   height: 350px;
   background-color: #edfbd5;
   position: relative;
@@ -194,14 +196,28 @@ const ResultBox = styled.div`
 `;
 
 const ButtonDiv = styled.div`
-  margin-top: 20px;
+  margin-top: 10px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 
   .btn {
-      margin: 30px;
+    height: 50px;
+    width: 240px;
+    margin-top: 10px;
+    cursor: pointer;
+    background-color: white;
+
+    &:hover {
+      background-color: limegreen;
+      color: white;
+    }
+    &:active {
+      background-color: green;
+      color: white;
+    }
   }
-`
+`;
 
 function Result({ totalScore }) {
   const router = useRouter();
@@ -218,7 +234,6 @@ function Result({ totalScore }) {
     },
   ];
 
-  // 라우터로 첫 문제로 안넘어가짐.. 결과페이지를 다른 url로 빼야되나???
   let result;
 
   if (totalScore < 50) {
@@ -236,17 +251,66 @@ function Result({ totalScore }) {
         <div className="result-text">{result.text}</div>
       </ResultBox>
       <ButtonDiv>
-        <Button className="btn" selected="">칵테일 추천받기</Button>
-        <Button className="btn" selected=""
+        <button
+          className="btn"
+          selected=""
           onClick={
             () => (document.location.href = "/quiz") /*router.push("/quiz")*/
           }
         >
           다시 도전하기
-        </Button>
+        </button>
+        <button className="btn" selected="">
+          칵테일 추천받기
+        </button>
+        <KakaoShareButton result={result} className="btn"></KakaoShareButton>
       </ButtonDiv>
     </>
   );
 }
+
+const kakaoKey = '75d977bf235fda941972e4be5835408a'
+
+function KakaoShareButton({result}) {
+
+  useEffect(() => {
+    createKakaoButton()
+  }, [])
+
+  console.log(result.imgsrc)
+  const createKakaoButton = () => {
+    // kakao sdk script이 정상적으로 불러와졌으면 window.Kakao로 접근이 가능합니다
+    if (window.Kakao) {
+      const kakao = window.Kakao
+      // 중복 initialization 방지
+      if (!kakao.isInitialized()) {
+        // 두번째 step 에서 가져온 javascript key 를 이용하여 initialize
+        kakao.init(kakaoKey)
+      }
+      kakao.Link.createDefaultButton({
+        // Render 부분 id=kakao-link-btn 을 찾아 그부분에 렌더링을 합니다
+        container: '#kakao-link-btn',
+        objectType: 'feed',
+        content: {
+          title: '나의 술알못 테스트 결과는?',
+          description: result.text,
+          imageUrl: 'http://mud-kage.kakao.co.kr/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg', // i.e. process.env.FETCH_URL + '/logo.png'
+          link: {
+            mobileWebUrl: window.location.href,
+            webUrl: window.location.href,
+          },
+        },
+      })
+
+
+    }
+  }
+  return (
+    <button className="btn" id="kakao-link-btn">
+      카카오톡 공유하기
+    </button>
+  )
+}
+
 
 export default quiz;
