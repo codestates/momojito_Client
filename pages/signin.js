@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled, {ThemeContext} from "styled-components";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useRouter } from "next/router";
 import PageUtils from "../components/PageUtils";
 
@@ -24,7 +24,7 @@ const Validation = styled.div`
   justify-content: center;
   margin-block-start: 3%;
   color: red;
-  font-size: 80%;
+  font-size: 50%;
 `;
 
 const Default = styled.button`
@@ -53,6 +53,7 @@ const Naver = styled.button`
   border-radius: 0.25rem;
   border: none;
   width: 300px;
+  height: 36px;
   align-items: center;
   margin: auto;
   margin-block-start: 20px;
@@ -74,9 +75,13 @@ const Kakao = styled.button`
   border-radius: 0.25rem;
   border: none;
   width: 300px;
+  height: 36px;
   align-items: center;
   margin: auto;
   margin-block-start: 20px;
+  img {
+    margin-left: 3px;
+  }
   .blank {
     width: 30px;
   }
@@ -96,6 +101,9 @@ const Facebook = styled.button`
   border: none;
   margin: auto;
   margin-block-start: 20px;
+  img {
+    margin-bottom: 3px;
+  }
   h1 {
     color: white;
   }
@@ -126,9 +134,12 @@ const Bottom = styled.div`
 `;
 
 export default function Login() {
-  let [email, setEmail] = useState();
-  let [password, setPassword] = useState();
-  let [validate, setValidate] = useState();
+
+  const {user, setUser} = useContext(ThemeContext).userContext; 
+
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [validate, setValidate] = useState();
 
   const router = useRouter();
 
@@ -152,20 +163,23 @@ export default function Login() {
     if(email && password) {
       axios.post('http://localhost:5000/auth/signin', {
         email,
-        password
+        password,
+        headers: {
+          Authorization: `Bearer ${user.authToken}`
+        }
       },{
         withCredentials: true
       })
       .then((res)=>{
-        router.push('/mypage');
         // if(존재하지 않는 아이디의 경우) {
-        //   setValidate('존재하지 않는 아이디 입니다.');
-        //   return validate;
-        // }
-        // else if(비밀번호가 틀린 경우) {
-        //   setValidate('올바른 비밀번호를 입력해 주세요.');
-        //   return validate;
-        // }
+          //   setValidate('존재하지 않는 아이디 입니다.');
+          //   return validate;
+          // }
+          // else if(비밀번호가 틀린 경우) {
+            //   setValidate('올바른 비밀번호를 입력해 주세요.');
+            //   return validate;
+            // }
+            router.push('/mypage');
       })
     }
   }
@@ -196,6 +210,7 @@ export default function Login() {
       <InputText
         onChange={eTargetValuePassword}
         placeholder="  비밀번호를 입력해 주세요."
+        type='password'
       ></InputText>
 
       <Validation>{!validate ? <div>ㅤ</div> : validate}</Validation>
@@ -203,13 +218,18 @@ export default function Login() {
       <Default onClick={handleSignIn}>
         <h1>로그인</h1>
       </Default>
+      <Naver onClick={handleNaver}>
+          <img src='/naver.png' width='30px' alt=''></img>
+          <h1>네이버 계정으로 신규 가입</h1>
+          <div className='blank'></div>
+        </Naver>
       <Kakao onClick={handleKakao}>
-        <img src="/kakao.png" width="30px" alt=""></img>
+        <img src="/kakao.png" width="25px" alt=""></img>
         <div>카카오 계정으로 신규 가입</div>
         <div className="blank"></div>
       </Kakao>
       <Facebook onClick={handleFacebook}>
-        <img src="/facebook.png" width="30px" alt=""></img>
+        <img src="/facebook.png" width="20px" alt=""></img>
         <h1>페이스북 계정으로 신규 가입</h1>
         <div className="blank"></div>
       </Facebook>

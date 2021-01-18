@@ -17,7 +17,7 @@ const InputText = styled.input`
   margin: auto;
   width: 300px;
   height: 30px;
-  margin-block-start: 3%;
+  margin-block-start: 10px;
   border-radius: 5px;
   border: 1px solid grey;
 `;
@@ -27,7 +27,7 @@ const Validation = styled.div`
   justify-content: center;
   margin-block-start: 3%;
   color: red;
-  font-size: 80%;
+  font-size: 50%;
 `;
 
 const Checkbox = styled.div`
@@ -76,9 +76,10 @@ const Naver = styled.button`
   border-radius: 0.25rem;
   border: none;
   width: 300px;
+  height: 36px;
   align-items: center;
   margin: auto;
-  margin-block-start: 20px;
+  margin-block-start: 15px;
   .blank {
     width: 30px;
   }
@@ -97,9 +98,13 @@ const Kakao = styled.button`
   border-radius: 0.25rem;
   border: none;
   width: 300px;
+  height: 36px;
   align-items: center;
   margin: auto;
-  margin-block-start: 20px;
+  margin-block-start: 15px;
+  img {
+    margin-left: 3px;
+  }
   .blank {
     width: 30px;
   }
@@ -118,7 +123,10 @@ const Facebook = styled.button`
   border-radius: 5px;
   border: none;
   margin: auto;
-  margin-block-start: 20px;
+  margin-block-start: 15px;
+  img {
+    margin-bottom: 3px;
+  }
   h1 {
     color: white;
   }
@@ -132,6 +140,8 @@ const Facebook = styled.button`
 
 const Div = styled.div`
   display: flex;
+  justify-content: center;
+  margin-top: 0;
 `;
 
 const CheckImageDiv = styled.div`
@@ -169,6 +179,7 @@ export default function SignUp() {
   const { user, setUser } = useContext(ThemeContext).userContext;
 
   const [email, setEmail] = useState();
+  const [nickname, setNickname] = useState();
   const [password, setPassword] = useState();
   const [passwordCheck, setPasswordCheck] = useState();
   const [validate, setValidate] = useState();
@@ -189,25 +200,22 @@ export default function SignUp() {
 
   function closeModal() {
     setIsOpen(false);
+    if(message === '회원가입이 완료되었습니다') {
+      router.push('/');
+    }
   }
 //
   function eTargetValueEmail(e) {
     setEmail(e.target.value);
-    if(e.keyCode == 13) {
-      handleSignUp();
-    }
+  }
+  function eTargetValueNickname(e) {
+    setNickname(e.target.value);
   }
   function eTargetValuePassword(e) {
     setPassword(e.target.value);
-    if(e.keyCode == 13) {
-      handleSignUp();
-    }
   }
   function eTargetValuePasswordCheck(e) {
     setPasswordCheck(e.target.value);
-    if(e.keyCode == 13) {
-      handleSignUp();
-    }
   }
   function checkPasswordCheck() {
     if((password && passwordCheck) && password === passwordCheck) {
@@ -230,6 +238,8 @@ export default function SignUp() {
       return "email을 입력해 주세요.";
     } else if (!email.includes("@")) {
       return "올바른 형식의 email을 입력해 주세요.";
+    } else if (!nickname) {
+      return "닉네임을 입력해 주세요."
     } else if (!password || !passwordCheck) {
       return "비밀번호를 입력해 주세요.";
     } else if (password !== passwordCheck) {
@@ -239,37 +249,41 @@ export default function SignUp() {
     }
   }
 
-
+  function onKeyDown(e) {
+    if(e.keyCode == 13) {
+      handleSignUp();
+    }
+  }
 
   function handleSignUp() {
     setValidate(validation);
 
-    if (email && password && passwordCheck) {
+    if (email && nickname && password && passwordCheck) {
       if (password === passwordCheck) {
         if (document.querySelector(".checkbox").checked === true) {
-          //!
+          
           axios
             .post("http://localhost:5000/auth/signup", {
               email,
+              nickname,
               password,
+              passwordCheck
             })
             .then((res) => {
-              console.log('-------->>>>>>>',res);
-
-              // else {
-              //   openModal();//
-              //   setUser({
-              //     isLogin: true,
-              //     nickname: res.body.nickname,
-              //     authToken: res.body.authToken,
-              //   });
-              //   router.push("/mainpage/getTopTen");
-              // }
-              openModal();
+              if(res.status === 401) {
+                setMessage('이미 존재하는 닉네임 입니다.');
+                openModal();
+              } else if(res.status === 402) {
+                setMessage('이미 존재하는 이메일 입니다.');
+                openModal();
+              }
+              else {
+                openModal();
+              }
             })
             .catch((err)=>{
               if(err) {
-                setMessage('이미 존재하는 이메일 입니다.');
+                setMessage(`${err}`);
                 openModal();
               }
             })
@@ -310,27 +324,37 @@ export default function SignUp() {
           className="email"
           onChange={eTargetValueEmail}
           placeholder="  사용하실 이메일 주소를 입력해주세요."
+          onKeyDown={onKeyDown}
+        ></InputText>
+        <InputText
+          className="nickname"
+          onChange={eTargetValueNickname}
+          placeholder="  사용하실 닉네임을 입력해주세요."
+          maxLength='8'
+          onKeyDown={onKeyDown}
         ></InputText>
         <InputText
           className="password"
           type="password"
           onChange={eTargetValuePassword}
           placeholder="  사용하실 패스워드를 입력해 주세요."
+          onKeyDown={onKeyDown}
         ></InputText>
-        <CheckImageDiv>
         <Div>
+        <CheckImageDiv>
         <InputText
           className="passwordCheck"
           type="password"
           onChange={eTargetValuePasswordCheck}
           placeholder="  패스워드를 다시 입력해 주세요."
+          onKeyDown={onKeyDown}
         ></InputText>
           <span>{validateCheck?
           <img src='/check.png'></img>
           :
           <></>}</span>
-        </Div>
         </CheckImageDiv>
+        </Div>
 
         <Validation>{!validate ? <div>ㅤ</div> : validate}</Validation>
 
@@ -348,7 +372,7 @@ export default function SignUp() {
           <div className='blank'></div>
         </Naver>
         <Kakao onClick={handleKakao}>
-          <img src="/kakao.png" width="30px" alt=""></img>
+          <img src="/kakao.png" width="25px" alt=""></img>
           <div>카카오 계정으로 신규 가입</div>
           <div className="blank"></div>
         </Kakao>

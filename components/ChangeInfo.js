@@ -201,6 +201,9 @@ export default function ChangeInfo() {
 
   function getUserData() {
     axios.get('http://localhost:5000/mypage/getUserData',{
+      headers: {
+        Authorization: `Bearer ${user.authToken}`
+      },
       withCredentials: true
     })
   };
@@ -209,6 +212,9 @@ export default function ChangeInfo() {
 
   function removeProfileImg() {
     axios.post('http://localhost:5000/mypage/profileDelete', {
+      headers: {
+        Authorization: `Bearer ${user.authToken}`
+      },
       withCredentials: true
     })
     .then((res)=>{
@@ -221,7 +227,10 @@ export default function ChangeInfo() {
     //   -> 모달창 '닉네임은 최대 8자까지 가능합니다.'
     // }
     axios.post('http://localhost:5000/mypage/nicknameChange',{
-      nickname
+      nickname,
+      headers: {
+        Authorization: `Bearer ${user.authToken}`
+      }
     },{
       withCredentials: true
     })
@@ -246,7 +255,10 @@ export default function ChangeInfo() {
     axios.post('http://localhost:5000/mypage/passwordChange',{
       currentPassword,
       password,
-      passwordCheck
+      passwordCheck,
+      headers: {
+        Authorization: `Bearer ${user.authToken}`
+      }
     },{
       withCredentials: true
     })
