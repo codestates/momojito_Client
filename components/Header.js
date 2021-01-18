@@ -50,8 +50,13 @@ export default function Header() {
 }
 
 function LogoPart() {
+  const router = useRouter();
   return (
-    <Logo>
+    <Logo
+      onClick={(e) => {
+        router.push("/");
+      }}
+    >
       <svg
         width="22"
         height="22"

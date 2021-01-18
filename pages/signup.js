@@ -1,4 +1,3 @@
-
 import styled, { ThemeContext } from "styled-components";
 import axios from "axios";
 import { useState, useContext, useEffect } from "react";
@@ -261,7 +260,7 @@ export default function SignUp() {
               //   openModal();//
               //   setUser({
               //     isLogin: true,
-              //     username: res.body.username,
+              //     nickname: res.body.nickname,
               //     authToken: res.body.authToken,
               //   });
               //   router.push("/mainpage/getTopTen");
