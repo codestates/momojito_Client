@@ -22,8 +22,8 @@ export default function MyApp({ Component, pageProps }) {
     isLogin: false,
     email: "", //! 추가했는데 합의필요(changeInfo에서 state를 따로 관리할것인가?)
     profileImg: "", //!
-    username: "", //! API에서는 nickname이라 되어있어 합의필요 //닉네임 길이제한 합의필요
-    authToken: "",
+    nickname: "", //! API에서는 nickname이라 되어있어 합의필요 //닉네임 길이제한 합의필요
+    accessToken: "",
   });
   return (
     <>

@@ -2,6 +2,7 @@ import styled, {ThemeContext} from 'styled-components';
 import axios from 'axios';
 import { useContext, useState, useEffect } from 'react';
 import HoverButton from './HoverButton';
+import Modal from 'react-modal';
 
 const Image = styled.div`
   display: flex;
@@ -186,6 +187,24 @@ export default function ChangeInfo() {
   const [content, setContent] = useState();
   const [uploadedImg, setUploadedImg] = useState({filePath: null});
 
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [message, setMessage] = useState();
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function afterOpenModal() {
+    subtitle.style.color = '#23B366';
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+    if(message === '로그인이 완료되었습니다') {
+      router.push('/');
+    }
+  }
+
   function eTargetValueCurrentPassword(e) {
     setCurrentPassword(e.target.value);
   }
@@ -201,6 +220,9 @@ export default function ChangeInfo() {
 
   function getUserData() {
     axios.get('http://localhost:5000/mypage/getUserData',{
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`
+      },
       withCredentials: true
     })
   };
@@ -209,6 +231,9 @@ export default function ChangeInfo() {
 
   function removeProfileImg() {
     axios.post('http://localhost:5000/mypage/profileDelete', {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`
+      },
       withCredentials: true
     })
     .then((res)=>{
@@ -221,7 +246,10 @@ export default function ChangeInfo() {
     //   -> 모달창 '닉네임은 최대 8자까지 가능합니다.'
     // }
     axios.post('http://localhost:5000/mypage/nicknameChange',{
-      nickname
+      nickname,
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`
+      }
     },{
       withCredentials: true
     })
@@ -231,12 +259,12 @@ export default function ChangeInfo() {
       // }
       // else {
       //   setUser({
-      //     username: res.body.nickname,
+      //     nickname: res.body.nickname,
       //   });
       //   -> 모달창 '닉네임을 성공적으로 변경 하였습니다.'
       // }
       setUser({
-        username: res.body.nickname,
+        nickname: res.body.nickname,
       })
     })
   }
@@ -246,7 +274,10 @@ export default function ChangeInfo() {
     axios.post('http://localhost:5000/mypage/passwordChange',{
       currentPassword,
       password,
-      passwordCheck
+      passwordCheck,
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`
+      }
     },{
       withCredentials: true
     })
@@ -284,6 +315,16 @@ export default function ChangeInfo() {
 
   return (
     <div>
+      <Modal
+        isOpen={modalIsOpen}
+        onAfterOpen={afterOpenModal}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel='Example Modal'
+      >
+        <h2 ref={_subtitle => (subtitle = _subtitle)}>{message}</h2>
+        <HoverButton onClick={closeModal}><button>확인</button></HoverButton>
+      </Modal>
       <ButtonDiv>
         <form onSubmit={onSubmit}>
 
@@ -329,7 +370,7 @@ export default function ChangeInfo() {
       </ButtonDiv>
 
       <Email>이메일 <Span>{user.email}</Span></Email>
-      <Nickname>닉네임 {!user.username ? <Span>내닉네임</Span> : <Span>{user.username}</Span>}
+      <Nickname>닉네임 {!user.nickname ? <Span>내닉네임</Span> : <Span>{user.nickname}</Span>}
       <ButtonDiv2><button>변경하기</button></ButtonDiv2>
       </Nickname>
       <Password>비밀번호 변경</Password>
