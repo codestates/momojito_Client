@@ -1,5 +1,5 @@
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import axios from "axios";
 import PageUtils from "../components/PageUtils";
 import CardGrid from "../components/CardGrid";
 import ButtonList from "../components/ButtonList";
@@ -14,6 +14,19 @@ export default function Home() {
   const [buttonSelected, setButtonSelected] = useState(0);
   const [pastquery, setPastquery] = useState("");
   const router = useRouter();
+
+  const [topTenList, setTopTenList] = useState([])
+  
+  useEffect(() => {
+    axios.get('http://localhost:5000/mainpage/getTopTen')
+    .then((res) => {
+      const data = res.data.data.map((el) => {
+        return el.id
+      })
+      setTopTenList(data)
+    })
+  })
+  
   return (
     <PageUtils>
       <Modal
@@ -79,7 +92,7 @@ export default function Home() {
         ></CardGrid>
       ) : (
         <CardGrid
-          indexList={[3]}
+          indexList={topTenList}
           type="ranking"
           setPastquery={setPastquery}
         ></CardGrid>

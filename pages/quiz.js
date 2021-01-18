@@ -1,12 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import PageUtils from "../components/PageUtils";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import quizdata from "../public/quizdb";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import ProgressBar from "../components/ProgressBar";
 import Head from "next/head";
+import KakaoShareButton from "../components/KakaoShareButton";
 
 const QuizHeader = styled.div`
   margin-top: 70px;
@@ -189,6 +188,7 @@ const ResultBox = styled.div`
 
   .result-text {
     margin-top: 20px;
+    margin-bottom: 20px;
   }
 `;
 
@@ -215,6 +215,17 @@ const ButtonDiv = styled.div`
     }
   }
 `;
+
+const KakaoLink = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  p {
+    align-self: center;
+    font-size: 14px;
+    margin-right: 10px;
+  }
+`
 
 function Result({ totalScore }) {
   const router = useRouter();
@@ -260,50 +271,18 @@ function Result({ totalScore }) {
         <button className="btn" selected="">
           칵테일 추천받기
         </button>
-        <KakaoShareButton result={result} className="btn"></KakaoShareButton>
       </ButtonDiv>
+      <KakaoLink>
+        <p >
+          카카오톡으로 공유하기
+        </p>
+          <KakaoShareButton
+            title="나의 술알못 테스트 결과는?"
+            desc={result.text}
+            imgurl="http://mud-kage.kakao.co.kr/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg"
+          ></KakaoShareButton>
+      </KakaoLink>
     </>
-  );
-}
-
-const kakaoKey = "75d977bf235fda941972e4be5835408a";
-
-function KakaoShareButton({ result }) {
-  useEffect(() => {
-    createKakaoButton();
-  }, []);
-
-  console.log(result.imgsrc);
-  const createKakaoButton = () => {
-    // kakao sdk script이 정상적으로 불러와졌으면 window.Kakao로 접근이 가능합니다
-    if (window.Kakao) {
-      const kakao = window.Kakao;
-      // 중복 initialization 방지
-      if (!kakao.isInitialized()) {
-        // 두번째 step 에서 가져온 javascript key 를 이용하여 initialize
-        kakao.init(kakaoKey);
-      }
-      kakao.Link.createDefaultButton({
-        // Render 부분 id=kakao-link-btn 을 찾아 그부분에 렌더링을 합니다
-        container: "#kakao-link-btn",
-        objectType: "feed",
-        content: {
-          title: "나의 술알못 테스트 결과는?",
-          description: result.text,
-          imageUrl:
-            "http://mud-kage.kakao.co.kr/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg", // i.e. process.env.FETCH_URL + '/logo.png'
-          link: {
-            mobileWebUrl: window.location.href,
-            webUrl: window.location.href,
-          },
-        },
-      });
-    }
-  };
-  return (
-    <button className="btn" id="kakao-link-btn">
-      카카오톡 공유하기
-    </button>
   );
 }
 

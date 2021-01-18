@@ -146,7 +146,7 @@ export default function SignUp() {
         if (document.querySelector(".checkbox").checked === true) {
           //!
           axios
-            .post("http://localhost:3000/auth/signup", {
+            .post("http://localhost:5000/auth/signup", {
               email,
               password,
             })
