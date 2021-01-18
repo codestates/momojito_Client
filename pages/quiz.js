@@ -88,7 +88,7 @@ function quiz() {
       </Head>
 
       <QuizHeader>✏️ 칵테일 능력평가</QuizHeader>
-      {resultOn ? (
+      {!resultOn ? (
         <>
           <StatusBar>
             <div className="count">
