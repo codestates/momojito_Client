@@ -1,10 +1,12 @@
-import styled from "styled-components";
+import styled, { ThemeContext } from "styled-components";
 import PageUtils from "./PageUtils";
 import StarList from "./StarList";
 import db from "../public/cocktaildb";
 import Carousel from "./Carousel";
 import Button from "./Button";
 import ButtonList from "./ButtonList";
+import { useState, useContext, useEffect } from "react";
+import axios from "axios";
 
 const Container = styled.div`
   display: flex;
@@ -58,12 +60,61 @@ const Container = styled.div`
       margin-bottom: 2rem;
     }
   }
+
+  .heart {
+    cursor: pointer;
+    color: ${(props) => (props.isLike ? "red" : "black")};
+    // color: red;
+  }
 `;
 export default function CocktailInfo({ id }) {
+  id = Number(id);
   const cocktail = db[id];
   const carouselImages = [{ url: 'url("/bar0.jpeg");' }];
+  
+  const userContext = useContext(ThemeContext).userContext;
+  const user = userContext.user;
+
+  const [isLike, setIsLike] = useState(false);
+  useEffect(() => {
+    //여기에 props로 받은 Id가 포함되어 있으면, isLike -> true
+    if (user.myCocktailList.includes(id) === true) {
+      setIsLike(true);
+    }
+  });
+
+  // IsLike 가 false 이면 추가,  true면 삭제
+  const likeRequestHandler = () => {
+    axios
+      .post(
+        "http://localhost:5000/detail/favorite",
+        { cocktailId: id, isAdd: !isLike },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        // '받은 응답코드' 200 이면 추가,  201이면 삭제
+        if (res.status === 200) {
+          user.myCocktailList.push(id);
+        }
+        else if (res.status === 201) {
+          user.myCocktailList.splice(user.myCocktailList.indexOf(id), 1);
+        }
+        // 업데이트
+        userContext.setUser({
+          ...user,
+          myCocktailList: user.myCocktailList,
+        });
+      })
+      .then(() => {
+        setIsLike(!isLike)
+      })
+  };
+
+  console.log('isLike', isLike)
+  console.log('myCocktailList', user.myCocktailList)
+
   return (
-    <Container>
+    <Container isLike={isLike}>
       <Carousel
         carouselList={[
           {
@@ -84,8 +135,10 @@ export default function CocktailInfo({ id }) {
       <div className="nameheart">
         <h1>{`${cocktail.koreanName}(${cocktail.name})`}</h1>
         <svg
+          onClick={likeRequestHandler}
+          className="heart"
           xmlns="http://www.w3.org/2000/svg"
-          fill="none"
+          fill={isLike ? "red" : "none"}
           viewBox="0 0 24 24"
           stroke="currentColor"
         >

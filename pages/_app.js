@@ -24,6 +24,7 @@ export default function MyApp({ Component, pageProps }) {
     profileImg: "", //!
     username: "", //! API에서는 nickname이라 되어있어 합의필요 //닉네임 길이제한 합의필요
     authToken: "",
+    myCocktailList: [],
   });
   return (
     <>
