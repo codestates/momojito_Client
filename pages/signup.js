@@ -1,10 +1,12 @@
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+
 import styled, { ThemeContext } from "styled-components";
 import axios from "axios";
 import { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
-import { Root, Body } from "../components/PageUtils";
+import PageUtils from "../components/PageUtils";
+import Modal from 'react-modal';
+import ReactDOM from 'react-dom';
+import HoverButton from '../components/HoverButton';
 
 const SignUpText = styled.div`
   text-align: center;
@@ -129,24 +131,100 @@ const Facebook = styled.button`
   }
 `;
 
+const Div = styled.div`
+  display: flex;
+`;
+
+const CheckImageDiv = styled.div`
+  
+  /* background-image: url('check.png'); */
+  display: inline-block;//
+  position: relative;//
+  justify-content: center;
+  span {
+    position: absolute;//
+    top: 0;
+    margin-top: 6%;
+    right: 15px;
+  }
+  img {
+    width:20px;
+    height:20px;
+  }
+`;
+
+const customStyles = {
+  content : {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  }
+}
+
+
 export default function SignUp() {
   const router = useRouter();
   const { user, setUser } = useContext(ThemeContext).userContext;
 
-  let [email, setEmail] = useState();
-  let [password, setPassword] = useState();
-  let [passwordCheck, setPasswordCheck] = useState();
-  let [validate, setValidate] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [passwordCheck, setPasswordCheck] = useState();
+  const [validate, setValidate] = useState();
 
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [message, setMessage] = useState('회원가입이 완료되었습니다');
+  const [validateCheck, setValidateCheck] = useState(false);
+
+  var subtitle;
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function afterOpenModal() {
+    subtitle.style.color = '#23B366';
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+//
   function eTargetValueEmail(e) {
     setEmail(e.target.value);
+    if(e.keyCode == 13) {
+      handleSignUp();
+    }
   }
   function eTargetValuePassword(e) {
     setPassword(e.target.value);
+    if(e.keyCode == 13) {
+      handleSignUp();
+    }
   }
   function eTargetValuePasswordCheck(e) {
     setPasswordCheck(e.target.value);
+    if(e.keyCode == 13) {
+      handleSignUp();
+    }
   }
+  function checkPasswordCheck() {
+    if((password && passwordCheck) && password === passwordCheck) {
+      setValidateCheck(true);
+    }
+    else {
+      setValidateCheck(false);
+    }
+  }
+
+  useEffect(checkPasswordCheck,[passwordCheck]);
+  useEffect(validation,[validateCheck]);
+  // console.log('=====>>>>>>',validateCheck);
+  // console.log('password',password);
+  // console.log('passwordCheck',passwordCheck);
+
 
   function validation() {
     if (!email) {
@@ -162,6 +240,8 @@ export default function SignUp() {
     }
   }
 
+
+
   function handleSignUp() {
     setValidate(validation);
 
@@ -170,19 +250,30 @@ export default function SignUp() {
         if (document.querySelector(".checkbox").checked === true) {
           //!
           axios
-            .post("http://localhost:3000/auth/signup", {
+            .post("http://localhost:5000/auth/signup", {
               email,
               password,
             })
             .then((res) => {
-              //if(이미 존재하는 이메일이 있는 경우)
-              setUser({
-                isLogin: true,
-                username: res.body.username,
-                authToken: res.body.authToken,
-              });
-              router.push("/mainpage/getTopTen");
-            });
+              console.log('-------->>>>>>>',res);
+
+              // else {
+              //   openModal();//
+              //   setUser({
+              //     isLogin: true,
+              //     username: res.body.username,
+              //     authToken: res.body.authToken,
+              //   });
+              //   router.push("/mainpage/getTopTen");
+              // }
+              openModal();
+            })
+            .catch((err)=>{
+              if(err) {
+                setMessage('이미 존재하는 이메일 입니다.');
+                openModal();
+              }
+            })
         }
       }
     }
@@ -201,10 +292,20 @@ export default function SignUp() {
     axios.post();
   }
 
+
   return (
-    <Root>
-      <Body>
-        <Header />
+    <PageUtils>
+      <Modal
+        isOpen={modalIsOpen}
+        onAfterOpen={afterOpenModal}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel='Example Modal'
+      >
+        <h2 ref={_subtitle => (subtitle = _subtitle)}>{message}</h2>
+        <HoverButton onClick={closeModal}><button>확인</button></HoverButton>
+      </Modal>
+
         <SignUpText>회원가입</SignUpText>
         <InputText
           className="email"
@@ -217,12 +318,20 @@ export default function SignUp() {
           onChange={eTargetValuePassword}
           placeholder="  사용하실 패스워드를 입력해 주세요."
         ></InputText>
+        <CheckImageDiv>
+        <Div>
         <InputText
           className="passwordCheck"
           type="password"
           onChange={eTargetValuePasswordCheck}
           placeholder="  패스워드를 다시 입력해 주세요."
         ></InputText>
+          <span>{validateCheck?
+          <img src='/check.png'></img>
+          :
+          <></>}</span>
+        </Div>
+        </CheckImageDiv>
 
         <Validation>{!validate ? <div>ㅤ</div> : validate}</Validation>
 
@@ -245,12 +354,10 @@ export default function SignUp() {
           <div className="blank"></div>
         </Kakao>
         <Facebook onClick={handleFacebook}>
-          <img src="/facebook.png" width="30px" alt=""></img>
+          <img src="/facebook.png" width="20px" alt=""></img>
           <h1>페이스북 계정으로 신규 가입</h1>
           <div className="blank"></div>
         </Facebook>
-      </Body>
-      <Footer />
-    </Root>
+      </PageUtils>
   );
 }
