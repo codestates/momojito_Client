@@ -186,16 +186,25 @@ export default function Login() {
     router.push("/signup");
   }
 
+  function onKeyDown(e) {
+    if(e.keyCode == 13) {
+      handleSignIn();
+    }
+  }
+
   return (
     <PageUtils>
       <SignInText>로그인</SignInText>
       <InputText
         onChange={eTargetValueEmail}
         placeholder="  이메일 주소를 입력해 주세요."
+        onKeyDown={onKeyDown}
       ></InputText>
       <InputText
         onChange={eTargetValuePassword}
         placeholder="  비밀번호를 입력해 주세요."
+        type='password'
+        onKeyDown={onKeyDown}
       ></InputText>
 
       <Validation>{!validate ? <div>ㅤ</div> : validate}</Validation>
