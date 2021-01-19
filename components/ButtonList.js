@@ -4,21 +4,22 @@ import Button from "./Button";
 const Container = styled.div`
   display: flex;
   padding: 1rem;
-  justify-content: space-evenly;
+  justify-content: ${(props) => (props.all ? "flex-start" : "center")};
 `;
 
 export default function ButtonList({
   buttonList,
   buttonSelected,
   setButtonSelected,
+  all,
 }) {
   return (
-    <Container>
+    <Container all={all}>
       {buttonList.map((v, i) => (
         <Button
-          primary
+          m={all ? "0 0.25rem" : "0 0.5rem"}
           key={v}
-          selected={i === buttonSelected}
+          selected={all ? true : i === buttonSelected}
           onClick={(e) => {
             setButtonSelected(i);
           }}
