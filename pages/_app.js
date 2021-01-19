@@ -19,6 +19,7 @@ const GlobalStyle = createGlobalStyle`
   transform: translateX(+375px);
 }
 `;
+
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const [user, setUser] = useState({
