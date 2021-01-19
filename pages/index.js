@@ -25,7 +25,7 @@ export default function Home() {
       })
       setTopTenList(data)
     })
-  },[])
+  }, [])
   
   return (
     <PageUtils>

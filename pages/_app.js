@@ -16,6 +16,7 @@ const GlobalStyle = createGlobalStyle`
   transform: translateX(+375px);
 }
 `;
+
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const [user, setUser] = useState({
@@ -40,6 +41,7 @@ export default function MyApp({ Component, pageProps }) {
           accessToken: res.data.data.accessToken,
           isLogin: true,
         });
+  
         localStorage.setItem("accessToken", res.data.data.accessToken);
         router.push("/");
       });

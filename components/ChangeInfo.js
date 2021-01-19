@@ -350,7 +350,6 @@ export default function ChangeInfo() {
     // onSubmit(e.target.files[0]);
   };
   
-  
   const forSubmit = () => {
     if(content) {
       onSubmit();
@@ -358,8 +357,7 @@ export default function ChangeInfo() {
   }
   useEffect(forSubmit,[content]);
 
-  const onSubmit = () => {
-    // e.preventDefault();
+  const onSubmit = (content) => {
     const formData = new FormData();
     formData.append("uploadImg", content);
 
@@ -371,6 +369,7 @@ export default function ChangeInfo() {
     })
   };
 
+  
   return (
     <PageUtils>
       <Modal

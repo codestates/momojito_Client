@@ -32,6 +32,7 @@ const Container = styled.div`
 export default function Sidebar() {
   const userContext = useContext(ThemeContext).userContext;
   const router = useRouter();
+  
   return (
     <Container>
       <div onClick={(e) => router.push("/")} className="big">
@@ -58,6 +59,8 @@ export default function Sidebar() {
       >
         My page
       </div>
+      {userContext.user.isLogin? <div className="big">Log out</div> : ''}
+
     </Container>
   );
 }
