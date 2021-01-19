@@ -292,7 +292,6 @@ export default function ChangeInfo() {
     // onSubmit(e.target.files[0]);
   };
   
-  
   const forSubmit = () => {
     if(content) {
       onSubmit();
@@ -300,8 +299,7 @@ export default function ChangeInfo() {
   }
   useEffect(forSubmit,[content]);
 
-  const onSubmit = () => {
-    // e.preventDefault();
+  const onSubmit = (content) => {
     const formData = new FormData();
     formData.append("uploadImg", content);
 
@@ -309,13 +307,16 @@ export default function ChangeInfo() {
     .post("http://localhost:5000/mypage/profileChange", formData, {withCredentials: true})
     .then(res => {
       setUploadedImg({filePath: res.data.imageUrl});
-      setUser({profileImg: res.data.imageUrl});
+      console.log('이미지 response', res.data.imageUrl)
+      setUser({...user, userInfo: {...user.userInfo, profile: res.data.imageUrl}});
+      
     })
   };
 
+  
   return (
     <div>
-      <Modal
+      {/* <Modal
         isOpen={modalIsOpen}
         onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
@@ -324,15 +325,15 @@ export default function ChangeInfo() {
       >
         <h2 ref={_subtitle => (subtitle = _subtitle)}>{message}</h2>
         <HoverButton onClick={closeModal}><button>확인</button></HoverButton>
-      </Modal>
+      </Modal> */}
       <ButtonDiv>
         <form onSubmit={onSubmit}>
 
         {
-          user.profileImg ?
+          user.userInfo.profile ?
           (
             <Image>
-              <Profile src={user.profileImg} alt="">
+              <Profile src={user.userInfo.profile} alt="">
               </Profile>
             </Image>
           )
@@ -369,8 +370,8 @@ export default function ChangeInfo() {
         </form>
       </ButtonDiv>
 
-      <Email>이메일 <Span>{user.email}</Span></Email>
-      <Nickname>닉네임 {!user.nickname ? <Span>내닉네임</Span> : <Span>{user.nickname}</Span>}
+      <Email>이메일 <Span>{user.userInfo.email}</Span></Email>
+      <Nickname>닉네임 {!user.userInfo ? <Span>내닉네임</Span> : <Span>{user.userInfo.nickname}</Span>}
       <ButtonDiv2><button>변경하기</button></ButtonDiv2>
       </Nickname>
       <Password>비밀번호 변경</Password>

@@ -1,9 +1,12 @@
 import { useRouter } from "next/router";
 import { useMediaQuery } from "react-responsive";
-import styled from "styled-components";
+import { useContext } from "react";
+import styled, { ThemeContext } from "styled-components";
 import Button from "./Button";
 import StarList from "./StarList";
 import db from "../public/cocktaildb";
+import axios from "axios";
+
 const Container_card = styled.div`
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -31,11 +34,7 @@ const Container = styled.div`
   .last {
     margin-bottom: 0.5rem;
   }
-  .delete {
-    position: absolute;
-    left: 65%;
-    top: 43%;
-  }
+
   .signature {
     position: relative;
     .barloc {
@@ -74,6 +73,9 @@ function Card({ index, type, i, setPastquery }) {
   const router = useRouter();
   const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
   const cocktail = db[index];
+  const userContext = useContext(ThemeContext).userContext;
+  const user = userContext.user;
+
   const handleClick = (e) => {
     if (isDesktop) {
       setPastquery(index);
@@ -82,12 +84,40 @@ function Card({ index, type, i, setPastquery }) {
       router.push(`/cocktails/${index}`);
     }
   };
+
+  
+  const likeRequestHandler = () => {
+    axios
+      .post(
+        "http://localhost:5000/detail/favorite",
+        { cocktailId: index, isAdd: false },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        // '받은 응답코드' 200 이면 추가,  201이면 삭제
+        if (res.status === 200) {
+          user.myCocktailList.push(index);
+        }
+        else if (res.status === 201) {
+          user.myCocktailList.splice(user.myCocktailList.indexOf(index), 1);
+        }
+        // 업데이트
+        userContext.setUser({
+          ...user,
+          myCocktailList: user.myCocktailList,
+        });
+      })
+      // .then(() => {
+      //   setIsLike(!isLike)
+      // })
+  };
+
   return (
-    <Container onClick={handleClick}>
-      <img src={`cocktails/${cocktail.id}.jpeg`}></img>
+    <Container>
+      <img onClick={handleClick} src={`cocktails/${cocktail.id}.jpeg`}></img>
       {type === "mypage" ? (
         <div className="abs">
-          <Button>삭제</Button>
+          <Button onClick={likeRequestHandler}>삭제</Button>
         </div>
       ) : (
         ""

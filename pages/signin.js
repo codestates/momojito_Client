@@ -1,10 +1,9 @@
-import styled, {ThemeContext} from "styled-components";
+import styled, { ThemeContext } from "styled-components";
 import axios from "axios";
 import { useState, useContext } from "react";
 import { useRouter } from "next/router";
 import PageUtils from "../components/PageUtils";
 // import Modal from 'react-modal';
-
 
 const SignInText = styled.div`
   text-align: center;
@@ -50,7 +49,7 @@ const Default = styled.button`
 
 const Naver = styled.button`
   display: flex;
-  background-color: #23B366;
+  background-color: #23b366;
   justify-content: space-between;
   border-radius: 0.25rem;
   border: none;
@@ -98,7 +97,7 @@ const Facebook = styled.button`
   align-items: center;
   width: 300px;
   height: 36px;
-  background-color: #3A579C;
+  background-color: #3a579c;
   border-radius: 5px;
   border: none;
   margin: auto;
@@ -175,41 +174,51 @@ export default function Login() {
       return "비밀번호를 입력해 주세요.";
     }
   }
-
+  
   function handleSignIn() {
     setValidate(validation);
-    if(email && password) {
-      axios.post('http://localhost:5000/auth/signin', {
-        email,
-        password
-      },{
-        withCredentials: true
-      })
-      .then((res)=>{
-        setUser({...user, accessToken: res.accessToken});
-        axios.get('http://localhost:5000/auth/accesstoken',{
-          headers: {
-            Authorization: `Bearer ${user.accessToken}`
+    if (email && password) {
+      axios
+        .post(
+          "http://localhost:5000/auth/signin",
+          {
+            email,
+            password,
           },
-          withCredentials: true
-        })
-      })
-      .then((res)=>{
-        if(res.status === 401) {
-            setValidate('존재하지 않는 이메일 입니다.');
-            return validate;
+          {
+            withCredentials: true,
           }
-          else if(res.status === 402) {
-              setValidate('올바른 비밀번호를 입력해 주세요.');
-              return validate;
+        )
+        .then((res) => {
+          setUser({ ...user, accessToken: res.data.accessToken });
+          if (res.status === 401) {
+            alert("존재하지 않는 이메일 입니다.");
+            setValidate("존재하지 않는 이메일 입니다.");
+            return validate;
+          } else if (res.status === 402) {
+            alert("올바른 비밀번호를 입력해 주세요.");
+            setValidate("올바른 비밀번호를 입력해 주세요.");
+            return validate;
           } else {
-            setUser({...user,accessToken: res.accessToken, isLogin: true});
-            // openModal();
-          } 
-      })
-      .catch((err)=>{
-        alert(err);
-      })
+            axios
+              .get("http://localhost:5000/auth/accesstoken", {
+                withCredentials: true,
+              })
+              .then((res) => {
+                console.log(res);
+                setUser({
+                  ...user,
+                  userInfo: res.data.data.userInfo,
+                  myCocktailList: res.data.data.cocktailList,
+                  accessToken: res.data.data.accessToken,
+                  isLogin: true,
+                });
+
+                localStorage.setItem("accessToken", res.data.data.accessToken);
+                router.push("/");
+              });
+          }
+        });
     }
   }
 
@@ -230,14 +239,13 @@ export default function Login() {
   }
 
   function onKeyDown(e) {
-    if(e.keyCode == 13) {
+    if (e.keyCode == 13) {
       handleSignIn();
     }
   }
 
   return (
     <PageUtils>
-
       {/* <Modal
         isOpen={modalIsOpen}
         onAfterOpen={afterOpenModal}
@@ -258,7 +266,7 @@ export default function Login() {
       <InputText
         onChange={eTargetValuePassword}
         placeholder="  비밀번호를 입력해 주세요."
-        type='password'
+        type="password"
         onKeyDown={onKeyDown}
       ></InputText>
 
@@ -268,10 +276,10 @@ export default function Login() {
         <h1>로그인</h1>
       </Default>
       <Naver onClick={handleNaver}>
-          <img src='/naver.png' width='30px' alt=''></img>
-          <h1>네이버 계정으로 신규 가입</h1>
-          <div className='blank'></div>
-        </Naver>
+        <img src="/naver.png" width="30px" alt=""></img>
+        <h1>네이버 계정으로 신규 가입</h1>
+        <div className="blank"></div>
+      </Naver>
       <Kakao onClick={handleKakao}>
         <img src="/kakao.png" width="25px" alt=""></img>
         <div>카카오 계정으로 신규 가입</div>
