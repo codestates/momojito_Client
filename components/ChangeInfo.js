@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useContext, useState, useEffect } from 'react';
 import HoverButton from './HoverButton';
 import Modal from 'react-modal';
+import PageUtils from "../components/PageUtils";
+
 
 const Image = styled.div`
   display: flex;
@@ -314,7 +316,7 @@ export default function ChangeInfo() {
   };
 
   return (
-    <div>
+    <PageUtils>
       <Modal
         isOpen={modalIsOpen}
         onAfterOpen={afterOpenModal}
@@ -378,6 +380,6 @@ export default function ChangeInfo() {
         <InputText type='password' onChange={eTargetValueCurrentPassword} placeholder='  새 비밀번호'/>
         <InputText type='password' onChange={eTargetValuePasswordCheck} placeholder='  새 비밀번호 확인'/>
       <ButtonDiv3><button>변경하기</button></ButtonDiv3>
-    </div>
+    </PageUtils>
   )
 }
