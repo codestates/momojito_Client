@@ -7,6 +7,7 @@ import Button from "./Button";
 import ButtonList from "./ButtonList";
 import { useState, useContext, useEffect } from "react";
 import axios from "axios";
+import Modal from "react-modal";
 
 const Container = styled.div`
   display: flex;
@@ -67,15 +68,27 @@ const Container = styled.div`
     // color: red;
   }
 `;
+
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
+  }
+};
+
 export default function CocktailInfo({ id }) {
   id = Number(id);
   const cocktail = db[id];
   const carouselImages = [{ url: 'url("/bar0.jpeg");' }];
-  
   const userContext = useContext(ThemeContext).userContext;
   const user = userContext.user;
-
   const [isLike, setIsLike] = useState(false);
+  const [modalIsOpen, setIsOpen] = useState(false);
+
   useEffect(() => {
     //여기에 props로 받은 Id가 포함되어 있으면, isLike -> true
     if (user.myCocktailList.includes(id) === true) {
@@ -83,7 +96,6 @@ export default function CocktailInfo({ id }) {
     }
   });
 
-  // IsLike 가 false 이면 추가,  true면 삭제
   const likeRequestHandler = () => {
     axios
       .post(
@@ -95,8 +107,7 @@ export default function CocktailInfo({ id }) {
         // '받은 응답코드' 200 이면 추가,  201이면 삭제
         if (res.status === 200) {
           user.myCocktailList.push(id);
-        }
-        else if (res.status === 201) {
+        } else if (res.status === 201) {
           user.myCocktailList.splice(user.myCocktailList.indexOf(id), 1);
         }
         // 업데이트
@@ -106,13 +117,13 @@ export default function CocktailInfo({ id }) {
         });
       })
       .then(() => {
-        setIsLike(!isLike)
-      })
+        setIsLike(!isLike);
+      });
   };
 
-  console.log('isLike', isLike)
-  console.log('myCocktailList', user.myCocktailList)
-
+  function openModal() {setIsOpen(true);}
+  function closeModal() {setIsOpen(false);}
+  function afterOpenModal() {}
   return (
     <Container isLike={isLike}>
       <Carousel
@@ -153,7 +164,18 @@ export default function CocktailInfo({ id }) {
       <div className="stars">
         <StarList rating={cocktail.rating}></StarList>
         <h2>평균별점 {cocktail.rating}</h2>
-        <Button>평가하기</Button>
+        <Button onClick={openModal}>평가하기</Button>
+        <Modal
+          isOpen={modalIsOpen}
+          onAfterOpen={afterOpenModal}
+          onRequestClose={closeModal}
+          style={customStyles}
+          contentLabel="Example Modal"
+        >
+          <h2>hello</h2>
+          <StarList></StarList>
+          <button onClick={closeModal}>닫기</button>
+        </Modal>
       </div>
       <div className="ingredients">
         <ButtonList

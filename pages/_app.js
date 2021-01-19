@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { Reset } from "styled-reset";
+import axios from "axios";
+import { useRouter } from "next/router";
 import "swiper/swiper-bundle.css";
 
 const GlobalStyle = createGlobalStyle`
@@ -17,15 +19,40 @@ const GlobalStyle = createGlobalStyle`
   transform: translateX(+375px);
 }
 `;
+
 export default function MyApp({ Component, pageProps }) {
+  const router = useRouter();
   const [user, setUser] = useState({
     isLogin: false,
-    email: "", 
-    profileImg: "",
-    nickname: "", 
+    userInfo: {},
     accessToken: "",
     myCocktailList: [],
   });
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
+      axios
+      .get("http://localhost:5000/auth/accesstoken", {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res);
+        setUser({
+          ...user,
+          userInfo: res.data.data.userInfo,
+          myCocktailList: res.data.data.cocktailList,
+          accessToken: res.data.data.accessToken,
+          isLogin: true,
+        });
+  
+        localStorage.setItem("accessToken", res.data.data.accessToken);
+        router.push("/");
+      });
+    }
+  }, []);
+
+  console.log('userInfo', user);
   return (
     <>
       <Reset />
