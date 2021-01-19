@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useContext, useState, useEffect } from 'react';
 import HoverButton from './HoverButton';
 import Modal from 'react-modal';
+import PageUtils from "../components/PageUtils";
+
 
 const Image = styled.div`
   display: flex;
@@ -15,6 +17,14 @@ const Profile = styled.img`
   max-width: 40%;
   max-height: 40%;
   border-radius: 50%;
+`;
+
+const Validation = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-block-start: 3%;
+  color: red;
+  font-size: 50%;
 `;
 
 const ButtonDiv = styled.div`
@@ -176,6 +186,17 @@ const InputText = styled.input`
   border: 1px solid grey;
 `;
 
+const customStyles = {
+  content : {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  }
+}
+
 export default function ChangeInfo() {
 
   const {user, setUser} = useContext(ThemeContext).userContext;
@@ -183,12 +204,17 @@ export default function ChangeInfo() {
   const [password, setPassword] = useState();
   const [passwordCheck, setPasswordCheck] = useState();
   const [nickname, setNickname] = useState();
+  const [isChangeNickname, setIsChangeNickname] = useState(false);
 
   const [content, setContent] = useState();
   const [uploadedImg, setUploadedImg] = useState({filePath: null});
 
   const [modalIsOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState();
+  const [validateCheck, setValidateCheck] = useState(false);
+  const [validate, setValidate] = useState();
+
+  var subtitle;
 
   function openModal() {
     setIsOpen(true);
@@ -200,7 +226,10 @@ export default function ChangeInfo() {
 
   function closeModal() {
     setIsOpen(false);
-    if(message === '로그인이 완료되었습니다') {
+    if(message === '닉네임이 성공적으로 변경되었습니다') {
+      router.push('/');
+    }
+    if(message === '비밀번호가 성공적으로 변경되었습니다') {
       router.push('/');
     }
   }
@@ -218,14 +247,33 @@ export default function ChangeInfo() {
     setNickname(e.target.value);
   }
 
-  function getUserData() {
-    axios.get('http://localhost:5000/mypage/getUserData',{
-      headers: {
-        Authorization: `Bearer ${user.accessToken}`
-      },
-      withCredentials: true
-    })
-  };
+  function checkPasswordCheck() {
+    if((password && passwordCheck) && password === passwordCheck) {
+      setValidateCheck(true);
+    }
+    else {
+      setValidateCheck(false);
+    }
+  }
+  useEffect(checkPasswordCheck,[passwordCheck]);
+  useEffect(validation,[validateCheck]);
+  function validation() {
+    if (!password || !passwordCheck) {
+      return "비밀번호를 입력해 주세요.";
+    } else if (password !== passwordCheck) {
+      return "비밀번호가 일치하지 않습니다.";
+    }
+  }
+
+
+  // function getUserData() {
+  //   axios.get('http://localhost:5000/mypage/getUserData',{
+  //     headers: {
+  //       Authorization: `Bearer ${user.accessToken}`
+  //     },
+  //     withCredentials: true
+  //   })
+  // };
 
 
 
@@ -237,14 +285,18 @@ export default function ChangeInfo() {
       withCredentials: true
     })
     .then((res)=>{
-      setUser({profileImg: null});
+      setUser({userInfo: {profileImg: null}});
     })
+  }
+  useEffect(()=>{},[user.userInfo.profileImg]);//!
+
+  function clickNicknameChange() {
+    setIsChangeNickname(true);
+    openModal();
   }
 
   function updateNickname(e) {
-    // if(닉네임이 8글자를 초과할 경우) {
-    //   -> 모달창 '닉네임은 최대 8자까지 가능합니다.'
-    // }
+
     axios.post('http://localhost:5000/mypage/nicknameChange',{
       nickname,
       headers: {
@@ -254,18 +306,17 @@ export default function ChangeInfo() {
       withCredentials: true
     })
     .then((res)=>{
-      // if(이미 존재하는 닉네임이 있는 경우) {
-          // -> 모달창 '이미 존재하는 닉네임 입니다'
-      // }
-      // else {
-      //   setUser({
-      //     nickname: res.body.nickname,
-      //   });
-      //   -> 모달창 '닉네임을 성공적으로 변경 하였습니다.'
-      // }
-      setUser({
-        nickname: res.body.nickname,
-      })
+      if(res.status === 400) {
+        setValidate('이미 존재하는 닉네임 입니다');
+        openModal();
+      }
+      else if(res.status === 200) {
+        setUser({userInfo: {
+          nickname: nickname,
+        }});
+        setValidate('닉네임이 성공적으로 변경되었습니다');
+        openModal();
+      }
     })
   }
 
@@ -273,8 +324,7 @@ export default function ChangeInfo() {
     
     axios.post('http://localhost:5000/mypage/passwordChange',{
       currentPassword,
-      password,
-      passwordCheck,
+      newPassword: password,
       headers: {
         Authorization: `Bearer ${user.accessToken}`
       }
@@ -282,8 +332,16 @@ export default function ChangeInfo() {
       withCredentials: true
     })
     .then((res)=>{
-      //if(currentPassword가 일치하지 않을 때)
-      //else(일치하면?) -> 모달창 '패스워드가 성공적으로 변경되었습니다'
+      if(res.status === 400) {
+        setMessage('올바른 현재 비밀번호를 입력해 주세요');
+      }
+      else if(res.status === 200) {
+        setMessage('패스워드가 성공적으로 변경되었습니다');
+      }
+    })
+    .catch((err)=>{
+      setMessage(err);
+      openModal();
     })
   }
 
@@ -307,16 +365,14 @@ export default function ChangeInfo() {
     .post("http://localhost:5000/mypage/profileChange", formData, {withCredentials: true})
     .then(res => {
       setUploadedImg({filePath: res.data.imageUrl});
-      console.log('이미지 response', res.data.imageUrl)
-      setUser({...user, userInfo: {...user.userInfo, profile: res.data.imageUrl}});
-      
+      setUser({userInfo: {profileImg: res.data.imageUrl}});
     })
   };
 
   
   return (
-    <div>
-      {/* <Modal
+    <PageUtils>
+      <Modal
         isOpen={modalIsOpen}
         onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
@@ -324,16 +380,19 @@ export default function ChangeInfo() {
         contentLabel='Example Modal'
       >
         <h2 ref={_subtitle => (subtitle = _subtitle)}>{message}</h2>
+        <Validation>{!validate ? <></> : validate}</Validation>
+        <InputText maxLength='8' onChange={eTargetValueNickname} placeholder='변경할 닉네임을 입력해 주세요'></InputText>
+        {isChangeNickname? <HoverButton onClick={updateNickname}>변경하기</HoverButton> : <></>}
         <HoverButton onClick={closeModal}><button>확인</button></HoverButton>
-      </Modal> */}
+      </Modal>
       <ButtonDiv>
         <form onSubmit={onSubmit}>
 
         {
-          user.userInfo.profile ?
+          user.userInfo.profileImg ?
           (
             <Image>
-              <Profile src={user.userInfo.profile} alt="">
+              <Profile src={user.userInfo.profileImg} alt="">
               </Profile>
             </Image>
           )
@@ -371,14 +430,14 @@ export default function ChangeInfo() {
       </ButtonDiv>
 
       <Email>이메일 <Span>{user.userInfo.email}</Span></Email>
-      <Nickname>닉네임 {!user.userInfo ? <Span>내닉네임</Span> : <Span>{user.userInfo.nickname}</Span>}
-      <ButtonDiv2><button>변경하기</button></ButtonDiv2>
+      <Nickname>닉네임 {!user.userInfo.nickname ? <Span>내닉네임</Span> : <Span>{user.userInfo.nickname}</Span>}
+      <ButtonDiv2><button onClick={clickNicknameChange}>변경하기</button></ButtonDiv2>
       </Nickname>
       <Password>비밀번호 변경</Password>
         <InputText type='password' onChange={eTargetValuePassword} placeholder='  현재 비밀번호'/>
         <InputText type='password' onChange={eTargetValueCurrentPassword} placeholder='  새 비밀번호'/>
         <InputText type='password' onChange={eTargetValuePasswordCheck} placeholder='  새 비밀번호 확인'/>
-      <ButtonDiv3><button>변경하기</button></ButtonDiv3>
-    </div>
+      <ButtonDiv3><button onClick={updatePassword}>변경하기</button></ButtonDiv3>
+    </PageUtils>
   )
 }
