@@ -57,18 +57,25 @@ const H1 = styled.h1`
 export default function CardGrid({ indexList, type, setPastquery }) {
   return (
     <Container_card>
-      {indexList.map((v, i) => (
-        <Card
-          type={type}
-          index={v}
-          key={v}
-          i={i}
-          setPastquery={setPastquery}
-        ></Card>
-      ))}
+      {indexList.map((v, i) => {
+        const cocktail = db[v];
+        if(cocktail) {
+          return (
+            <Card
+              type={type}
+              index={v}
+              key={v}
+              i={i}
+              setPastquery={setPastquery}
+            ></Card>
+          )
+        }
+        else { return }
+      })}
     </Container_card>
   );
 }
+
 function Card({ index, type, i, setPastquery }) {
   const router = useRouter();
   const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
@@ -85,7 +92,6 @@ function Card({ index, type, i, setPastquery }) {
     }
   };
 
-  
   const likeRequestHandler = () => {
     axios
       .post(
@@ -97,8 +103,7 @@ function Card({ index, type, i, setPastquery }) {
         // '받은 응답코드' 200 이면 추가,  201이면 삭제
         if (res.status === 200) {
           user.myCocktailList.push(index);
-        }
-        else if (res.status === 201) {
+        } else if (res.status === 201) {
           user.myCocktailList.splice(user.myCocktailList.indexOf(index), 1);
         }
         // 업데이트
@@ -106,15 +111,19 @@ function Card({ index, type, i, setPastquery }) {
           ...user,
           myCocktailList: user.myCocktailList,
         });
-      })
-      // .then(() => {
-      //   setIsLike(!isLike)
-      // })
+      });
+    // .then(() => {
+    //   setIsLike(!isLike)
+    // })
   };
 
   return (
     <Container>
-      <img onClick={handleClick} src={`cocktails/${cocktail.id}.jpeg`}></img>
+      <img
+        onClick={handleClick}
+        src={cocktail ? `cocktails/${cocktail.id}.jpeg` : ""}
+        alt="no-img"
+      ></img>
       {type === "mypage" ? (
         <div className="abs">
           <Button onClick={likeRequestHandler}>삭제</Button>
