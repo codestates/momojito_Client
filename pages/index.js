@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import PageUtils from "../components/PageUtils";
 import CardGrid from "../components/CardGrid";
@@ -7,27 +7,25 @@ import Carousel from "../components/Carousel";
 import CocktailInfo from "../components/CocktailInfo";
 import { useRouter } from "next/router";
 import Modal from "react-modal";
-import db from "../public/cocktaildb"
+import db from "../public/cocktaildb";
+import { ThemeContext } from "styled-components";
 Modal.setAppElement("#__next");
-
 
 export default function Home() {
   const [buttonSelected, setButtonSelected] = useState(0);
-  const [pastquery, setPastquery] = useState("");
   const router = useRouter();
-
-  const dbIndexList = db.map((el) => el.id)
-  const [topTenList, setTopTenList] = useState([])
+  const { user, setUser } = useContext(ThemeContext).userContext;
+  const dbIndexList = db.map((el) => el.id);
+  const [topTenList, setTopTenList] = useState([]);
   useEffect(() => {
-    axios.get('http://localhost:5000/mainpage/getTopTen')
-    .then((res) => {
+    axios.get("http://localhost:5000/mainpage/getTopTen").then((res) => {
       const data = res.data.data.map((el) => {
-        return el.id
-      })
-      setTopTenList(data)
-    })
-  }, [])
-  
+        return el.id;
+      });
+      setTopTenList(data);
+    });
+  }, []);
+
   return (
     <PageUtils>
       <Modal
@@ -50,7 +48,9 @@ export default function Home() {
         }}
       >
         <CocktailInfo
-          id={router.query.cocktailId ? router.query.cocktailId : pastquery}
+          id={
+            router.query.cocktailId ? router.query.cocktailId : user.pastquery
+          }
         ></CocktailInfo>
       </Modal>
       <Carousel
@@ -84,19 +84,11 @@ export default function Home() {
         setButtonSelected={setButtonSelected}
       ></ButtonList>
       {buttonSelected === 0 ? (
-        <CardGrid indexList={dbIndexList} setPastquery={setPastquery}></CardGrid>
+        <CardGrid indexList={dbIndexList}></CardGrid>
       ) : buttonSelected === 1 ? (
-        <CardGrid
-          indexList={[4, 5]}
-          type="signature"
-          setPastquery={setPastquery}
-        ></CardGrid>
+        <CardGrid indexList={[4, 5]} type="signature"></CardGrid>
       ) : (
-        <CardGrid
-          indexList={topTenList}
-          type="ranking"
-          setPastquery={setPastquery}
-        ></CardGrid>
+        <CardGrid indexList={topTenList} type="ranking"></CardGrid>
       )}
     </PageUtils>
   );

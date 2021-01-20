@@ -4,23 +4,12 @@ import { Reset } from "styled-reset";
 import axios from "axios";
 import { useRouter } from "next/router";
 import "swiper/swiper-bundle.css";
-const GlobalStyle = createGlobalStyle`
-.ReactModal__Overlay {
-  transform: translateX(+375px);
-  transition: all 250ms ease-in-out;
-}
-.ReactModal__Overlay--after-open {
-  transform: translateX(0px);
-}
-.ReactModal__Overlay--before-close {
-  transform: translateX(+375px);
-}
-`;
 
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const [user, setUser] = useState({
     isLogin: false,
+    pastquery: 0,
     userInfo: {},
     accessToken: "",
     myCocktailList: [],
@@ -48,7 +37,6 @@ export default function MyApp({ Component, pageProps }) {
   return (
     <>
       <Reset />
-      <GlobalStyle></GlobalStyle>
       <ThemeProvider
         theme={{
           main: "limegreen",
