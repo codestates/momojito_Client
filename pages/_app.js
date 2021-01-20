@@ -26,28 +26,28 @@ export default function MyApp({ Component, pageProps }) {
     myCocktailList: [],
   });
   useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
+    const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
       axios
-      .get("http://localhost:5000/auth/accesstoken", {
-        withCredentials: true,
-      })
-      .then((res) => {
-        console.log(res);
-        setUser({
-          ...user,
-          userInfo: res.data.data.userInfo,
-          myCocktailList: res.data.data.cocktailList,
-          accessToken: res.data.data.accessToken,
-          isLogin: true,
+        .get("http://localhost:5000/auth/accesstoken", {
+          withCredentials: true,
+        })
+        .then((res) => {
+          console.log(res);
+          setUser({
+            ...user,
+            userInfo: res.data.data.userInfo,
+            myCocktailList: res.data.data.cocktailList,
+            accessToken: res.data.data.accessToken,
+            isLogin: true,
+          });
+
+          localStorage.setItem("accessToken", res.data.data.accessToken);
+          router.push("/");
         });
-  
-        localStorage.setItem("accessToken", res.data.data.accessToken);
-        router.push("/");
-      });
     }
   }, []);
-  console.log('userInfo', user);
+  console.log("userInfo", user);
   return (
     <>
       <Reset />
@@ -68,8 +68,6 @@ export default function MyApp({ Component, pageProps }) {
     </>
   );
 }
-
-
 
 // import { useState } from "react";
 // import { createGlobalStyle, ThemeProvider } from "styled-components";
@@ -93,9 +91,9 @@ export default function MyApp({ Component, pageProps }) {
 // export default function MyApp({ Component, pageProps }) {
 //   const [user, setUser] = useState({
 //     isLogin: false,
-//     email: "", 
+//     email: "",
 //     profileImg: "",
-//     nickname: "", 
+//     nickname: "",
 //     accessToken: "",
 //     myCocktailList: [],
 //   });

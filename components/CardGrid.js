@@ -59,7 +59,7 @@ export default function CardGrid({ indexList, type, setPastquery }) {
     <Container_card>
       {indexList.map((v, i) => {
         const cocktail = db[v];
-        if(cocktail) {
+        if (cocktail) {
           return (
             <Card
               type={type}
@@ -68,9 +68,10 @@ export default function CardGrid({ indexList, type, setPastquery }) {
               i={i}
               setPastquery={setPastquery}
             ></Card>
-          )
+          );
+        } else {
+          return;
         }
-        else { return }
       })}
     </Container_card>
   );
@@ -120,6 +121,7 @@ function Card({ index, type, i, setPastquery }) {
   return (
     <Container>
       <img
+        style={{ cursor: "pointer" }}
         onClick={handleClick}
         src={cocktail ? `cocktails/${cocktail.id}.jpeg` : ""}
         alt="no-img"

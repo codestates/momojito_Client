@@ -19,6 +19,7 @@ const DesktopFooter = styled.div`
   display: flex;
   align-items: center;
   padding: 1.5rem;
+  height: 1.5rem;
   background-color: ${(props) => props.theme.sub};
   img {
     margin-left: 0.5rem;
@@ -29,13 +30,14 @@ const DesktopFooter = styled.div`
 
 const Button = styled.button`
   background-color: transparent;
+  cursor: pointer;
   border: 0;
 `;
 
 export default function Footer() {
   const router = useRouter();
   const userContext = useContext(ThemeContext).userContext;
-  const isDesktop = useMediaQuery({ query: "(min-width: 1024px" });
+  const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
   if (isDesktop) {
     return (
       <DesktopFooter>
