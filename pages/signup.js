@@ -228,7 +228,11 @@ export default function SignUp() {
       setValidateCheck(false);
     }
   }
-
+  useEffect(() => {
+    if (user.isLogin) {
+      router.push("/");
+    }
+  }, [user]);
   useEffect(checkPasswordCheck, [passwordCheck]);
   useEffect(validation, [validateCheck]);
   // console.log('=====>>>>>>',validateCheck);

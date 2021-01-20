@@ -1,6 +1,6 @@
 import styled, { ThemeContext } from "styled-components";
 import axios from "axios";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import PageUtils from "../components/PageUtils";
 // import Modal from 'react-modal';
@@ -228,6 +228,11 @@ export default function Login() {
       handleSignIn();
     }
   }
+  useEffect(() => {
+    if (user.isLogin) {
+      router.push("/");
+    }
+  }, [user]);
   return (
     <PageUtils>
       {/* <Modal
