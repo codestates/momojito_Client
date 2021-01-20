@@ -14,6 +14,7 @@ const Divider = styled.div`
 const Body = styled.div`
   flex: 1;
   overflow: auto;
+  height: 100%;
 `;
 
 const Root = styled.div`

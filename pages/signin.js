@@ -1,6 +1,6 @@
 import styled, { ThemeContext } from "styled-components";
 import axios from "axios";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import PageUtils from "../components/PageUtils";
 // import Modal from 'react-modal';
@@ -125,6 +125,14 @@ const Bottom = styled.div`
     }
   }
 `;
+const Outer = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  height: 100%;
+`;
+const Inner = styled.div``;
+
 export default function Login() {
   const { user, setUser } = useContext(ThemeContext).userContext;
   const router = useRouter();
@@ -220,6 +228,11 @@ export default function Login() {
       handleSignIn();
     }
   }
+  useEffect(() => {
+    if (user.isLogin) {
+      router.push("/");
+    }
+  }, [user]);
   return (
     <PageUtils>
       {/* <Modal
@@ -232,45 +245,48 @@ export default function Login() {
         <h2 ref={_subtitle => (subtitle = _subtitle)}>{message}</h2>
         <HoverButton onClick={closeModal}><button>확인</button></HoverButton>
       </Modal> */}
-      <SignInText>로그인</SignInText>
-      <InputText
-        onChange={eTargetValueEmail}
-        placeholder="  이메일 주소를 입력해 주세요."
-        onKeyDown={onKeyDown}
-      ></InputText>
-      <InputText
-        onChange={eTargetValuePassword}
-        placeholder="  비밀번호를 입력해 주세요."
-        type="password"
-        onKeyDown={onKeyDown}
-      ></InputText>
-      <Validation>{!validate ? <div>ㅤ</div> : validate}</Validation>
-      <Default onClick={handleSignIn}>
-        <h1>로그인</h1>
-      </Default>
-      <Naver onClick={handleNaver}>
-        <img src="/naver.png" width="30px" alt=""></img>
-        <h1>네이버 계정으로 신규 가입</h1>
-        <div className="blank"></div>
-      </Naver>
-      <Kakao onClick={handleKakao}>
-        <img src="/kakao.png" width="25px" alt=""></img>
-        <div>카카오 계정으로 신규 가입</div>
-        <div className="blank"></div>
-      </Kakao>
-      <Facebook onClick={handleFacebook}>
-        <img src="/facebook.png" width="20px" alt=""></img>
-        <h1>페이스북 계정으로 신규 가입</h1>
-        <div className="blank"></div>
-      </Facebook>
-      <Bottom>
-        <h1>회원이 아니신가요?</h1>
-        <h2 onClick={redirection}>회원가입</h2>
-      </Bottom>
+      <Outer>
+        <Inner>
+          <SignInText>로그인</SignInText>
+          <InputText
+            onChange={eTargetValueEmail}
+            placeholder="  이메일 주소를 입력해 주세요."
+            onKeyDown={onKeyDown}
+          ></InputText>
+          <InputText
+            onChange={eTargetValuePassword}
+            placeholder="  비밀번호를 입력해 주세요."
+            type="password"
+            onKeyDown={onKeyDown}
+          ></InputText>
+          <Validation>{!validate ? <div>ㅤ</div> : validate}</Validation>
+          <Default onClick={handleSignIn}>
+            <h1>로그인</h1>
+          </Default>
+          <Naver onClick={handleNaver}>
+            <img src="/naver.png" width="30px" alt=""></img>
+            <h1>네이버 계정으로 신규 가입</h1>
+            <div className="blank"></div>
+          </Naver>
+          <Kakao onClick={handleKakao}>
+            <img src="/kakao.png" width="25px" alt=""></img>
+            <div>카카오 계정으로 신규 가입</div>
+            <div className="blank"></div>
+          </Kakao>
+          <Facebook onClick={handleFacebook}>
+            <img src="/facebook.png" width="20px" alt=""></img>
+            <h1>페이스북 계정으로 신규 가입</h1>
+            <div className="blank"></div>
+          </Facebook>
+          <Bottom>
+            <h1>회원이 아니신가요?</h1>
+            <h2 onClick={redirection}>회원가입</h2>
+          </Bottom>
+        </Inner>
+      </Outer>
     </PageUtils>
   );
 }
-
 
 // import styled, {ThemeContext} from "styled-components";
 // import axios from "axios";
@@ -278,7 +294,6 @@ export default function Login() {
 // import { useRouter } from "next/router";
 // import PageUtils from "../components/PageUtils";
 // // import Modal from 'react-modal';
-
 
 // const SignInText = styled.div`
 //   text-align: center;
@@ -479,7 +494,7 @@ export default function Login() {
 //           } else {
 //             setUser({...user,accessToken: res.accessToken, isLogin: true});
 //             // openModal();
-//           } 
+//           }
 //       })
 //       .catch((err)=>{
 //         alert(err);

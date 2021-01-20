@@ -7,12 +7,17 @@ const Container = styled.div`
   flex: none;
   border-bottom: 1px solid rgba(219, 219, 219);
   padding: 0.5rem;
+  @media (min-width: 1024px) {
+    padding: 1.5rem;
+    height: 1.5rem;
+  }
   display: ${(props) => (props.theme.userContext.user.isLogin ? "" : "flex")};
   justify-content: ${(props) =>
     props.theme.userContext.user.isLogin ? "" : "space-between"};
 `;
 
 const Logo = styled.div`
+  cursor: pointer;
   display: flex;
   align-items: baseline;
   justify-content: center;

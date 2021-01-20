@@ -4,6 +4,7 @@ import { useContext } from "react";
 const Container = styled.div`
   display: none;
   padding: 1rem;
+  border-right: 1px solid rgba(219, 219, 219);
   @media (min-width: 1024px) {
     display: block;
   }
@@ -12,6 +13,7 @@ const Container = styled.div`
     font-size: 1.5rem;
     background: white;
     color: black;
+    cursor: pointer;
     &:hover {
       background: ${(props) => props.theme.main};
       color: white;
@@ -22,6 +24,7 @@ const Container = styled.div`
     margin-left: 2rem;
     background: white;
     color: black;
+    cursor: pointer;
     &:hover {
       background: ${(props) => props.theme.main};
       color: white;
@@ -32,7 +35,7 @@ const Container = styled.div`
 export default function Sidebar() {
   const userContext = useContext(ThemeContext).userContext;
   const router = useRouter();
-  
+
   return (
     <Container>
       <div onClick={(e) => router.push("/")} className="big">
@@ -59,8 +62,7 @@ export default function Sidebar() {
       >
         My page
       </div>
-      {userContext.user.isLogin? <div className="big">Log out</div> : ''}
-
+      {userContext.user.isLogin ? <div className="big">Log out</div> : ""}
     </Container>
   );
 }
