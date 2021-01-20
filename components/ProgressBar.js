@@ -4,6 +4,7 @@ import React from "react";
 import styled from "styled-components";
 
 const Bar = styled.div`
+    max-width: 540px;
     margin-top: 10px;
     position: relative;
     height: 10px;

@@ -7,6 +7,7 @@ import Carousel from "../components/Carousel";
 import CocktailInfo from "../components/CocktailInfo";
 import { useRouter } from "next/router";
 import Modal from "react-modal";
+import db from "../public/cocktaildb"
 Modal.setAppElement("#__next");
 
 
@@ -15,8 +16,8 @@ export default function Home() {
   const [pastquery, setPastquery] = useState("");
   const router = useRouter();
 
+  const dbIndexList = db.map((el) => el.id)
   const [topTenList, setTopTenList] = useState([])
-  
   useEffect(() => {
     axios.get('http://localhost:5000/mainpage/getTopTen')
     .then((res) => {
@@ -83,7 +84,7 @@ export default function Home() {
         setButtonSelected={setButtonSelected}
       ></ButtonList>
       {buttonSelected === 0 ? (
-        <CardGrid indexList={[1, 3, 5]} setPastquery={setPastquery}></CardGrid>
+        <CardGrid indexList={dbIndexList} setPastquery={setPastquery}></CardGrid>
       ) : buttonSelected === 1 ? (
         <CardGrid
           indexList={[4, 5]}

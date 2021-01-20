@@ -85,7 +85,7 @@ function Card({ index, type, i, setPastquery }) {
 
   const handleClick = (e) => {
     if (isDesktop) {
-      setPastquery(index);
+      // setPastquery(index);
       router.push(`/?cocktailId=${index}`, `/cocktails/${index}`);
     } else {
       router.push(`/cocktails/${index}`);
@@ -121,7 +121,7 @@ function Card({ index, type, i, setPastquery }) {
     <Container>
       <img
         onClick={handleClick}
-        src={cocktail ? `cocktails/${cocktail.id}.jpeg` : ""}
+        src={cocktail ? `cocktails/${cocktail.id}.png` : ""}
         alt="no-img"
       ></img>
       {type === "mypage" ? (
@@ -142,7 +142,7 @@ function Card({ index, type, i, setPastquery }) {
         ""
       )}
       {type === "ranking" ? <H1>No. {i + 1}</H1> : ""}
-      <H1>{cocktail.name}</H1>
+      {/* <H1>{cocktail.name}</H1> */}
       <H1 className="last">{cocktail.koreanName}</H1>
       <StarList rating={cocktail.rating}></StarList>
     </Container>

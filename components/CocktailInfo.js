@@ -129,7 +129,7 @@ export default function CocktailInfo({ id }) {
       <Carousel
         carouselList={[
           {
-            url: `url("/cocktails/${id}.jpeg");`,
+            url: `url("/cocktails/${id}.png");`,
           },
         ]}
       ></Carousel>
