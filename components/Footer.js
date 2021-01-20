@@ -1,7 +1,6 @@
 import styled, { ThemeContext } from "styled-components";
 import { useRouter } from "next/router";
 import { useContext } from "react";
-import { useMediaQuery } from "react-responsive";
 const MobileFooter = styled.div`
   flex: none;
   display: flex;
@@ -14,12 +13,17 @@ const MobileFooter = styled.div`
     height: 24px;
     width: 24px;
   }
+  @media (min-width: 1024px) {
+    display: none;
+  }
 `;
 const DesktopFooter = styled.div`
-  display: flex;
+  display: none;
+  @media (min-width: 1024px) {
+    display: flex;
+  }
   align-items: center;
   padding: 1.5rem;
-  height: 1.5rem;
   background-color: ${(props) => props.theme.sub};
   img {
     margin-left: 0.5rem;
@@ -30,25 +34,14 @@ const DesktopFooter = styled.div`
 
 const Button = styled.button`
   background-color: transparent;
-  cursor: pointer;
   border: 0;
 `;
 
 export default function Footer() {
   const router = useRouter();
   const userContext = useContext(ThemeContext).userContext;
-  const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
-  if (isDesktop) {
-    return (
-      <DesktopFooter>
-        <div className="">{"2021 © Design & Code by Maldivian"}</div>
-        <Button onClick={(e) => router.push("/")}>
-          <img src="/github.png" alt="A github icon"></img>
-        </Button>
-      </DesktopFooter>
-    );
-  } else {
-    return (
+  return (
+    <div className="">
       <MobileFooter>
         <Button onClick={(e) => router.push("/")}>
           <svg
@@ -105,6 +98,12 @@ export default function Footer() {
           </svg>
         </Button>
       </MobileFooter>
-    );
-  }
+      <DesktopFooter>
+        <div className="">{"2021 © Design & Code by Maldivian"}</div>
+        <Button onClick={(e) => router.push("/")}>
+          <img src="/github.png" alt="A github icon"></img>
+        </Button>
+      </DesktopFooter>
+    </div>
+  );
 }
