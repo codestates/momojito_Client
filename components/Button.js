@@ -12,6 +12,7 @@ const Button = styled.button`
     else return props.theme.grey;
   }};
   color: white;
+  z-index: 10;
   cursor: pointer;
 `;
 

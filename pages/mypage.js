@@ -10,24 +10,8 @@ export default function MyPage() {
   const router = useRouter();
   const { user, setUser } = useContext(ThemeContext).userContext;
   const [buttonSelected, setButtonSelected] = useState(0);
-  const signOutHandler = () => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
-      axios
-        .post("https://server.momo-jito.com/auth/signout", "", {
-          withCredentials: true,
-        })
-        .then((res) => {
-          setUser({
-            ...user,
-            isLogin: false,
-            accessToken: "",
-            myCocktailList: [],
-          });
-          localStorage.removeItem("accessToken");
-          router.push("/");
-        });
-    }
+  const signOutHandler = (e) => {
+    router.push("/?logout=true", "/");
   };
   return (
     <PageUtils>

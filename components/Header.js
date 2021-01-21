@@ -2,14 +2,16 @@ import { useRouter } from "next/router";
 import { useContext } from "react";
 import styled, { ThemeContext } from "styled-components";
 import Button from "./Button";
-
+import Logout from "./Logout";
+import Modal from "react-modal";
 const Container = styled.div`
   flex: none;
   border-bottom: 1px solid rgba(219, 219, 219);
   padding: 0.5rem;
   @media (min-width: 1024px) {
     padding: 1.5rem;
-    height: 1.5rem;
+    box-sizing: border-box;
+    height: 75px;
   }
   display: ${(props) => (props.theme.userContext.user.isLogin ? "" : "flex")};
   justify-content: ${(props) =>
@@ -33,11 +35,43 @@ const ButtonPart = styled.div`
   display: flex;
 `;
 
+function ReactModalAdapter({ className, ...props }) {
+  const contentClassName = `${className}__content`;
+  const overlayClassName = `${className}__overlay`;
+  return (
+    <Modal
+      portalClassName={className}
+      className={contentClassName}
+      overlayClassName={overlayClassName}
+      {...props}
+    />
+  );
+}
+
+const StyledModal = styled(ReactModalAdapter)`
+  &__overlay {
+    background-color: rgba(255, 255, 255, 0.75);
+    position: fixed;
+    z-index: 10;
+    inset: 0;
+  }
+
+  &__content {
+    overflow: auto;
+    background-color: white;
+    position: absolute;
+    inset: 40%;
+  }
+`;
+
 export default function Header() {
   const { user, setUser } = useContext(ThemeContext).userContext;
   const router = useRouter();
   return (
     <Container>
+      <StyledModal isOpen={!!router.query.logout}>
+        <Logout></Logout>
+      </StyledModal>
       {user.isLogin ? (
         <LogoPart></LogoPart>
       ) : (
