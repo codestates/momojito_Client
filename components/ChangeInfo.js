@@ -3,7 +3,6 @@ import axios from "axios";
 import { useContext, useState, useEffect } from "react";
 import HoverButton from "./HoverButton";
 import Modal from "react-modal";
-import PageUtils from "../components/PageUtils";
 
 const Image = styled.div`
   display: flex;
@@ -11,10 +10,10 @@ const Image = styled.div`
 `;
 
 const Profile = styled.img`
-  width: auto;
-  height: auto;
-  max-width: 40%;
-  max-height: 40%;
+  width: 200px;
+  height: 200px;
+  max-width: 10rem;
+  max-height: 10rem;
   border-radius: 50%;
 `;
 
@@ -23,7 +22,7 @@ const Validation = styled.div`
   justify-content: center;
   margin-block-start: 3%;
   color: red;
-  font-size: 50%;
+  font-size: 80%;
 `;
 
 const ButtonDiv = styled.div`
@@ -75,7 +74,6 @@ const ButtonDiv1 = styled.div`
 const ButtonDiv2 = styled.div`
   margin: auto;
   position: relative;
-
   button {
     overflow: hidden;
     position: relative;
@@ -90,6 +88,7 @@ const ButtonDiv2 = styled.div`
     vertical-align: 18%; //내려가있는거 올리기
     font-size: 60%;
     padding-top: 3%;
+    margin-left: 100px;
   }
 
   button:hover {
@@ -103,7 +102,6 @@ const ButtonDiv2 = styled.div`
     position: absolute;
     background: #31c460;
     transition: all 1s;
-
     left: 0;
     top: 0;
     width: 100%;
@@ -150,41 +148,65 @@ const ButtonDiv3 = styled.div`
 
 const Email = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: left;
   margin-top: 10%;
-  margin-left: 10%;
   color: #31c460;
+
+  span {
+    margin-left: 50px;
+    color: black;
+  }
 `;
 
 const Nickname = styled.div`
   display: flex;
   justify-content: left;
   margin-top: 10%;
-  margin-left: 10%;
   color: #31c460;
-`;
-
-const Span = styled.span`
-  margin: auto;
-  color: black;
+  span {
+    margin-left: 50px;
+    color: black;
+  }
 `;
 
 const Password = styled.div`
   display: flex;
   justify-content: left;
   margin-top: 10%;
-  margin-left: 10%;
   color: #31c460;
 `;
 
 const InputText = styled.input`
   display: flex;
   margin: auto;
-  width: 50%;
+  width: 300px;
   height: 30px;
-  margin-block-start: 5%;
-  border-radius: 5px;
+  margin-block-start: 1rem;
+  border-radius: 0.25rem;
   border: 1px solid grey;
+`;
+
+const Div = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 0;
+`;
+
+const CheckImageDiv = styled.div`
+  /* background-image: url('check.png'); */
+  display: inline-block; //
+  position: relative; //
+  justify-content: center;
+  span {
+    position: absolute; //
+    top: 0;
+    margin-top: 1.3rem;
+    right: 15px;
+  }
+  img {
+    width: 20px;
+    height: 20px;
+  }
 `;
 
 const customStyles = {
@@ -220,7 +242,8 @@ export default function ChangeInfo() {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState();
   const [validateCheck, setValidateCheck] = useState(false);
-  const [validate, setValidate] = useState();
+  const [validatePassword, setValidatePassword] = useState();
+  const [validateNickname, setValidateNickname] = useState();
 
   var subtitle;
 
@@ -233,13 +256,16 @@ export default function ChangeInfo() {
   }
 
   function closeModal() {
+    if (content) {
+      return;
+    }
+    setMessage();
+    setMessage();
+    setIsChangeNickname();
+    setValidatePassword();
+    setValidateNickname();
     setIsOpen(false);
-    if (message === "닉네임이 성공적으로 변경되었습니다") {
-      router.push("/");
-    }
-    if (message === "비밀번호가 성공적으로 변경되었습니다") {
-      router.push("/");
-    }
+    window.location.reload();
   }
 
   function eTargetValueCurrentPassword(e) {
@@ -270,37 +296,38 @@ export default function ChangeInfo() {
     } else if (password !== passwordCheck) {
       return "비밀번호가 일치하지 않습니다.";
     }
+    if (!currentPassword) {
+      return "현재 비밀번호를 입력해 주세요.";
+    }
   }
 
-  // function getUserData() {
-  //   axios.get('https://server.momo-jito.com/mypage/getUserData',{
-  //     headers: {
-  //       Authorization: `Bearer ${user.accessToken}`
-  //     },
-  //     withCredentials: true
-  //   })
-  // };
-
   function removeProfileImg() {
+    if (!user.userInfo.profile) {
+      setMessage("삭제할 프로필 이미지가 존재하지 않습니다");
+      openModal();
+      return;
+    }
     axios
-      .post("https://server.momo-jito.com/mypage/profileDelete", {
-        headers: {
-          Authorization: `Bearer ${user.accessToken}`,
-        },
+      .post("https://server.momo-jito.com/mypage/profileDelete", "", {
         withCredentials: true,
       })
       .then((res) => {
-        setUser({ userInfo: { profileImg: null } });
+        setUser({ userInfo: { profile: null } });
+        window.location.reload();
+      })
+      .catch((err) => {
+        setMessage(`${err}`);
+        openModal();
       });
   }
-  useEffect(() => {}, [user.userInfo.profileImg]); //!
 
   function clickNicknameChange() {
     setIsChangeNickname(true);
+    setMessage();
     openModal();
   }
 
-  function updateNickname(e) {
+  function updateNickname() {
     axios
       .post(
         "https://server.momo-jito.com/mypage/nicknameChange",
@@ -315,47 +342,60 @@ export default function ChangeInfo() {
         }
       )
       .then((res) => {
-        if (res.status === 400) {
-          setValidate("이미 존재하는 닉네임 입니다");
-          openModal();
-        } else if (res.status === 200) {
+        if (res.status === 200) {
           setUser({
             userInfo: {
               nickname: nickname,
             },
           });
-          setValidate("닉네임이 성공적으로 변경되었습니다");
+          setValidateNickname("닉네임이 성공적으로 변경되었습니다");
+        }
+      })
+      .catch((err) => {
+        if (err.response.status === 400) {
+          setValidateNickname("이미 존재하는 닉네임 입니다");
+        } else {
+          setMessage(`${err}`);
           openModal();
         }
       });
   }
 
   function updatePassword() {
-    axios
-      .post(
-        "https://server.momo-jito.com/mypage/passwordChange",
-        {
-          currentPassword,
-          newPassword: password,
-          headers: {
-            Authorization: `Bearer ${user.accessToken}`,
-          },
-        },
-        {
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        if (res.status === 400) {
-          setMessage("올바른 현재 비밀번호를 입력해 주세요");
-        } else if (res.status === 200) {
-          setMessage("패스워드가 성공적으로 변경되었습니다");
-        }
-      })
-      .catch((err) => {
-        setMessage(err);
-        openModal();
-      });
+    setValidatePassword(validation);
+    setValidateCheck();
+    if (currentPassword && password && passwordCheck) {
+      if (password === passwordCheck) {
+        axios
+          .post(
+            "https://server.momo-jito.com/mypage/passwordChange",
+            {
+              currentPassword,
+              newPassword: password,
+              headers: {
+                Authorization: `Bearer ${user.accessToken}`,
+              },
+            },
+            {
+              withCredentials: true,
+            }
+          )
+          .then((res) => {
+            if (res.status === 200) {
+              setMessage("패스워드가 성공적으로 변경되었습니다");
+              openModal();
+            }
+          })
+          .catch((err) => {
+            if (err.response.status === 400) {
+              setValidatePassword("올바른 현재 비밀번호를 입력해 주세요");
+            } else {
+              setMessage(`${err}`);
+              openModal();
+            }
+          });
+      }
+    }
   }
 
   const onChange = (e) => {
@@ -370,9 +410,12 @@ export default function ChangeInfo() {
   };
   useEffect(forSubmit, [content]);
 
-  const onSubmit = (content) => {
+  const onSubmit = () => {
     const formData = new FormData();
     formData.append("uploadImg", content);
+
+    setMessage("이미지를 업로드 하는 중입니다");
+    openModal();
 
     axios
       .post("https://server.momo-jito.com/mypage/profileChange", formData, {
@@ -380,9 +423,13 @@ export default function ChangeInfo() {
       })
       .then((res) => {
         setUploadedImg({ filePath: res.data.imageUrl });
-        setUser({ userInfo: { profileImg: res.data.imageUrl } });
+        setUser({ userInfo: { profile: res.data.imageUrl } });
       });
   };
+  useEffect(() => {
+    setMessage("이미지 업로드가 완료되었습니다");
+    setContent();
+  }, [uploadedImg]);
 
   return (
     <Outer>
@@ -394,15 +441,36 @@ export default function ChangeInfo() {
           style={customStyles}
           contentLabel="Example Modal"
         >
-          <h2 ref={(_subtitle) => (subtitle = _subtitle)}>{message}</h2>
-          <Validation>{!validate ? <></> : validate}</Validation>
-          <InputText
-            maxLength="8"
-            onChange={eTargetValueNickname}
-            placeholder="변경할 닉네임을 입력해 주세요"
-          ></InputText>
+          <h2 ref={(_subtitle) => (subtitle = _subtitle)}>
+            {message ? message : <></>}
+          </h2>
+          {content ? (
+            <Image>
+              <img src={"/loading.gif"} width="300px" alt=""></img>
+            </Image>
+          ) : (
+            <></>
+          )}
           {isChangeNickname ? (
-            <HoverButton onClick={updateNickname}>변경하기</HoverButton>
+            <InputText
+              maxLength="8"
+              onChange={eTargetValueNickname}
+              placeholder="  변경할 닉네임을 입력해 주세요"
+            ></InputText>
+          ) : (
+            <></>
+          )}
+          {isChangeNickname ? (
+            <Validation>
+              {!validateNickname ? <></> : validateNickname}
+            </Validation>
+          ) : (
+            <></>
+          )}
+          {isChangeNickname ? (
+            <HoverButton onClick={updateNickname}>
+              <button>변경하기</button>
+            </HoverButton>
           ) : (
             <></>
           )}
@@ -412,15 +480,15 @@ export default function ChangeInfo() {
         </Modal>
         <ButtonDiv>
           <form onSubmit={onSubmit}>
-            {user.userInfo.profileImg ? (
+            {user.userInfo.profile ? (
               <Image>
-                <Profile src={user.userInfo.profileImg} alt=""></Profile>
+                <Profile src={user.userInfo.profile} alt=""></Profile>
               </Image>
             ) : (
               <Image>
                 <svg
-                  width="40%"
-                  height="40%"
+                  width="230px"
+                  height="230px"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -449,14 +517,14 @@ export default function ChangeInfo() {
         </ButtonDiv>
 
         <Email>
-          이메일 <Span>{user.userInfo.email}</Span>
+          이메일 <span>{user.userInfo.email}</span>
         </Email>
         <Nickname>
           닉네임{" "}
           {!user.userInfo.nickname ? (
-            <Span>내닉네임</Span>
+            <span>내닉네임</span>
           ) : (
-            <Span>{user.userInfo.nickname}</Span>
+            <span>{user.userInfo.nickname}</span>
           )}
           <ButtonDiv2>
             <button onClick={clickNicknameChange}>변경하기</button>
@@ -465,19 +533,34 @@ export default function ChangeInfo() {
         <Password>비밀번호 변경</Password>
         <InputText
           type="password"
-          onChange={eTargetValuePassword}
-          placeholder="  현재 비밀번호"
-        />
-        <InputText
-          type="password"
           onChange={eTargetValueCurrentPassword}
-          placeholder="  새 비밀번호"
+          placeholder="  현재 비밀번호"
+          className="currentPassword"
         />
         <InputText
           type="password"
-          onChange={eTargetValuePasswordCheck}
-          placeholder="  새 비밀번호 확인"
+          onChange={eTargetValuePassword}
+          placeholder="  새 비밀번호"
+          className="newPassword"
         />
+        <Div>
+          <CheckImageDiv>
+            <InputText
+              type="password"
+              onChange={eTargetValuePasswordCheck}
+              placeholder="  새 비밀번호 확인"
+              className="newPasswordCheck"
+            />
+            <span>{validateCheck ? <img src="/check.png"></img> : <></>}</span>
+          </CheckImageDiv>
+        </Div>
+        {validatePassword ? (
+          <Validation>
+            {!validatePassword ? <></> : validatePassword}
+          </Validation>
+        ) : (
+          <></>
+        )}
         <ButtonDiv3>
           <button onClick={updatePassword}>변경하기</button>
         </ButtonDiv3>

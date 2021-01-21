@@ -22,6 +22,13 @@ export default function MyApp({ Component, pageProps }) {
           withCredentials: true,
         })
         .then((res) => {
+          console.log(res);
+          if (
+            res.data.data.userInfo.profile ===
+            "https://avatars1.githubusercontent.com/u/47313528?s=88&v=4"
+          ) {
+            res.data.data.userInfo.profile = null;
+          }
           setUser({
             ...user,
             userInfo: res.data.data.userInfo,

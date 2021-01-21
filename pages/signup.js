@@ -5,6 +5,10 @@ import { useRouter } from "next/router";
 import PageUtils from "../components/PageUtils";
 import Modal from "react-modal";
 import HoverButton from "../components/HoverButton";
+import DefaultButton from "../components/DafaultButton";
+import NaverButton from "../components/NaverButton";
+import KakaoButton from "../components/KakaoButton";
+import FacebookButton from "../components/FacebookButton";
 
 const SignUpText = styled.div`
   text-align: center;
@@ -16,8 +20,8 @@ const InputText = styled.input`
   margin: auto;
   width: 300px;
   height: 30px;
-  margin-block-start: 10px;
-  border-radius: 5px;
+  margin-block-start: 1rem;
+  border-radius: 0.25rem;
   border: 1px solid grey;
 `;
 
@@ -26,7 +30,7 @@ const Validation = styled.div`
   justify-content: center;
   margin-block-start: 3%;
   color: red;
-  font-size: 50%;
+  font-size: 80%;
 `;
 
 const Checkbox = styled.div`
@@ -48,94 +52,6 @@ const Checkbox = styled.div`
   }
 `;
 
-const Default = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #000000;
-  border-radius: 0.25rem;
-  border: none;
-  width: 300px;
-  height: 36px;
-  margin: auto; //?
-  margin-block-start: 20px;
-  h1 {
-    color: white;
-  }
-  :hover {
-    cursor: pointer;
-  }
-`;
-
-const Naver = styled.button`
-  display: flex;
-  background-color: #23b366;
-  justify-content: space-between;
-  border-radius: 0.25rem;
-  border: none;
-  width: 300px;
-  height: 36px;
-  align-items: center;
-  margin: auto;
-  margin-block-start: 15px;
-  .blank {
-    width: 30px;
-  }
-  :hover {
-    cursor: pointer;
-  }
-  h1 {
-    color: white;
-  }
-`;
-
-const Kakao = styled.button`
-  display: flex;
-  justify-content: space-between;
-  background-color: #ffe812;
-  border-radius: 0.25rem;
-  border: none;
-  width: 300px;
-  height: 36px;
-  align-items: center;
-  margin: auto;
-  margin-block-start: 15px;
-  img {
-    margin-left: 3px;
-  }
-  .blank {
-    width: 30px;
-  }
-  :hover {
-    cursor: pointer;
-  }
-`;
-
-const Facebook = styled.button`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 300px;
-  height: 36px;
-  background-color: #1e4799;
-  border-radius: 5px;
-  border: none;
-  margin: auto;
-  margin-block-start: 15px;
-  img {
-    margin-bottom: 3px;
-  }
-  h1 {
-    color: white;
-  }
-  .blank {
-    width: 30px;
-  }
-  :hover {
-    cursor: pointer;
-  }
-`;
-
 const Div = styled.div`
   display: flex;
   justify-content: center;
@@ -150,7 +66,7 @@ const CheckImageDiv = styled.div`
   span {
     position: absolute; //
     top: 0;
-    margin-top: 6%;
+    margin-top: 1.3rem;
     right: 15px;
   }
   img {
@@ -235,9 +151,6 @@ export default function SignUp() {
   }, [user]);
   useEffect(checkPasswordCheck, [passwordCheck]);
   useEffect(validation, [validateCheck]);
-  // console.log('=====>>>>>>',validateCheck);
-  // console.log('password',password);
-  // console.log('passwordCheck',passwordCheck);
 
   function validation() {
     if (!email) {
@@ -275,18 +188,16 @@ export default function SignUp() {
               passwordCheck,
             })
             .then((res) => {
-              if (res.status === 401) {
-                setMessage("이미 존재하는 닉네임 입니다.");
-                openModal();
-              } else if (res.status === 402) {
-                setMessage("이미 존재하는 이메일 입니다.");
-                openModal();
-              } else {
+              if (res.status === 200) {
                 openModal();
               }
             })
             .catch((err) => {
-              if (err) {
+              if (err.response.status === 401) {
+                setValidate("이미 존재하는 닉네임 입니다.");
+              } else if (err.response.status === 402) {
+                setValidate("이미 존재하는 이메일 입니다.");
+              } else {
                 setMessage(`${err}`);
                 openModal();
               }
@@ -368,24 +279,24 @@ export default function SignUp() {
             <h1>만 19세 미만은 회원가입이 불가합니다.</h1>
           </Checkbox>
 
-          <Default className="default" onClick={handleSignUp}>
-            <h1>회원가입</h1>
-          </Default>
-          <Naver onClick={handleNaver}>
+          <DefaultButton className="default" onClick={handleSignUp}>
+            회원가입
+          </DefaultButton>
+          <NaverButton className="naver" onClick={handleNaver}>
             <img src="/naver.png" width="30px" alt=""></img>
-            <h1>네이버 계정으로 신규 가입</h1>
+            네이버 계정으로 신규 가입
             <div className="blank"></div>
-          </Naver>
-          <Kakao onClick={handleKakao}>
+          </NaverButton>
+          <KakaoButton className="kakao" onClick={handleKakao}>
             <img src="/kakao.png" width="25px" alt=""></img>
-            <div>카카오 계정으로 신규 가입</div>
+            카카오 계정으로 신규 가입
             <div className="blank"></div>
-          </Kakao>
-          <Facebook onClick={handleFacebook}>
+          </KakaoButton>
+          <FacebookButton className="facebook" onClick={handleFacebook}>
             <img src="/facebook.png" width="20px" alt=""></img>
-            <h1>페이스북 계정으로 신규 가입</h1>
+            페이스북 계정으로 신규 가입
             <div className="blank"></div>
-          </Facebook>
+          </FacebookButton>
         </Inner>
       </Outer>
     </PageUtils>
