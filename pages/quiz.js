@@ -18,8 +18,8 @@ const StatusBar = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
   .bar {
+    max-width: 600;
     margin-top: 10px;
   }
 `;
@@ -33,8 +33,9 @@ const QuizBody = styled.div`
   .quiz-content {
     width: 80%;
   }
-
+  
   .question {
+    max-width: 600px;
     height: 100px;
     background-color: #edfbd5;
     border: 1px solid #c2bdbd;
@@ -54,6 +55,8 @@ const AnswerList = styled.div`
 
 const AnswerBtn = styled.button`
   margin-top: 5px;
+  // width: 100%;
+  max-width: 600px;
   width: 100%;
   height: 30px;
   text-align: left;
@@ -78,7 +81,6 @@ function quiz() {
   const [resultOn, setResultOn] = useState(false);
   const percentage = (count / quizdata.length) * 100;
 
-  console.log(totalScore);
 
   let q = quizdata[count];
   return (

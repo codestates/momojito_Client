@@ -12,6 +12,7 @@ const Button = styled.button`
     else return props.theme.grey;
   }};
   color: white;
+  cursor: pointer;
 `;
 
 export default Button;

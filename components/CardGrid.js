@@ -24,12 +24,22 @@ const Container = styled.div`
   --tw-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
     var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-  img {
+  .imagecontainer {
+    position: relative;
     width: 150px;
     height: 150px;
-    position: relative;
-    place-self: center;
+    place-self: center center;
     margin-bottom: 0.5rem;
+    img {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      height: 170%;
+      width: auto;
+      -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
   }
   .last {
     margin-bottom: 0.5rem;
@@ -59,7 +69,7 @@ export default function CardGrid({ indexList, type, setPastquery }) {
     <Container_card>
       {indexList.map((v, i) => {
         const cocktail = db[v];
-        if(cocktail) {
+        if (cocktail) {
           return (
             <Card
               type={type}
@@ -68,9 +78,10 @@ export default function CardGrid({ indexList, type, setPastquery }) {
               i={i}
               setPastquery={setPastquery}
             ></Card>
-          )
+          );
+        } else {
+          return;
         }
-        else { return }
       })}
     </Container_card>
   );
@@ -85,7 +96,7 @@ function Card({ index, type, i, setPastquery }) {
 
   const handleClick = (e) => {
     if (isDesktop) {
-      setPastquery(index);
+      // setPastquery(index);
       router.push(`/?cocktailId=${index}`, `/cocktails/${index}`);
     } else {
       router.push(`/cocktails/${index}`);
@@ -119,11 +130,14 @@ function Card({ index, type, i, setPastquery }) {
 
   return (
     <Container>
-      <img
-        onClick={handleClick}
-        src={cocktail ? `cocktails/${cocktail.id}.jpeg` : ""}
-        alt="no-img"
-      ></img>
+      <div className="imagecontainer">
+        <img
+          style={{ cursor: "pointer" }}
+          onClick={handleClick}
+          src={cocktail ? `/cocktails/${cocktail.id}.png` : ""}
+          alt="no-img"
+        ></img>
+      </div>
       {type === "mypage" ? (
         <div className="abs">
           <Button onClick={likeRequestHandler}>삭제</Button>
@@ -142,7 +156,7 @@ function Card({ index, type, i, setPastquery }) {
         ""
       )}
       {type === "ranking" ? <H1>No. {i + 1}</H1> : ""}
-      <H1>{cocktail.name}</H1>
+      {/* <H1>{cocktail.name}</H1> */}
       <H1 className="last">{cocktail.koreanName}</H1>
       <StarList rating={cocktail.rating}></StarList>
     </Container>

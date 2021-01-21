@@ -3,7 +3,6 @@ import axios from "axios";
 import { useContext, useState, useEffect } from "react";
 import HoverButton from "./HoverButton";
 import Modal from "react-modal";
-import PageUtils from "../components/PageUtils";
 
 const Image = styled.div`
   display: flex;
@@ -75,7 +74,6 @@ const ButtonDiv1 = styled.div`
 const ButtonDiv2 = styled.div`
   margin: auto;
   position: relative;
-
   button {
     overflow: hidden;
     position: relative;
@@ -90,6 +88,7 @@ const ButtonDiv2 = styled.div`
     vertical-align: 18%; //내려가있는거 올리기
     font-size: 60%;
     padding-top: 3%;
+    margin-left: 100px;
   }
 
   button:hover {
@@ -103,7 +102,6 @@ const ButtonDiv2 = styled.div`
     position: absolute;
     background: #31c460;
     transition: all 1s;
-
     left: 0;
     top: 0;
     width: 100%;
@@ -152,12 +150,10 @@ const Email = styled.div`
   display: flex;
   justify-content: left;
   margin-top: 10%;
-  margin-left: 10%;
   color: #31c460;
 
   span {
-    margin: left;
-    margin-left: 4rem;
+    margin-left: 50px;
     color: black;
   }
 `;
@@ -166,20 +162,17 @@ const Nickname = styled.div`
   display: flex;
   justify-content: left;
   margin-top: 10%;
-  margin-left: 10%;
   color: #31c460;
-`;
-
-const Span = styled.span`
-  margin: auto;
-  color: black;
+  span {
+    margin-left: 50px;
+    color: black;
+  }
 `;
 
 const Password = styled.div`
   display: flex;
   justify-content: left;
   margin-top: 10%;
-  margin-left: 10%;
   color: #31c460;
 `;
 
@@ -227,6 +220,14 @@ const customStyles = {
   },
 };
 
+const Outer = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  height: 100%;
+`;
+const Inner = styled.div``;
+
 export default function ChangeInfo() {
   const { user, setUser } = useContext(ThemeContext).userContext;
   const [currentPassword, setCurrentPassword] = useState();
@@ -264,6 +265,7 @@ export default function ChangeInfo() {
     setValidatePassword();
     setValidateNickname();
     setIsOpen(false);
+    window.location.reload();
   }
 
   function eTargetValueCurrentPassword(e) {
@@ -317,13 +319,13 @@ export default function ChangeInfo() {
       )
       .then((res) => {
         setUser({ userInfo: { profile: null } });
+        window.location.reload();
       })
       .catch((err) => {
         setMessage(`${err}`);
         openModal();
       });
   }
-  useEffect(() => {}, []);
 
   function clickNicknameChange() {
     setIsChangeNickname(true);
@@ -367,6 +369,7 @@ export default function ChangeInfo() {
 
   function updatePassword() {
     setValidatePassword(validation);
+    setValidateCheck();
     if (currentPassword && password && passwordCheck) {
       if (password === passwordCheck) {
         axios
@@ -435,132 +438,139 @@ export default function ChangeInfo() {
   }, [uploadedImg]);
 
   return (
-    <PageUtils>
-      <Modal
-        isOpen={modalIsOpen}
-        onAfterOpen={afterOpenModal}
-        onRequestClose={closeModal}
-        style={customStyles}
-        contentLabel="Example Modal"
-      >
-        <h2 ref={(_subtitle) => (subtitle = _subtitle)}>
-          {message ? message : <></>}
-        </h2>
-        {content ? (
-          <Image>
-            <img src={"/loading.gif"} width="300px" alt=""></img>
-          </Image>
-        ) : (
-          <></>
-        )}
-        {isChangeNickname ? (
-          <InputText
-            maxLength="8"
-            onChange={eTargetValueNickname}
-            placeholder="  변경할 닉네임을 입력해 주세요"
-          ></InputText>
-        ) : (
-          <></>
-        )}
-        {isChangeNickname ? (
+    <Outer>
+      <Inner>
+        <Modal
+          isOpen={modalIsOpen}
+          onAfterOpen={afterOpenModal}
+          onRequestClose={closeModal}
+          style={customStyles}
+          contentLabel="Example Modal"
+        >
+          <h2 ref={(_subtitle) => (subtitle = _subtitle)}>
+            {message ? message : <></>}
+          </h2>
+          {content ? (
+            <Image>
+              <img src={"/loading.gif"} width="300px" alt=""></img>
+            </Image>
+          ) : (
+            <></>
+          )}
+          {isChangeNickname ? (
+            <InputText
+              maxLength="8"
+              onChange={eTargetValueNickname}
+              placeholder="  변경할 닉네임을 입력해 주세요"
+            ></InputText>
+          ) : (
+            <></>
+          )}
+          {isChangeNickname ? (
+            <Validation>
+              {!validateNickname ? <></> : validateNickname}
+            </Validation>
+          ) : (
+            <></>
+          )}
+          {isChangeNickname ? (
+            <HoverButton onClick={updateNickname}>
+              <button>변경하기</button>
+            </HoverButton>
+          ) : (
+            <></>
+          )}
+          <HoverButton onClick={closeModal}>
+            <button>확인</button>
+          </HoverButton>
+        </Modal>
+        <ButtonDiv>
+          <form onSubmit={onSubmit}>
+            {user.userInfo.profile ? (
+              <Image>
+                <Profile src={user.userInfo.profile} alt=""></Profile>
+              </Image>
+            ) : (
+              <Image>
+                <svg
+                  width="230px"
+                  height="230px"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="#31C460"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </Image>
+            )}
+
+            <div></div>
+            <ButtonDiv1>
+              {/* <label class="btn fileUpload btn-default">https://stackoverflow.com/a/57051918/14914253 */}
+              <label class="btn fileUpload btn-default">
+                등록
+                <input type="file" onChange={onChange} hidden />
+              </label>
+              <label onClick={removeProfileImg}>삭제</label>
+            </ButtonDiv1>
+          </form>
+        </ButtonDiv>
+
+        <Email>
+          이메일 <span>{user.userInfo.email}</span>
+        </Email>
+        <Nickname>
+          닉네임{" "}
+          {!user.userInfo.nickname ? (
+            <span>내닉네임</span>
+          ) : (
+            <span>{user.userInfo.nickname}</span>
+          )}
+          <ButtonDiv2>
+            <button onClick={clickNicknameChange}>변경하기</button>
+          </ButtonDiv2>
+        </Nickname>
+        <Password>비밀번호 변경</Password>
+        <InputText
+          type="password"
+          onChange={eTargetValueCurrentPassword}
+          placeholder="  현재 비밀번호"
+          className="currentPassword"
+        />
+        <InputText
+          type="password"
+          onChange={eTargetValuePassword}
+          placeholder="  새 비밀번호"
+          className="newPassword"
+        />
+        <Div>
+          <CheckImageDiv>
+            <InputText
+              type="password"
+              onChange={eTargetValuePasswordCheck}
+              placeholder="  새 비밀번호 확인"
+              className="newPasswordCheck"
+            />
+            <span>{validateCheck ? <img src="/check.png"></img> : <></>}</span>
+          </CheckImageDiv>
+        </Div>
+        {validatePassword ? (
           <Validation>
-            {!validateNickname ? <></> : validateNickname}
+            {!validatePassword ? <></> : validatePassword}
           </Validation>
         ) : (
           <></>
         )}
-        {isChangeNickname ? (
-          <HoverButton onClick={updateNickname}>
-            <button>변경하기</button>
-          </HoverButton>
-        ) : (
-          <></>
-        )}
-        <HoverButton onClick={closeModal}>
-          <button>확인</button>
-        </HoverButton>
-      </Modal>
-      <ButtonDiv>
-        <form onSubmit={onSubmit}>
-          {user.userInfo.profile ? (
-            <Image>
-              <Profile src={user.userInfo.profile} alt=""></Profile>
-            </Image>
-          ) : (
-            <Image>
-              <svg
-                width="230px"
-                height="230px"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="#31C460"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </Image>
-          )}
-
-          <div></div>
-          <ButtonDiv1>
-            {/* <label class="btn fileUpload btn-default">https://stackoverflow.com/a/57051918/14914253 */}
-            <label class="btn fileUpload btn-default">
-              등록
-              <input type="file" onChange={onChange} hidden />
-            </label>
-            <label onClick={removeProfileImg}>삭제</label>
-          </ButtonDiv1>
-        </form>
-      </ButtonDiv>
-
-      <Email>
-        이메일 <span>{user.userInfo.email}</span>
-      </Email>
-      <Nickname>
-        닉네임{" "}
-        {!user.userInfo.nickname ? (
-          <Span>내닉네임</Span>
-        ) : (
-          <Span>{user.userInfo.nickname}</Span>
-        )}
-        <ButtonDiv2>
-          <button onClick={clickNicknameChange}>변경하기</button>
-        </ButtonDiv2>
-      </Nickname>
-      <Password>비밀번호 변경</Password>
-      <InputText
-        type="password"
-        onChange={eTargetValueCurrentPassword}
-        placeholder="  현재 비밀번호"
-      />
-      <InputText
-        type="password"
-        onChange={eTargetValuePassword}
-        placeholder="  새 비밀번호"
-      />
-      <Div>
-        <CheckImageDiv>
-          <InputText
-            type="password"
-            onChange={eTargetValuePasswordCheck}
-            placeholder="  새 비밀번호 확인"
-          />
-          <span>{validateCheck ? <img src="/check.png"></img> : <></>}</span>
-        </CheckImageDiv>
-      </Div>
-      {validatePassword ? (
-        <Validation>{!validatePassword ? <></> : validatePassword}</Validation>
-      ) : (
-        <></>
-      )}
-      <ButtonDiv3>
-        <button onClick={updatePassword}>변경하기</button>
-      </ButtonDiv3>
-    </PageUtils>
+        <ButtonDiv3>
+          <button onClick={updatePassword}>변경하기</button>
+        </ButtonDiv3>
+      </Inner>
+    </Outer>
   );
 }

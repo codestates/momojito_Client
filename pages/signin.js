@@ -1,8 +1,12 @@
 import styled, { ThemeContext } from "styled-components";
 import axios from "axios";
-import { useEffect, useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import PageUtils from "../components/PageUtils";
+import DefaultButton from "../components/DafaultButton";
+import NaverButton from "../components/NaverButton";
+import KakaoButton from "../components/KakaoButton";
+import FacebookButton from "../components/FacebookButton";
 
 const SignInText = styled.div`
   text-align: center;
@@ -24,90 +28,6 @@ const Validation = styled.div`
   color: red;
   font-size: 80%;
 `;
-const Default = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #000000;
-  border-radius: 0.25rem;
-  border: none;
-  width: 300px;
-  height: 36px;
-  margin: auto; //?
-  margin-block-start: 3%;
-  h1 {
-    color: white;
-  }
-  :hover {
-    cursor: pointer;
-  }
-`;
-const Naver = styled.button`
-  display: flex;
-  background-color: #23b366;
-  justify-content: space-between;
-  border-radius: 0.25rem;
-  border: none;
-  width: 300px;
-  height: 36px;
-  align-items: center;
-  margin: auto;
-  margin-block-start: 15px;
-  .blank {
-    width: 30px;
-  }
-  :hover {
-    cursor: pointer;
-  }
-  h1 {
-    color: white;
-  }
-`;
-const Kakao = styled.button`
-  display: flex;
-  background-color: #ffe812;
-  justify-content: space-between;
-  border-radius: 0.25rem;
-  border: none;
-  width: 300px;
-  height: 36px;
-  align-items: center;
-  margin: auto;
-  margin-block-start: 15px;
-  img {
-    margin-left: 3px;
-  }
-  .blank {
-    width: 30px;
-  }
-  :hover {
-    cursor: pointer;
-  }
-`;
-const Facebook = styled.button`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 300px;
-  height: 36px;
-  background-color: #3a579c;
-  border-radius: 5px;
-  border: none;
-  margin: auto;
-  margin-block-start: 15px;
-  img {
-    margin-bottom: 3px;
-  }
-  h1 {
-    color: white;
-  }
-  .blank {
-    width: 30px;
-  }
-  :hover {
-    cursor: pointer;
-  }
-`;
 const Bottom = styled.div`
   display: flex;
   justify-content: center;
@@ -125,6 +45,14 @@ const Bottom = styled.div`
     }
   }
 `;
+const Outer = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  height: 100%;
+`;
+const Inner = styled.div``;
+
 export default function Login() {
   const { user, setUser } = useContext(ThemeContext).userContext;
   const router = useRouter();
@@ -253,43 +181,50 @@ export default function Login() {
       handleSignIn();
     }
   }
+  useEffect(() => {
+    if (user.isLogin) {
+      router.push("/");
+    }
+  }, [user]);
   return (
     <PageUtils>
-      <SignInText>로그인</SignInText>
-      <InputText
-        onChange={eTargetValueEmail}
-        placeholder="  이메일 주소를 입력해 주세요."
-        onKeyDown={onKeyDown}
-      ></InputText>
-      <InputText
-        onChange={eTargetValuePassword}
-        placeholder="  비밀번호를 입력해 주세요."
-        type="password"
-        onKeyDown={onKeyDown}
-      ></InputText>
-      <Validation>{!validate ? <div>ㅤ</div> : validate}</Validation>
-      <Default onClick={handleSignIn}>
-        <h1>로그인</h1>
-      </Default>
-      <Naver onClick={handleNaver}>
-        <img src="/naver.png" width="30px" alt=""></img>
-        <h1>네이버 계정으로 로그인</h1>
-        <div className="blank"></div>
-      </Naver>
-      <Kakao onClick={handleKakao}>
-        <img src="/kakao.png" width="25px" alt=""></img>
-        <div>카카오 계정으로 로그인</div>
-        <div className="blank"></div>
-      </Kakao>
-      <Facebook onClick={handleFacebook}>
-        <img src="/facebook.png" width="20px" alt=""></img>
-        <h1>페이스북 계정으로 로그인</h1>
-        <div className="blank"></div>
-      </Facebook>
-      <Bottom>
-        <h1>회원이 아니신가요?</h1>
-        <h2 onClick={redirection}>회원가입</h2>
-      </Bottom>
+      <Outer>
+        <Inner>
+          <SignInText>로그인</SignInText>
+          <InputText
+            onChange={eTargetValueEmail}
+            placeholder="  이메일 주소를 입력해 주세요."
+            onKeyDown={onKeyDown}
+          ></InputText>
+          <InputText
+            onChange={eTargetValuePassword}
+            placeholder="  비밀번호를 입력해 주세요."
+            type="password"
+            onKeyDown={onKeyDown}
+          ></InputText>
+          <Validation>{!validate ? <div>ㅤ</div> : validate}</Validation>
+          <DefaultButton onClick={handleSignIn}>로그인</DefaultButton>
+          <NaverButton onClick={handleNaver}>
+            <img src="/naver.png" width="30px" alt=""></img>
+            네이버 계정으로 로그인
+            <div className="blank"></div>
+          </NaverButton>
+          <KakaoButton onClick={handleKakao}>
+            <img src="/kakao.png" width="25px" alt=""></img>
+            카카오 계정으로 로그인
+            <div className="blank"></div>
+          </KakaoButton>
+          <FacebookButton onClick={handleFacebook}>
+            <img src="/facebook.png" width="20px" alt=""></img>
+            페이스북 계정으로 로그인
+            <div className="blank"></div>
+          </FacebookButton>
+          <Bottom>
+            <h1>회원이 아니신가요?</h1>
+            <h2 onClick={redirection}>회원가입</h2>
+          </Bottom>
+        </Inner>
+      </Outer>
     </PageUtils>
   );
 }

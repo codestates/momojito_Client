@@ -52,7 +52,6 @@ export default function MyApp({ Component, pageProps }) {
         });
     }
   }, []);
-  console.log("userInfo", user);
   return (
     <>
       <Reset />

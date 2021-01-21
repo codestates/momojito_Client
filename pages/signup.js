@@ -5,6 +5,10 @@ import { useRouter } from "next/router";
 import PageUtils from "../components/PageUtils";
 import Modal from "react-modal";
 import HoverButton from "../components/HoverButton";
+import DefaultButton from "../components/DafaultButton";
+import NaverButton from "../components/NaverButton";
+import KakaoButton from "../components/KakaoButton";
+import FacebookButton from "../components/FacebookButton";
 
 const SignUpText = styled.div`
   text-align: center;
@@ -48,94 +52,6 @@ const Checkbox = styled.div`
   }
 `;
 
-const Default = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #000000;
-  border-radius: 0.25rem;
-  border: none;
-  width: 300px;
-  height: 36px;
-  margin: auto; //?
-  margin-block-start: 20px;
-  h1 {
-    color: white;
-  }
-  :hover {
-    cursor: pointer;
-  }
-`;
-
-const Naver = styled.button`
-  display: flex;
-  background-color: #23b366;
-  justify-content: space-between;
-  border-radius: 0.25rem;
-  border: none;
-  width: 300px;
-  height: 36px;
-  align-items: center;
-  margin: auto;
-  margin-block-start: 15px;
-  .blank {
-    width: 30px;
-  }
-  :hover {
-    cursor: pointer;
-  }
-  h1 {
-    color: white;
-  }
-`;
-
-const Kakao = styled.button`
-  display: flex;
-  justify-content: space-between;
-  background-color: #ffe812;
-  border-radius: 0.25rem;
-  border: none;
-  width: 300px;
-  height: 36px;
-  align-items: center;
-  margin: auto;
-  margin-block-start: 15px;
-  img {
-    margin-left: 3px;
-  }
-  .blank {
-    width: 30px;
-  }
-  :hover {
-    cursor: pointer;
-  }
-`;
-
-const Facebook = styled.button`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 300px;
-  height: 36px;
-  background-color: #1e4799;
-  border-radius: 5px;
-  border: none;
-  margin: auto;
-  margin-block-start: 15px;
-  img {
-    margin-bottom: 3px;
-  }
-  h1 {
-    color: white;
-  }
-  .blank {
-    width: 30px;
-  }
-  :hover {
-    cursor: pointer;
-  }
-`;
-
 const Div = styled.div`
   display: flex;
   justify-content: center;
@@ -170,6 +86,14 @@ const customStyles = {
   },
 };
 
+const Outer = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  height: 100%;
+`;
+const Inner = styled.div``;
+
 export default function SignUp() {
   const router = useRouter();
   const { user, setUser } = useContext(ThemeContext).userContext;
@@ -200,7 +124,7 @@ export default function SignUp() {
       router.push("/");
     }
   }
-
+  //
   function eTargetValueEmail(e) {
     setEmail(e.target.value);
   }
@@ -220,7 +144,11 @@ export default function SignUp() {
       setValidateCheck(false);
     }
   }
-
+  useEffect(() => {
+    if (user.isLogin) {
+      router.push("/");
+    }
+  }, [user]);
   useEffect(checkPasswordCheck, [passwordCheck]);
   useEffect(validation, [validateCheck]);
 
@@ -293,78 +221,84 @@ export default function SignUp() {
 
   return (
     <PageUtils>
-      <Modal
-        isOpen={modalIsOpen}
-        onAfterOpen={afterOpenModal}
-        onRequestClose={closeModal}
-        style={customStyles}
-        contentLabel="Example Modal"
-      >
-        <h2 ref={(_subtitle) => (subtitle = _subtitle)}>{message}</h2>
-        <HoverButton onClick={closeModal}>
-          <button>확인</button>
-        </HoverButton>
-      </Modal>
+      <Outer>
+        <Inner>
+          <Modal
+            isOpen={modalIsOpen}
+            onAfterOpen={afterOpenModal}
+            onRequestClose={closeModal}
+            style={customStyles}
+            contentLabel="Example Modal"
+          >
+            <h2 ref={(_subtitle) => (subtitle = _subtitle)}>{message}</h2>
+            <HoverButton onClick={closeModal}>
+              <button>확인</button>
+            </HoverButton>
+          </Modal>
 
-      <SignUpText>회원가입</SignUpText>
-      <InputText
-        className="email"
-        onChange={eTargetValueEmail}
-        placeholder="  사용하실 이메일 주소를 입력해주세요."
-        onKeyDown={onKeyDown}
-      ></InputText>
-      <InputText
-        className="nickname"
-        onChange={eTargetValueNickname}
-        placeholder="  사용하실 닉네임을 입력해주세요."
-        maxLength="8"
-        onKeyDown={onKeyDown}
-      ></InputText>
-      <InputText
-        className="password"
-        type="password"
-        onChange={eTargetValuePassword}
-        placeholder="  사용하실 패스워드를 입력해 주세요."
-        onKeyDown={onKeyDown}
-      ></InputText>
-      <Div>
-        <CheckImageDiv>
+          <SignUpText>회원가입</SignUpText>
           <InputText
-            className="passwordCheck"
-            type="password"
-            onChange={eTargetValuePasswordCheck}
-            placeholder="  패스워드를 다시 입력해 주세요."
+            className="email"
+            onChange={eTargetValueEmail}
+            placeholder="  사용하실 이메일 주소를 입력해주세요."
             onKeyDown={onKeyDown}
           ></InputText>
-          <span>{validateCheck ? <img src="/check.png"></img> : <></>}</span>
-        </CheckImageDiv>
-      </Div>
+          <InputText
+            className="nickname"
+            onChange={eTargetValueNickname}
+            placeholder="  사용하실 닉네임을 입력해주세요."
+            maxLength="8"
+            onKeyDown={onKeyDown}
+          ></InputText>
+          <InputText
+            className="password"
+            type="password"
+            onChange={eTargetValuePassword}
+            placeholder="  사용하실 패스워드를 입력해 주세요."
+            onKeyDown={onKeyDown}
+          ></InputText>
+          <Div>
+            <CheckImageDiv>
+              <InputText
+                className="passwordCheck"
+                type="password"
+                onChange={eTargetValuePasswordCheck}
+                placeholder="  패스워드를 다시 입력해 주세요."
+                onKeyDown={onKeyDown}
+              ></InputText>
+              <span>
+                {validateCheck ? <img src="/check.png"></img> : <></>}
+              </span>
+            </CheckImageDiv>
+          </Div>
 
-      <Validation>{!validate ? <div>ㅤ</div> : validate}</Validation>
+          <Validation>{!validate ? <div>ㅤ</div> : validate}</Validation>
 
-      <Checkbox>
-        <input type="checkbox" className="checkbox"></input>
-        <h1>만 19세 미만은 회원가입이 불가합니다.</h1>
-      </Checkbox>
+          <Checkbox>
+            <input type="checkbox" className="checkbox"></input>
+            <h1>만 19세 미만은 회원가입이 불가합니다.</h1>
+          </Checkbox>
 
-      <Default className="default" onClick={handleSignUp}>
-        <h1>회원가입</h1>
-      </Default>
-      <Naver onClick={handleNaver}>
-        <img src="/naver.png" width="30px" alt=""></img>
-        <h1>네이버 계정으로 신규 가입</h1>
-        <div className="blank"></div>
-      </Naver>
-      <Kakao onClick={handleKakao}>
-        <img src="/kakao.png" width="25px" alt=""></img>
-        <div>카카오 계정으로 신규 가입</div>
-        <div className="blank"></div>
-      </Kakao>
-      <Facebook onClick={handleFacebook}>
-        <img src="/facebook.png" width="20px" alt=""></img>
-        <h1>페이스북 계정으로 신규 가입</h1>
-        <div className="blank"></div>
-      </Facebook>
+          <DefaultButton className="default" onClick={handleSignUp}>
+            회원가입
+          </DefaultButton>
+          <NaverButton className="naver" onClick={handleNaver}>
+            <img src="/naver.png" width="30px" alt=""></img>
+            네이버 계정으로 신규 가입
+            <div className="blank"></div>
+          </NaverButton>
+          <KakaoButton className="kakao" onClick={handleKakao}>
+            <img src="/kakao.png" width="25px" alt=""></img>
+            카카오 계정으로 신규 가입
+            <div className="blank"></div>
+          </KakaoButton>
+          <FacebookButton className="facebook" onClick={handleFacebook}>
+            <img src="/facebook.png" width="20px" alt=""></img>
+            페이스북 계정으로 신규 가입
+            <div className="blank"></div>
+          </FacebookButton>
+        </Inner>
+      </Outer>
     </PageUtils>
   );
 }
