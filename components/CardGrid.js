@@ -45,15 +45,6 @@ const Container = styled.div`
     margin-bottom: 0.5rem;
   }
 
-  .signature {
-    position: relative;
-    .barloc {
-      position: absolute;
-      left: 70%;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-  }
   .abs {
     position: absolute;
     left: 65%;
@@ -70,7 +61,7 @@ export default function CardGrid({ indexList, type }) {
       {indexList.map((v, i) => {
         const cocktail = db[v];
         if (cocktail) {
-          return <Card type={type} index={v} key={v} i={i}></Card>;
+          return <Card type={type} index={v} key={v} i={v}></Card>;
         } else {
           return;
         }
@@ -132,16 +123,6 @@ function Card({ index, type, i }) {
       {type === "mypage" ? (
         <div className="abs">
           <Button onClick={likeRequestHandler}>삭제</Button>
-        </div>
-      ) : (
-        ""
-      )}
-      {type === "signature" ? (
-        <div className="signature">
-          <H1>{cocktail.barname}</H1>
-          <div className="barloc">
-            <Button s="0.5rem">{cocktail.barlocation}</Button>
-          </div>
         </div>
       ) : (
         ""
