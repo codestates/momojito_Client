@@ -6,6 +6,7 @@ const quizdata = [
     score: 16,
     question:
       "부산에 있는 TGIF 에서 만들어져 전세계에 퍼졌다고 알려져있으며 달콤한 향과 맛으로 유명한 칵테일은?",
+    imgsrc: '5.png',
     answers: [
       {
         id: 1,
@@ -35,6 +36,7 @@ const quizdata = [
     score: 16,
     question:
       "잭다니엘 위스키에 콜라를 섞어 마시는 매우 간단한 칵테일로, 제법 강한 도수와 거친 남성적인 이미지로 사랑받는 칵테일은?",
+    imgsrc: '1.jpeg',
     answers: [
       {
         id: 1,
@@ -58,6 +60,7 @@ const quizdata = [
     score: 16,
     question:
       "칵테일의 왕이라고도 불리며 007과 킹스맨 등 영화의 명대사로 유명한 칵테일은?",
+    imgsrc: '2.jpeg',
     answers: [
       {
         id: 1,
@@ -85,6 +88,7 @@ const quizdata = [
     id: 4,
     score: 16,
     question: "다음중 모히또의 재료가 아닌것은?",
+    imgsrc: '3.jpeg',
     answers: [
       {
         id: 1,

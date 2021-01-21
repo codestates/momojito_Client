@@ -39,19 +39,13 @@ export default function Sidebar() {
   return (
     <Container>
       <div onClick={(e) => router.push("/")} className="big">
-        Home
+        Homepage
       </div>
-      <div onClick={(e) => router.push("/contents")} className="big">
-        Contents
+      <div onClick={(e) => router.push("/quiz")} className="big">
+        Cocktail Quiz
       </div>
-      <div onClick={(e) => router.push("/quiz")} className="small">
-        칵테일 Quiz
-      </div>
-      <div onClick={(e) => router.push("/worldcup")} className="small">
-        칵테일 이상형 월드컵
-      </div>
-      <div onClick={(e) => router.push("/test")} className="small">
-        칵테일 성향테스트
+      <div onClick={(e) => router.push("/worldcup")} className="big">
+        Cocktail Worldcup
       </div>
       <div
         onClick={(e) => {
@@ -60,9 +54,15 @@ export default function Sidebar() {
         }}
         className="big"
       >
-        My page
+        Mypage
       </div>
-      {userContext.user.isLogin ? <div className="big">Log out</div> : ""}
+      {userContext.user.isLogin ? (
+        <div onClick={(e) => router.push("?logout=true")} className="big">
+          Logout
+        </div>
+      ) : (
+        ""
+      )}
     </Container>
   );
 }

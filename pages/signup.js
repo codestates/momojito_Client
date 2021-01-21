@@ -181,7 +181,7 @@ export default function SignUp() {
       if (password === passwordCheck) {
         if (document.querySelector(".checkbox").checked === true) {
           axios
-            .post("http://localhost:5000/auth/signup", {
+            .post("https://server.momo-jito.com/auth/signup", {
               email,
               nickname,
               password,

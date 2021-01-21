@@ -78,7 +78,7 @@ export default function Login() {
     if (email && password) {
       axios
         .post(
-          "http://localhost:5000/auth/signin",
+          "https://server.momo-jito.com/auth/signin",
           {
             email,
             password,
@@ -91,7 +91,7 @@ export default function Login() {
           setUser({ ...user, accessToken: res.data.accessToken });
           {
             axios
-              .get("http://localhost:5000/auth/accesstoken", {
+              .get("https://server.momo-jito.com/auth/accesstoken", {
                 withCredentials: true,
               })
               .then((res) => {
@@ -140,15 +140,15 @@ export default function Login() {
       if (authorizationCode && callback) {
         axios
           .post(
-            `http://localhost:5000/auth/${callback}`,
+            `https://server.momo-jito.com/auth/auth/${callback}`,
             { authorizationCode },
             { withCredentials: true }
           )
           .then((res) => {
+            //여서 jwt토큰 받아서 setUser해줌.
             setUser({
               ...user,
               userInfo: res.data.data.userInfo,
-              userInfo: { profile: user.userInfo.profile },
               myCocktailList: res.data.data.cocktailList,
               accessToken: res.data.data.accessToken,
               isLogin: true,
@@ -159,20 +159,24 @@ export default function Login() {
       }
     }
   }, []);
+
+  useEffect(() => {
+    if (user.isLogin) {
+      router.push("/");
+    }
+  }, [user]);
+
   function handleNaver() {
     window.location.assign(
-      "https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=PTisZDNi6hMVQyFoFNm6&redirect_uri=http://localhost:5000/auth/navercallback&state=rara"
+      "https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=PTisZDNi6hMVQyFoFNm6&redirect_uri=https://server.momo-jito.com/auth/navercallback&state=rara"
     );
   }
   function handleKakao() {
     window.location.assign(
-      `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=f03c58d925a4fe0e1fdd2e3ea7617c09&redirect_uri=http://localhost:5000/auth/kakaocallback`
+      `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=f03c58d925a4fe0e1fdd2e3ea7617c09&redirect_uri=https://server.momo-jito.com/auth/kakaocallback`
     );
   }
 
-  function handleFacebook() {
-    axios.post();
-  }
   function redirection() {
     router.push("/signup");
   }
@@ -181,11 +185,7 @@ export default function Login() {
       handleSignIn();
     }
   }
-  useEffect(() => {
-    if (user.isLogin) {
-      router.push("/");
-    }
-  }, [user]);
+
   return (
     <PageUtils>
       <Outer>
@@ -214,7 +214,7 @@ export default function Login() {
             카카오 계정으로 로그인
             <div className="blank"></div>
           </KakaoButton>
-          <FacebookButton onClick={handleFacebook}>
+          <FacebookButton>
             <img src="/facebook.png" width="20px" alt=""></img>
             페이스북 계정으로 로그인
             <div className="blank"></div>

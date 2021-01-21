@@ -34,7 +34,7 @@ const Container = styled.div`
       position: absolute;
       left: 50%;
       top: 50%;
-      height: 170%;
+      height: 100%;
       width: auto;
       -webkit-transform: translate(-50%, -50%);
       -ms-transform: translate(-50%, -50%);
@@ -64,21 +64,13 @@ const H1 = styled.h1`
   padding: 0.25rem;
   text-align: center;
 `;
-export default function CardGrid({ indexList, type, setPastquery }) {
+export default function CardGrid({ indexList, type }) {
   return (
     <Container_card>
       {indexList.map((v, i) => {
         const cocktail = db[v];
         if (cocktail) {
-          return (
-            <Card
-              type={type}
-              index={v}
-              key={v}
-              i={i}
-              setPastquery={setPastquery}
-            ></Card>
-          );
+          return <Card type={type} index={v} key={v} i={i}></Card>;
         } else {
           return;
         }
@@ -87,16 +79,15 @@ export default function CardGrid({ indexList, type, setPastquery }) {
   );
 }
 
-function Card({ index, type, i, setPastquery }) {
+function Card({ index, type, i }) {
   const router = useRouter();
   const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
+  const { user, setUser } = useContext(ThemeContext).userContext;
   const cocktail = db[index];
-  const userContext = useContext(ThemeContext).userContext;
-  const user = userContext.user;
 
   const handleClick = (e) => {
     if (isDesktop) {
-      // setPastquery(index);
+      setUser({ ...user, pastquery: i });
       router.push(`/?cocktailId=${index}`, `/cocktails/${index}`);
     } else {
       router.push(`/cocktails/${index}`);
@@ -106,7 +97,7 @@ function Card({ index, type, i, setPastquery }) {
   const likeRequestHandler = () => {
     axios
       .post(
-        "http://localhost:5000/detail/favorite",
+        "https://server.momo-jito.com/detail/favorite",
         { cocktailId: index, isAdd: false },
         { withCredentials: true }
       )
@@ -118,7 +109,7 @@ function Card({ index, type, i, setPastquery }) {
           user.myCocktailList.splice(user.myCocktailList.indexOf(index), 1);
         }
         // 업데이트
-        userContext.setUser({
+        user.setUser({
           ...user,
           myCocktailList: user.myCocktailList,
         });
@@ -156,8 +147,8 @@ function Card({ index, type, i, setPastquery }) {
         ""
       )}
       {type === "ranking" ? <H1>No. {i + 1}</H1> : ""}
-      {/* <H1>{cocktail.name}</H1> */}
-      <H1 className="last">{cocktail.koreanName}</H1>
+      <H1>{cocktail.koreanName}</H1>
+      <H1 className="last">{cocktail.name}</H1>
       <StarList rating={cocktail.rating}></StarList>
     </Container>
   );

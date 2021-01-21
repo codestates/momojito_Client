@@ -308,15 +308,9 @@ export default function ChangeInfo() {
       return;
     }
     axios
-      .post(
-        "http://localhost:5000/mypage/profileDelete",
-        {
-          headers: {
-            Authorization: `Bearer ${user.accessToken}`,
-          },
-        },
-        { withCredentials: true }
-      )
+      .post("https://server.momo-jito.com/mypage/profileDelete", "", {
+        withCredentials: true,
+      })
       .then((res) => {
         setUser({ userInfo: { profile: null } });
         window.location.reload();
@@ -336,7 +330,7 @@ export default function ChangeInfo() {
   function updateNickname() {
     axios
       .post(
-        "http://localhost:5000/mypage/nicknameChange",
+        "https://server.momo-jito.com/mypage/nicknameChange",
         {
           nickname,
           headers: {
@@ -374,7 +368,7 @@ export default function ChangeInfo() {
       if (password === passwordCheck) {
         axios
           .post(
-            "http://localhost:5000/mypage/passwordChange",
+            "https://server.momo-jito.com/mypage/passwordChange",
             {
               currentPassword,
               newPassword: password,
@@ -424,7 +418,7 @@ export default function ChangeInfo() {
     openModal();
 
     axios
-      .post("http://localhost:5000/mypage/profileChange", formData, {
+      .post("https://server.momo-jito.com/mypage/profileChange", formData, {
         withCredentials: true,
       })
       .then((res) => {
