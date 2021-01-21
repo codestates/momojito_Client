@@ -102,7 +102,7 @@ export default function CocktailInfo({ id }) {
     if (user.isLogin) {
       axios
         .post(
-          "http://localhost:5000/detail/favorite",
+          "https://server.momo-jito.com/detail/favorite",
           { cocktailId: id, isAdd: !isLike },
           { withCredentials: true }
         )
