@@ -11,6 +11,8 @@ const QuizHeader = styled.div`
   margin-top: 70px;
   font-size: 24px;
   text-align: center;
+  font-weight: bold; 
+  // color: grey;
 `;
 
 const StatusBar = styled.div`
@@ -24,6 +26,10 @@ const StatusBar = styled.div`
   }
 `;
 
+const QuizDiv = styled.div`
+
+`
+
 const QuizBody = styled.div`
   margin-top: 30px;
   display: flex;
@@ -36,9 +42,14 @@ const QuizBody = styled.div`
   
   .question {
     max-width: 600px;
-    height: 100px;
     position: relative;
-    background-color: #edfbd5;
+    background-color: white;
+    line-height: 30px;
+    text-align: center;
+
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+
     border: 1px solid #c2bdbd;
     display: flex;
     flex-direction: column;
@@ -46,16 +57,15 @@ const QuizBody = styled.div`
   }
 
   p {
-    margin: 30px 15px 0px 15px;
+    margin: 30px 15px 15px 15px;
     text-
     font-size: 14px;
   }
 
   .quiz-img {
-    position: absolute;
-    top: 30px;
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
+    margin-bottom: 15px;
   }
 `;
 const AnswerList = styled.div`
@@ -67,7 +77,6 @@ const AnswerList = styled.div`
 
 const AnswerBtn = styled.button`
   margin-top: 5px;
-  // width: 100%;
   max-width: 600px;
   width: 100%;
   height: 30px;
@@ -75,12 +84,14 @@ const AnswerBtn = styled.button`
   padding-left: 25px;
   border: 1px solid #c2bdbd;
   background-color: white;
+  box-shadow: 0 5px 5px rgba(0,0,0,0.19), 0 3px 3px rgba(0,0,0,0.23);
+  border-radius: 8px;
   cursor: pointer;
 
-  //   &:hover {
-  //     border-color: #36cc3c;
-  //     background-color: #edfbd5;
-  //   }
+  // &:hover {
+  //   border-color: #36cc3c;
+  //   background-color: #edfbd5;
+  // }
   &:active {
     border-color: #36cc3c;
     background-color: #edfbd5;
@@ -93,53 +104,55 @@ function quiz() {
   const [resultOn, setResultOn] = useState(false);
   const percentage = (count / quizdata.length) * 100;
 
-
   let q = quizdata[count];
   return (
-    <PageUtils>
+    <PageUtils page="quiz">
       <Head>
         <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
       </Head>
+      <QuizDiv>
+        <QuizHeader>✏️ 칵테일 능력평가</QuizHeader>
+        {!resultOn ? (
+          <>
+            <StatusBar>
+              <div className="count">
+                {q.id}/{quizdata.length}
+              </div>
 
-      <QuizHeader>✏️ 칵테일 능력평가</QuizHeader>
-      {!resultOn ? (
-        <>
-          <StatusBar>
-            <div className="count">
-              {q.id}/{quizdata.length}
-            </div>
-
-            <ProgressBar percentage={percentage}></ProgressBar>
-          </StatusBar>
-          <QuizBody>
-            <div className="quiz-content question">
-              <p>
-              {q.question}
-              </p>
-              {/* <img className="quiz-img" src={`/cocktails/${q.imgsrc}`} alt="no-img"/> */}
-            </div>
-            <div className="quiz-content">
-              <AnswerList>
-                {q.answers.map((answer) => {
-                  return (
-                    <Answer
-                      count={count}
-                      setCount={setCount}
-                      answer={answer}
-                      score={q.score}
-                      totalScore={totalScore}
-                      setScore={setScore}
-                      setResultOn={setResultOn}
-                    ></Answer>
-                  );
-                })}
-              </AnswerList>
-            </div>
-          </QuizBody>
-        </>
-      ) : (
-        <Result totalScore={totalScore}></Result>
-      )}
+              <ProgressBar percentage={percentage}></ProgressBar>
+            </StatusBar>
+            <QuizBody>
+              <div className="quiz-content question">
+                <p>{q.question}</p>
+                <img
+                  className="quiz-img"
+                  src={`/cocktails/${q.imgsrc}`}
+                  alt="no-img"
+                />
+              </div>
+              <div className="quiz-content">
+                <AnswerList>
+                  {q.answers.map((answer) => {
+                    return (
+                      <Answer
+                        count={count}
+                        setCount={setCount}
+                        answer={answer}
+                        score={q.score}
+                        totalScore={totalScore}
+                        setScore={setScore}
+                        setResultOn={setResultOn}
+                      ></Answer>
+                    );
+                  })}
+                </AnswerList>
+              </div>
+            </QuizBody>
+          </>
+        ) : (
+          <Result totalScore={totalScore}></Result>
+        )}
+      </QuizDiv>
     </PageUtils>
   );
 }
@@ -178,7 +191,9 @@ const ResultBox = styled.div`
   margin-top: 30px;
   width: 350px;
   height: 350px;
-  background-color: #edfbd5;
+  // background-color: #edfbd5;
+  background-color: white;
+  box-shadow: 0 5px 5px rgba(0,0,0,0.19), 0 3px 3px rgba(0,0,0,0.23);
   position: relative;
 
   display: flex;
@@ -242,7 +257,7 @@ const KakaoLink = styled.div`
     font-size: 14px;
     margin-right: 10px;
   }
-`
+`;
 
 function Result({ totalScore }) {
   const router = useRouter();
@@ -290,14 +305,12 @@ function Result({ totalScore }) {
         </button>
       </ButtonDiv>
       <KakaoLink>
-        <p >
-          카카오톡으로 공유하기
-        </p>
-          <KakaoShareButton
-            title="나의 술알못 테스트 결과는?"
-            desc={result.text}
-            imgurl="http://mud-kage.kakao.co.kr/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg"
-          ></KakaoShareButton>
+        <p>카카오톡으로 공유하기</p>
+        <KakaoShareButton
+          title="나의 술알못 테스트 결과는?"
+          desc={result.text}
+          imgurl="http://mud-kage.kakao.co.kr/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg"
+        ></KakaoShareButton>
       </KakaoLink>
     </>
   );
