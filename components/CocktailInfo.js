@@ -8,6 +8,7 @@ import ButtonList from "./ButtonList";
 import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import Modal from "react-modal";
+import { Router, useRouter } from "next/router";
 
 const Container = styled.div`
   display: flex;
@@ -88,6 +89,7 @@ export default function CocktailInfo({ id }) {
   const user = userContext.user;
   const [isLike, setIsLike] = useState(false);
   const [modalIsOpen, setIsOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     //여기에 props로 받은 Id가 포함되어 있으면, isLike -> true
@@ -96,29 +98,33 @@ export default function CocktailInfo({ id }) {
     }
   });
 
-  const likeRequestHandler = () => {
-    axios
-      .post(
-        "http://localhost:5000/detail/favorite",
-        { cocktailId: id, isAdd: !isLike },
-        { withCredentials: true }
-      )
-      .then((res) => {
-        // '받은 응답코드' 200 이면 추가,  201이면 삭제
-        if (res.status === 200) {
-          user.myCocktailList.push(id);
-        } else if (res.status === 201) {
-          user.myCocktailList.splice(user.myCocktailList.indexOf(id), 1);
-        }
-        // 업데이트
-        userContext.setUser({
-          ...user,
-          myCocktailList: user.myCocktailList,
+  const likeRequestHandler = (e) => {
+    if (user.isLogin) {
+      axios
+        .post(
+          "http://localhost:5000/detail/favorite",
+          { cocktailId: id, isAdd: !isLike },
+          { withCredentials: true }
+        )
+        .then((res) => {
+          // '받은 응답코드' 200 이면 추가,  201이면 삭제
+          if (res.status === 200) {
+            user.myCocktailList.push(id);
+          } else if (res.status === 201) {
+            user.myCocktailList.splice(user.myCocktailList.indexOf(id), 1);
+          }
+          // 업데이트
+          userContext.setUser({
+            ...user,
+            myCocktailList: user.myCocktailList,
+          });
+        })
+        .then(() => {
+          setIsLike(!isLike);
         });
-      })
-      .then(() => {
-        setIsLike(!isLike);
-      });
+    } else {
+      router.push("/signin");
+    }
   };
 
   function openModal() {
