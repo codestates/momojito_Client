@@ -210,7 +210,7 @@ export default function Login() {
       if (authorizationCode && callback) {
         axios
           .post(
-            `http://localhost:5000/auth/auth/${callback}`,
+            `https://server.momo-jito.com/auth/auth/${callback}`,
             { authorizationCode },
             { withCredentials: true }
           )
@@ -240,12 +240,12 @@ export default function Login() {
 
   function handleNaver() {
     window.location.assign(
-      "https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=PTisZDNi6hMVQyFoFNm6&redirect_uri=http://localhost:5000/auth/navercallback&state=rara"
+      "https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=PTisZDNi6hMVQyFoFNm6&redirect_uri=https://server.momo-jito.com/auth/navercallback&state=rara"
     );
   }
   function handleKakao() {
     window.location.assign(
-      `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=f03c58d925a4fe0e1fdd2e3ea7617c09&redirect_uri=http://localhost:5000/auth/kakaocallback`
+      `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=f03c58d925a4fe0e1fdd2e3ea7617c09&redirect_uri=https://server.momo-jito.com/auth/kakaocallback`
     );
   }
 
