@@ -199,6 +199,7 @@ export default function Login() {
     }
   }
 
+
   useEffect(() => {
     const url = new URL(window.location.href);
     console.log(url);
@@ -209,7 +210,7 @@ export default function Login() {
       if (authorizationCode && callback) {
         axios
           .post(
-            `http://localhost:5000/auth/${callback}`,
+            `http://localhost:5000/auth/auth/${callback}`,
             { authorizationCode },
             { withCredentials: true }
           )
@@ -227,11 +228,14 @@ export default function Login() {
           });
       }
     }
+ 
+  }, []);
 
+  useEffect(() => {
     if (user.isLogin) {
       router.push("/");
     }
-  }, [user]);
+  },[user])
 
 
   function handleNaver() {
