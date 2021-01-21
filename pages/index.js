@@ -8,8 +8,48 @@ import CocktailInfo from "../components/CocktailInfo";
 import { useRouter } from "next/router";
 import Modal from "react-modal";
 import db from "../public/cocktaildb";
-import { ThemeContext } from "styled-components";
+import styled, { ThemeContext } from "styled-components";
 Modal.setAppElement("#__next");
+
+function ReactModalAdapter({ className, ...props }) {
+  const contentClassName = `${className}__content`;
+  const overlayClassName = `${className}__overlay`;
+  return (
+    <Modal
+      portalClassName={className}
+      className={contentClassName}
+      overlayClassName={overlayClassName}
+      {...props}
+    />
+  );
+}
+
+const StyledModal = styled(ReactModalAdapter)`
+  &__overlay {
+    background-color: rgba(255, 255, 255, 0);
+    z-index: 10;
+    position: fixed;
+    inset: 0;
+    transform: translateX(+375px);
+    transition: all 250ms ease-in-out;
+    &.ReactModal__Overlay--after-open {
+      transform: translateX(0px);
+    }
+    &.ReactModal__Overlay--before-close {
+      transform: translateX(+375px);
+    }
+  }
+
+  &__content {
+    background-color: white;
+    position: absolute;
+    top: 42px;
+    bottom: 69px;
+    right: 0px;
+    left: auto;
+    width: 375px;
+  }
+`;
 
 export default function Home() {
   const [buttonSelected, setButtonSelected] = useState(0);
@@ -17,42 +57,29 @@ export default function Home() {
   const { user, setUser } = useContext(ThemeContext).userContext;
   const dbIndexList = db.map((el) => el.id);
   const [topTenList, setTopTenList] = useState([]);
-  useEffect(() => {
-    axios.get("http://localhost:5000/mainpage/getTopTen").then((res) => {
-      const data = res.data.data.map((el) => {
-        return el.id;
-      });
-      setTopTenList(data);
-    });
-  }, []);
+  // useEffect(() => {
+  //   axios.get("http://localhost:5000/mainpage/getTopTen").then((res) => {
+  //     const data = res.data.data.map((el) => {
+  //       return el.id;
+  //     });
+  //     setTopTenList(data);
+  //   });
+  // }, []);
 
   return (
     <PageUtils>
-      <Modal
+      <StyledModal
         closeTimeoutMS={250}
         isOpen={!!router.query.cocktailId}
         onRequestClose={() => router.push("/")}
         contentLabel="Cocktail Modal"
-        style={{
-          overlay: {
-            backgroundColor: "rgba(255, 255, 255, 0)",
-            zIndex: 10,
-          },
-          content: {
-            top: "42px",
-            bottom: "69px",
-            right: "0px",
-            left: "auto",
-            width: "375px",
-          },
-        }}
       >
         <CocktailInfo
           id={
             router.query.cocktailId ? router.query.cocktailId : user.pastquery
           }
         ></CocktailInfo>
-      </Modal>
+      </StyledModal>
       <Carousel
         carouselList={[
           {
