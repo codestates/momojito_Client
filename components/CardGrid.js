@@ -34,7 +34,7 @@ const Container = styled.div`
       position: absolute;
       left: 50%;
       top: 50%;
-      height: 170%;
+      height: 100%;
       width: auto;
       -webkit-transform: translate(-50%, -50%);
       -ms-transform: translate(-50%, -50%);
@@ -106,7 +106,7 @@ function Card({ index, type, i, setPastquery }) {
   const likeRequestHandler = () => {
     axios
       .post(
-        "http://localhost:5000/detail/favorite",
+        "https://server.momo-jito.com/detail/favorite",
         { cocktailId: index, isAdd: false },
         { withCredentials: true }
       )
@@ -156,8 +156,8 @@ function Card({ index, type, i, setPastquery }) {
         ""
       )}
       {type === "ranking" ? <H1>No. {i + 1}</H1> : ""}
-      {/* <H1>{cocktail.name}</H1> */}
-      <H1 className="last">{cocktail.koreanName}</H1>
+      <H1>{cocktail.koreanName}</H1>
+      <H1 className="last">{cocktail.name}</H1>
       <StarList rating={cocktail.rating}></StarList>
     </Container>
   );

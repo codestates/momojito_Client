@@ -29,7 +29,7 @@ export default function MyApp({ Component, pageProps }) {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
       axios
-        .get("http://localhost:5000/auth/accesstoken", {
+        .get("https://server.momo-jito.com/auth/accesstoken", {
           withCredentials: true,
         })
         .then((res) => {

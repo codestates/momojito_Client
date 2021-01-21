@@ -37,13 +37,25 @@ const QuizBody = styled.div`
   .question {
     max-width: 600px;
     height: 100px;
+    position: relative;
     background-color: #edfbd5;
     border: 1px solid #c2bdbd;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   p {
-    margin: 30px 15px;
+    margin: 30px 15px 0px 15px;
+    text-
     font-size: 14px;
+  }
+
+  .quiz-img {
+    position: absolute;
+    top: 30px;
+    width: 200px;
+    height: 200px;
   }
 `;
 const AnswerList = styled.div`
@@ -96,12 +108,15 @@ function quiz() {
             <div className="count">
               {q.id}/{quizdata.length}
             </div>
-            {/* <div className="bar"></div> */}
+
             <ProgressBar percentage={percentage}></ProgressBar>
           </StatusBar>
           <QuizBody>
             <div className="quiz-content question">
-              <p>{q.question}</p>
+              <p>
+              {q.question}
+              </p>
+              {/* <img className="quiz-img" src={`/cocktails/${q.imgsrc}`} alt="no-img"/> */}
             </div>
             <div className="quiz-content">
               <AnswerList>

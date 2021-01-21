@@ -14,7 +14,7 @@ export default function MyPage() {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
       axios
-        .post("http://localhost:5000/auth/signout", "", {
+        .post("https://server.momo-jito.com/auth/signout", "", {
           withCredentials: true,
         })
         .then((res) => {

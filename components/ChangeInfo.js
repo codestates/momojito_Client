@@ -273,7 +273,7 @@ export default function ChangeInfo() {
   }
 
   // function getUserData() {
-  //   axios.get('http://localhost:5000/mypage/getUserData',{
+  //   axios.get('https://server.momo-jito.com/mypage/getUserData',{
   //     headers: {
   //       Authorization: `Bearer ${user.accessToken}`
   //     },
@@ -283,7 +283,7 @@ export default function ChangeInfo() {
 
   function removeProfileImg() {
     axios
-      .post("http://localhost:5000/mypage/profileDelete", {
+      .post("https://server.momo-jito.com/mypage/profileDelete", {
         headers: {
           Authorization: `Bearer ${user.accessToken}`,
         },
@@ -303,7 +303,7 @@ export default function ChangeInfo() {
   function updateNickname(e) {
     axios
       .post(
-        "http://localhost:5000/mypage/nicknameChange",
+        "https://server.momo-jito.com/mypage/nicknameChange",
         {
           nickname,
           headers: {
@@ -333,7 +333,7 @@ export default function ChangeInfo() {
   function updatePassword() {
     axios
       .post(
-        "http://localhost:5000/mypage/passwordChange",
+        "https://server.momo-jito.com/mypage/passwordChange",
         {
           currentPassword,
           newPassword: password,
@@ -375,7 +375,7 @@ export default function ChangeInfo() {
     formData.append("uploadImg", content);
 
     axios
-      .post("http://localhost:5000/mypage/profileChange", formData, {
+      .post("https://server.momo-jito.com/mypage/profileChange", formData, {
         withCredentials: true,
       })
       .then((res) => {
