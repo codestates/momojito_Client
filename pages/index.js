@@ -88,13 +88,6 @@ export default function Home() {
       <Carousel
         carouselList={[
           {
-            url: 'url("/bar0.jpeg");',
-            heading: "성향에 따라 맞춤 칵테일을 추천 받으려면?",
-            handleClick: (e) => {
-              router.push("/test");
-            },
-          },
-          {
             url: 'url("/bar1.jpeg");',
             heading: "당신의 칵잘알 퀴즈 점수는?",
             handleClick: (e) => {

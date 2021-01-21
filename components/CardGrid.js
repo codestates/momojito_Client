@@ -109,7 +109,7 @@ function Card({ index, type, i }) {
           user.myCocktailList.splice(user.myCocktailList.indexOf(index), 1);
         }
         // 업데이트
-        user.setUser({
+        setUser({
           ...user,
           myCocktailList: user.myCocktailList,
         });
