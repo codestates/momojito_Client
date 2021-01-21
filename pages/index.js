@@ -19,13 +19,15 @@ export default function Home() {
   const dbIndexList = db.map((el) => el.id)
   const [topTenList, setTopTenList] = useState([])
   useEffect(() => {
-    axios.get('http://localhost:5000/mainpage/getTopTen')
-    .then((res) => {
-      const data = res.data.data.map((el) => {
-        return el.id
+    if(topTenList.length === 0) {
+      axios.get('https://server.momo-jito.com/mainpage/getTopTen')
+      .then((res) => {
+        const data = res.data.data.map((el) => {
+          return el.id
+        })
+        setTopTenList(data)
       })
-      setTopTenList(data)
-    })
+    }
   }, [])
   
   return (

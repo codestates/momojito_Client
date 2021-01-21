@@ -99,7 +99,7 @@ export default function CocktailInfo({ id }) {
   const likeRequestHandler = () => {
     axios
       .post(
-        "http://localhost:5000/detail/favorite",
+        "https://server.momo-jito.com/detail/favorite",
         { cocktailId: id, isAdd: !isLike },
         { withCredentials: true }
       )

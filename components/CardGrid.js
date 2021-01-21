@@ -106,7 +106,7 @@ function Card({ index, type, i, setPastquery }) {
   const likeRequestHandler = () => {
     axios
       .post(
-        "http://localhost:5000/detail/favorite",
+        "https://server.momo-jito.com/detail/favorite",
         { cocktailId: index, isAdd: false },
         { withCredentials: true }
       )
@@ -156,7 +156,7 @@ function Card({ index, type, i, setPastquery }) {
         ""
       )}
       {type === "ranking" ? <H1>No. {i + 1}</H1> : ""}
-      {/* <H1>{cocktail.name}</H1> */}
+      <H1>{cocktail.name}</H1>
       <H1 className="last">{cocktail.koreanName}</H1>
       <StarList rating={cocktail.rating}></StarList>
     </Container>
