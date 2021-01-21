@@ -24,6 +24,8 @@ const DesktopFooter = styled.div`
   }
   align-items: center;
   padding: 1.5rem;
+  box-sizing: border-box;
+  height: 75px;
   background-color: ${(props) => props.theme.sub};
   img {
     margin-left: 0.5rem;

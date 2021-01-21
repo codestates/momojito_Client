@@ -9,7 +9,8 @@ const Container = styled.div`
   padding: 0.5rem;
   @media (min-width: 1024px) {
     padding: 1.5rem;
-    height: 1.5rem;
+    box-sizing: border-box;
+    height: 75px;
   }
   display: ${(props) => (props.theme.userContext.user.isLogin ? "" : "flex")};
   justify-content: ${(props) =>

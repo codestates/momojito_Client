@@ -41,10 +41,11 @@ const StyledModal = styled(ReactModalAdapter)`
   }
 
   &__content {
+    overflow: auto;
     background-color: white;
     position: absolute;
-    top: 42px;
-    bottom: 69px;
+    top: 75px;
+    bottom: 75px;
     right: 0px;
     left: auto;
     width: 375px;
