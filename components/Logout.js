@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
 import styled, { ThemeContext } from "styled-components";
@@ -10,7 +11,6 @@ const Container = styled.div`
 const H1 = styled.h1`
   padding: 1rem;
 `;
-
 export default function Logout() {
   const router = useRouter();
   const { user, setUser } = useContext(ThemeContext).userContext;
@@ -27,7 +27,7 @@ export default function Logout() {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
       axios
-        .post("http://localhost:5000/auth/signout", "", {
+        .post("https://server.momo-jito.com/auth/signout", "", {
           withCredentials: true,
         })
         .then((res) => {

@@ -56,7 +56,13 @@ export default function Sidebar() {
       >
         Mypage
       </div>
-      {userContext.user.isLogin ? <div className="big">Logout</div> : ""}
+      {userContext.user.isLogin ? (
+        <div onClick={(e) => router.push("?logout=true")} className="big">
+          Logout
+        </div>
+      ) : (
+        ""
+      )}
     </Container>
   );
 }
