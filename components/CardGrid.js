@@ -64,21 +64,13 @@ const H1 = styled.h1`
   padding: 0.25rem;
   text-align: center;
 `;
-export default function CardGrid({ indexList, type, setPastquery }) {
+export default function CardGrid({ indexList, type }) {
   return (
     <Container_card>
       {indexList.map((v, i) => {
         const cocktail = db[v];
         if (cocktail) {
-          return (
-            <Card
-              type={type}
-              index={v}
-              key={v}
-              i={i}
-              setPastquery={setPastquery}
-            ></Card>
-          );
+          return <Card type={type} index={v} key={v} i={i}></Card>;
         } else {
           return;
         }
@@ -87,16 +79,15 @@ export default function CardGrid({ indexList, type, setPastquery }) {
   );
 }
 
-function Card({ index, type, i, setPastquery }) {
+function Card({ index, type, i }) {
   const router = useRouter();
   const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
+  const { user, setUser } = useContext(ThemeContext).userContext;
   const cocktail = db[index];
-  const userContext = useContext(ThemeContext).userContext;
-  const user = userContext.user;
 
   const handleClick = (e) => {
     if (isDesktop) {
-      // setPastquery(index);
+      setUser({ ...user, pastquery: i });
       router.push(`/?cocktailId=${index}`, `/cocktails/${index}`);
     } else {
       router.push(`/cocktails/${index}`);

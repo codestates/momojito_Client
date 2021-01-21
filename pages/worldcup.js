@@ -32,13 +32,9 @@ const Card = styled(animated.div)`
     0 10px 10px -10px rgba(50, 50, 73, 0.3);
 `;
 
-const cards = [
-  "/cocktails/0.jpeg",
-  "/cocktails/1.jpeg",
-  "/cocktails/2.jpeg",
-  "/cocktails/3.jpeg",
-  "/cocktails/4.jpeg",
-];
+const cards = Array.from({ length: 8 }, (_, i) => i).map(
+  (v) => `/cocktails/${v}.png`
+);
 
 const to = (i) => ({
   x: 0,
@@ -165,6 +161,7 @@ function Deck() {
             y,
             rotate,
             scale,
+            zIndex,
             backgroundImage: `url(${cards[i]})`,
           }}
         />
