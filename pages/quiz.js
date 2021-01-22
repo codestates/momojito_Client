@@ -58,7 +58,6 @@ const QuizBody = styled.div`
 
   p {
     margin: 30px 15px 15px 15px;
-    text-
     font-size: 14px;
   }
 

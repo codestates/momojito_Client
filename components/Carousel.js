@@ -1,7 +1,9 @@
-import Button from "../components/Button";
+import ButtonL from "../components/ButtonL";
 import styled, { css } from "styled-components";
 import SwiperCore, { Navigation, Pagination, Autoplay } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
+import {FaArrowAltCircleRight} from 'react-icons/fa'
+
 SwiperCore.use([Navigation, Pagination, Autoplay]);
 const Divwithbg = styled.div`
   background-image: ${(props) =>
@@ -15,7 +17,7 @@ const Divwithbg = styled.div`
       : props.url};
   background-size: cover;
   width: ${(props) => (props.heading ? "100%" : "375px")};
-  height: ${(props) => (props.heading ? "200px" : "375px")};
+  height: ${(props) => (props.heading ? "400px" : "375px")};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -25,28 +27,35 @@ const Divwithbg = styled.div`
     align-items: center;
   }
   div button {
-    width: 6rem;
+    margin-top: 20px;
+    width: 10rem;
   }
   h1 {
     color: white;
-    width: 14rem;
-    font-size: 1rem;
+    /* width: 14rem; */
+    font-size: 1.5rem;
     line-height: 1.5rem;
     font-weight: bold;
     text-align: center;
     margin-bottom: 0.5rem;
   }
+
+  h4 {
+    color: white;
+    margin-top: 10px;
+  }
 `;
 
-function Slide({ url, heading, buttonText = "지금 이동하기", handleClick }) {
+function Slide({ url, heading, sub, buttonText = "지금바로 GO! 🍹", handleClick }) {
   return (
     <Divwithbg url={url} heading={heading}>
       {heading ? (
         <div className="">
           <h1>{heading}</h1>
-          <Button selected onClick={handleClick}>
+          <h4>{sub}</h4>
+          <ButtonL selected onClick={handleClick}>
             {buttonText}
-          </Button>
+          </ButtonL>
         </div>
       ) : (
         ""
@@ -58,11 +67,12 @@ function Slide({ url, heading, buttonText = "지금 이동하기", handleClick }
 export default function Carousel({ carouselList }) {
   return (
     <Swiper autoplay={{ delay: 5000 }}>
-      {carouselList.map(({ url, heading, buttonText, handleClick }) => (
+      {carouselList.map(({ url, heading, sub, buttonText, handleClick }) => (
         <SwiperSlide key={url}>
           <Slide
             url={url}
             heading={heading}
+            sub={sub}
             buttonText={buttonText}
             handleClick={handleClick}
           ></Slide>

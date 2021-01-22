@@ -12,13 +12,11 @@ const Divider = styled.div`
 `;
 
 const Body = styled.div`
-
   // 라임, 스카이 gradient
-  background: ${(props) => props.page === "quiz" ? "linear-gradient(90deg, rgba(215,246,193,1) 0%, rgba(194,251,240,1) 100%);" : "white;" }
-
-  // 스카이, 핑크 gradient
-  // background: ${(props) => props.page === "quiz" ? "linear-gradient(35deg, #CCFFFF, #FFCCCC);" : "white;" }
-  
+  ${(props) =>
+    props.page === "quiz"
+      ? "background: linear-gradient(90deg, rgba(215,246,193,1) 0%, rgba(194,251,240,1) 100%);"
+      : ""}
   flex: 1;
   overflow: auto;
   height: 100%;

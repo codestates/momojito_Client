@@ -124,12 +124,12 @@ export default function Footer() {
           </svg>
         </Button>
       </MobileFooter>
-      <DesktopFooter>
+      {/* <DesktopFooter>
         <div className="">{"2021 © Design & Code by Maldivian"}</div>
         <Button onClick={(e) => router.push("/")}>
           <img src="/github.png" alt="A github icon"></img>
         </Button>
-      </DesktopFooter>
+      </DesktopFooter> */}
     </div>
   );
 }

@@ -59,6 +59,7 @@ const Container = styled.div`
   }
   .recommend {
     margin-top: 0.5rem;
+    margin-bottom: 100px;
     padding: 0.5rem 1rem;
     h1 {
       font-size: 1.25rem;
@@ -161,7 +162,7 @@ export default function CocktailInfo({ id }) {
             user.myCocktailList.splice(user.myCocktailList.indexOf(id), 1);
           }
           // 업데이트
-          userContext.setUser({
+          setUser({
             ...user,
             myCocktailList: user.myCocktailList,
           });
