@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import PageUtils from "../components/PageUtils";
 import { ThemeContext } from "styled-components";
 import ButtonList from "../components/ButtonList";
@@ -10,13 +10,15 @@ export default function MyPage() {
   const router = useRouter();
   const { user, setUser } = useContext(ThemeContext).userContext;
   const [buttonSelected, setButtonSelected] = useState(0);
-  const signOutHandler = (e) => {
-    router.push("/?logout=true", "/");
-  };
+  useEffect(() => {
+    if (buttonSelected === 2) {
+      router.push("/?logout=true", "/");
+    }
+  }, [buttonSelected]);
   return (
     <PageUtils>
       <ButtonList
-        buttonList={["회원정보 수정", "My 칵테일"]}
+        buttonList={["회원정보 수정", "My 칵테일", "로그아웃"]}
         buttonSelected={buttonSelected}
         setButtonSelected={setButtonSelected}
       ></ButtonList>
@@ -27,7 +29,6 @@ export default function MyPage() {
       ) : (
         <div></div>
       )}
-      <button onClick={signOutHandler}>로그아웃</button>
     </PageUtils>
   );
 }

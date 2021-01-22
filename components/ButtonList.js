@@ -4,7 +4,7 @@ import Button from "./Button";
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
-  padding: 1rem;
+  padding: 1rem 0.5rem;
   justify-content: ${(props) => (props.all ? "flex-start" : "center")};
 `;
 

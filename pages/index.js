@@ -88,13 +88,6 @@ export default function Home() {
       <Carousel
         carouselList={[
           {
-            url: 'url("/bar0.jpeg");',
-            heading: "성향에 따라 맞춤 칵테일을 추천 받으려면?",
-            handleClick: (e) => {
-              router.push("/test");
-            },
-          },
-          {
             url: 'url("/bar1.jpeg");',
             heading: "당신의 칵잘알 퀴즈 점수는?",
             handleClick: (e) => {
@@ -111,17 +104,44 @@ export default function Home() {
         ]}
       ></Carousel>
       <ButtonList
-        buttonList={["클래식 칵테일", "이색 칵테일 in 서울", "인기 TOP 10"]}
+        buttonList={["클래식 칵테일", "재료별 칵테일", "인기 TOP 10"]}
         buttonSelected={buttonSelected}
         setButtonSelected={setButtonSelected}
       ></ButtonList>
       {buttonSelected === 0 ? (
         <CardGrid indexList={dbIndexList}></CardGrid>
       ) : buttonSelected === 1 ? (
-        <CardGrid indexList={[4, 5]} type="signature"></CardGrid>
+        <Ingredientsfilter db={db}></Ingredientsfilter>
       ) : (
-        <CardGrid indexList={topTenList} type="ranking"></CardGrid>
+        <CardGrid indexList={topTenList.slice(0, 10)} type="ranking"></CardGrid>
       )}
     </PageUtils>
+  );
+}
+
+const baseList = ["진", "럼", "보드카", "위스키", "데킬라", "깔루아"];
+
+function Ingredientsfilter({ db }) {
+  const [buttonSelected, setButtonSelected] = useState(0);
+  return (
+    <div>
+      <ButtonList
+        buttonList={baseList}
+        buttonSelected={buttonSelected}
+        setButtonSelected={setButtonSelected}
+      ></ButtonList>
+      <CardGrid
+        indexList={db
+          .map(({ ingredients }, i) => {
+            if (ingredients.includes(baseList[buttonSelected])) {
+              return i;
+            } else {
+              return undefined;
+            }
+          })
+          .filter((v) => v !== undefined)}
+        type="signature"
+      ></CardGrid>
+    </div>
   );
 }

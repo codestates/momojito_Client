@@ -507,7 +507,7 @@ export default function ChangeInfo() {
             <div></div>
             <ButtonDiv1>
               {/* <label class="btn fileUpload btn-default">https://stackoverflow.com/a/57051918/14914253 */}
-              <label class="btn fileUpload btn-default">
+              <label className="btn fileUpload btn-default">
                 등록
                 <input type="file" onChange={onChange} hidden />
               </label>
