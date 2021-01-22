@@ -113,7 +113,7 @@ export default function Home() {
       ) : buttonSelected === 1 ? (
         <Ingredientsfilter db={db}></Ingredientsfilter>
       ) : (
-        <CardGrid indexList={topTenList} type="ranking"></CardGrid>
+        <CardGrid indexList={topTenList.slice(0, 10)} type="ranking"></CardGrid>
       )}
     </PageUtils>
   );

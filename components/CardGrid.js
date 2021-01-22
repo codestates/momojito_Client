@@ -61,7 +61,7 @@ export default function CardGrid({ indexList, type }) {
       {indexList.map((v, i) => {
         const cocktail = db[v];
         if (cocktail) {
-          return <Card type={type} index={v} key={v} i={v}></Card>;
+          return <Card type={type} index={v} key={v} i={i}></Card>;
         } else {
           return;
         }
@@ -78,7 +78,7 @@ function Card({ index, type, i }) {
 
   const handleClick = (e) => {
     if (isDesktop) {
-      setUser({ ...user, pastquery: i });
+      setUser({ ...user, pastquery: index });
       router.push(`/?cocktailId=${index}`, `/cocktails/${index}`);
     } else {
       router.push(`/cocktails/${index}`);
