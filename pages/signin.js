@@ -140,7 +140,7 @@ export default function Login() {
       if (authorizationCode && callback) {
         axios
           .post(
-            `https://server.momo-jito.com/auth/auth/${callback}`,
+            `https://server.momo-jito.com/auth/${callback}`,
             { authorizationCode },
             { withCredentials: true }
           )
