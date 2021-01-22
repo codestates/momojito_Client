@@ -260,7 +260,7 @@ export default function ChangeInfo() {
       return;
     }
     setMessage();
-    setMessage();
+    setNickname();
     setIsChangeNickname();
     setValidatePassword();
     setValidateNickname();
@@ -328,37 +328,39 @@ export default function ChangeInfo() {
   }
 
   function updateNickname() {
-    axios
-      .post(
-        "https://server.momo-jito.com/mypage/nicknameChange",
-        {
-          nickname,
-          headers: {
-            Authorization: `Bearer ${user.accessToken}`,
-          },
-        },
-        {
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        if (res.status === 200) {
-          setUser({
-            userInfo: {
-              nickname: nickname,
+    if (nickname) {
+      axios
+        .post(
+          "https://server.momo-jito.com/mypage/nicknameChange",
+          {
+            nickname,
+            headers: {
+              Authorization: `Bearer ${user.accessToken}`,
             },
-          });
-          setValidateNickname("닉네임이 성공적으로 변경되었습니다");
-        }
-      })
-      .catch((err) => {
-        if (err.response.status === 400) {
-          setValidateNickname("이미 존재하는 닉네임 입니다");
-        } else {
-          setMessage(`${err}`);
-          openModal();
-        }
-      });
+          },
+          {
+            withCredentials: true,
+          }
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            setUser({
+              userInfo: {
+                nickname: nickname,
+              },
+            });
+            setValidateNickname("닉네임이 성공적으로 변경되었습니다");
+          }
+        })
+        .catch((err) => {
+          if (err.response.status === 400) {
+            setValidateNickname("이미 존재하는 닉네임 입니다");
+          } else {
+            setMessage(`${err}`);
+            openModal();
+          }
+        });
+    }
   }
 
   function updatePassword() {

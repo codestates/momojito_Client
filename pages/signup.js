@@ -8,11 +8,12 @@ import HoverButton from "../components/HoverButton";
 import DefaultButton from "../components/DafaultButton";
 import NaverButton from "../components/NaverButton";
 import KakaoButton from "../components/KakaoButton";
-import FacebookButton from "../components/FacebookButton";
 
 const SignUpText = styled.div`
   text-align: center;
   margin-block-start: 30%;
+  font-size: 30px;
+  font-weight: 500;
 `;
 
 const InputText = styled.input`
@@ -215,10 +216,6 @@ export default function SignUp() {
     axios.post();
   }
 
-  function handleFacebook() {
-    axios.post();
-  }
-
   return (
     <PageUtils>
       <Outer>
@@ -279,24 +276,13 @@ export default function SignUp() {
             <h1>만 19세 미만은 회원가입이 불가합니다.</h1>
           </Checkbox>
 
-          <DefaultButton className="default" onClick={handleSignUp}>
+          <DefaultButton
+            onKeyDown={onKeyDown}
+            className="default"
+            onClick={handleSignUp}
+          >
             회원가입
           </DefaultButton>
-          <NaverButton className="naver" onClick={handleNaver}>
-            <img src="/naver.png" width="30px" alt=""></img>
-            네이버 계정으로 신규 가입
-            <div className="blank"></div>
-          </NaverButton>
-          <KakaoButton className="kakao" onClick={handleKakao}>
-            <img src="/kakao.png" width="25px" alt=""></img>
-            카카오 계정으로 신규 가입
-            <div className="blank"></div>
-          </KakaoButton>
-          <FacebookButton className="facebook" onClick={handleFacebook}>
-            <img src="/facebook.png" width="20px" alt=""></img>
-            페이스북 계정으로 신규 가입
-            <div className="blank"></div>
-          </FacebookButton>
         </Inner>
       </Outer>
     </PageUtils>
