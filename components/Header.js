@@ -13,9 +13,8 @@ const Container = styled.div`
     box-sizing: border-box;
     height: 75px;
   }
-  display: ${(props) => (props.theme.userContext.user.isLogin ? "" : "flex")};
-  justify-content: ${(props) =>
-    props.theme.userContext.user.isLogin ? "" : "space-between"};
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Logo = styled.div`
@@ -33,6 +32,7 @@ const Logo = styled.div`
 
 const ButtonPart = styled.div`
   display: flex;
+  visibility: ${(props) => (props.isLogin ? "hidden" : "visible")};
 `;
 
 function ReactModalAdapter({ className, ...props }) {
@@ -72,18 +72,14 @@ export default function Header() {
       <StyledModal isOpen={!!router.query.logout}>
         <Logout></Logout>
       </StyledModal>
-      {user.isLogin ? (
+      <>
         <LogoPart></LogoPart>
-      ) : (
-        <>
-          <LogoPart></LogoPart>
-          <ButtonPart>
-            <Button onClick={(e) => router.push("/signin")} selected>
-              Log in
-            </Button>
-          </ButtonPart>
-        </>
-      )}
+        <ButtonPart isLogin={user.isLogin}>
+          <Button onClick={(e) => router.push("/signin")} selected>
+            Log in
+          </Button>
+        </ButtonPart>
+      </>
     </Container>
   );
 }
