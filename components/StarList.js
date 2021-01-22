@@ -7,6 +7,12 @@ const Container = styled.div`
   margin-top: -5px;
 `;
 
+const HoverContainer = styled(Container)`
+  svg {
+    cursor: pointer;
+  }
+`;
+
 export default function StarList({ rating }) {
   const theme = useContext(ThemeContext);
   const colors = Array.from({ length: 5 }, (v, i) =>
@@ -44,7 +50,7 @@ export function HoverStarList({ setStarSelected }) {
     setHoverState(i);
   };
   return (
-    <Container onClick={(e) => setStarSelected(hoverState)}>
+    <HoverContainer onClick={(e) => setStarSelected(hoverState)}>
       {[0, 1, 2, 3, 4].map((v, i) => (
         <svg
           key={i}
@@ -65,6 +71,6 @@ export function HoverStarList({ setStarSelected }) {
           />
         </svg>
       ))}
-    </Container>
+    </HoverContainer>
   );
 }
