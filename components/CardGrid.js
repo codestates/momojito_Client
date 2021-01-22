@@ -79,7 +79,7 @@ function Card({ index, type, i }) {
   const handleClick = (e) => {
     if (isDesktop) {
       setUser({ ...user, pastquery: index });
-      router.push(`/?cocktailId=${index}`, `/cocktails/${index}`);
+      router.push(`${router.asPath}?cocktailId=${index}`);
     } else {
       router.push(`/cocktails/${index}`);
     }

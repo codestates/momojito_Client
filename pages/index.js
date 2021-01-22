@@ -140,7 +140,6 @@ function Ingredientsfilter({ db }) {
             }
           })
           .filter((v) => v !== undefined)}
-        type="signature"
       ></CardGrid>
     </div>
   );

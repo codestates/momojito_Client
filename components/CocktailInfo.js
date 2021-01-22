@@ -90,7 +90,15 @@ export default function CocktailInfo({ id }) {
   const [isLike, setIsLike] = useState(false);
   const [modalIsOpen, setIsOpen] = useState(false);
   const router = useRouter();
-
+  const [buttonSelected, setButtonSelected] = useState(-1);
+  useEffect(() => {
+    if (buttonSelected !== -1) {
+      const ingredientslist = cocktail.ingredients
+        .split(",")
+        .map((v) => v.trim());
+      router.push(`/ingredients/${ingredientslist[buttonSelected]}`);
+    }
+  }, [buttonSelected]);
   useEffect(() => {
     //여기에 props로 받은 Id가 포함되어 있으면, isLike -> true
     if (user.myCocktailList.includes(id) === true) {
@@ -190,6 +198,8 @@ export default function CocktailInfo({ id }) {
       <div className="ingredients">
         <ButtonList
           all
+          buttonSelected={buttonSelected}
+          setButtonSelected={setButtonSelected}
           buttonList={cocktail.ingredients.split(",")}
         ></ButtonList>
       </div>
