@@ -56,20 +56,8 @@ export default function Home() {
   const [buttonSelected, setButtonSelected] = useState(0);
   const router = useRouter();
   const { user, setUser } = useContext(ThemeContext).userContext;
+  const { ratingList, setRatingList } = useContext(ThemeContext).ratingContext;
   const dbIndexList = db.map((el) => el.id);
-  const [topTenList, setTopTenList] = useState([]);
-  useEffect(() => {
-    if (topTenList.length === 0) {
-      axios
-        .get("https://server.momo-jito.com/mainpage/getTopTen")
-        .then((res) => {
-          const data = res.data.data.map((el) => {
-            return el.id;
-          });
-          setTopTenList(data);
-        });
-    }
-  }, []);
 
   return (
     <PageUtils>
@@ -113,7 +101,14 @@ export default function Home() {
       ) : buttonSelected === 1 ? (
         <Ingredientsfilter db={db}></Ingredientsfilter>
       ) : (
-        <CardGrid indexList={topTenList.slice(0, 10)} type="ranking"></CardGrid>
+        <CardGrid
+          indexList={ratingList
+            .slice()
+            .sort((a, b) => Number(b.avrRate) - Number(a.avrRate))
+            .slice(0, 10)
+            .map((v) => v.id)}
+          type="ranking"
+        ></CardGrid>
       )}
     </PageUtils>
   );
@@ -140,7 +135,6 @@ function Ingredientsfilter({ db }) {
             }
           })
           .filter((v) => v !== undefined)}
-        type="signature"
       ></CardGrid>
     </div>
   );

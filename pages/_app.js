@@ -14,6 +14,7 @@ export default function MyApp({ Component, pageProps }) {
     accessToken: "",
     myCocktailList: [],
   });
+  const [ratingList, setRatingList] = useState([]);
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
@@ -41,6 +42,17 @@ export default function MyApp({ Component, pageProps }) {
         });
     }
   }, []);
+  useEffect(() => {
+    if (ratingList.length === 0) {
+      axios
+        .get("https://server.momo-jito.com/mainpage/getTopTen")
+        .then((res) => {
+          const data = res.data.data;
+          setRatingList(data);
+        });
+    }
+  });
+
   return (
     <>
       <Reset />
@@ -52,6 +64,10 @@ export default function MyApp({ Component, pageProps }) {
           userContext: {
             user: user,
             setUser: setUser,
+          },
+          ratingContext: {
+            ratingList,
+            setRatingList,
           },
         }}
       >

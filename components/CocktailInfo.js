@@ -1,14 +1,12 @@
 import styled, { ThemeContext } from "styled-components";
-import PageUtils from "./PageUtils";
-import StarList from "./StarList";
+import { HoverStarList } from "./StarList";
 import db from "../public/cocktaildb";
 import Carousel from "./Carousel";
 import Button from "./Button";
 import ButtonList from "./ButtonList";
 import { useState, useContext, useEffect } from "react";
 import axios from "axios";
-import Modal from "react-modal";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 
 const Container = styled.div`
   display: flex;
@@ -27,7 +25,7 @@ const Container = styled.div`
     font-size: 1.5rem;
     padding: 0.5rem 1rem;
     svg {
-      margin-left: 2rem;
+      margin-left: 1rem;
       width: 15px;
       height: 15px;
     }
@@ -40,11 +38,16 @@ const Container = styled.div`
     padding: 0.5rem 1rem;
     display: flex;
     align-items: center;
-    h2 {
-      margin-left: 1rem;
-    }
     button {
       margin-left: 1rem;
+    }
+    h1 {
+      font-size: 1rem;
+      margin-right: 0.5rem;
+    }
+    h2 {
+      font-size: 1rem;
+      margin-left: 0.5rem;
     }
   }
   .ingredients {
@@ -85,12 +88,56 @@ export default function CocktailInfo({ id }) {
   id = Number(id);
   const cocktail = db[id];
   const carouselImages = [{ url: 'url("/bar0.jpeg");' }];
-  const userContext = useContext(ThemeContext).userContext;
-  const user = userContext.user;
+  const { user, setUser } = useContext(ThemeContext).userContext;
+  const { ratingList, setRatingList } = useContext(ThemeContext).ratingContext;
   const [isLike, setIsLike] = useState(false);
   const [modalIsOpen, setIsOpen] = useState(false);
   const router = useRouter();
-
+  const [buttonSelected, setButtonSelected] = useState(-1);
+  const [starSelected, setStarSelected] = useState(-1);
+  const [statusMessage, setStatusMessage] = useState("");
+  useEffect(() => {
+    if (buttonSelected !== -1) {
+      const ingredientslist = cocktail.ingredients
+        .split(",")
+        .map((v) => v.trim());
+      router.push(`/ingredients/${ingredientslist[buttonSelected]}`);
+    }
+  }, [buttonSelected]);
+  useEffect(() => {
+    if (starSelected !== -1) {
+      if (user.isLogin) {
+        axios
+          .post(
+            "https://server.momo-jito.com/detail/rating",
+            {
+              rating: starSelected,
+              cocktailId: id,
+            },
+            { withCredentials: true }
+          )
+          .then((res) => {
+            if (res.status === 200) {
+              setRatingList([
+                ...ratingList.slice(0, id),
+                { ...ratingList[id], avrRate: res.data.rate },
+                ...ratingList.slice(id + 1),
+              ]);
+              setStatusMessage("성공적입니다.");
+            } else {
+              setStatusMessage("문제가 있습니다.");
+            }
+          });
+      } else {
+        router.push("/signin");
+      }
+    }
+  }, [starSelected]);
+  useEffect(() => {
+    if (statusMessage !== "") {
+      setTimeout(() => setStatusMessage(""), 3000);
+    }
+  }, [statusMessage]);
   useEffect(() => {
     //여기에 props로 받은 Id가 포함되어 있으면, isLike -> true
     if (user.myCocktailList.includes(id) === true) {
@@ -126,14 +173,6 @@ export default function CocktailInfo({ id }) {
       router.push("/signin");
     }
   };
-
-  function openModal() {
-    setIsOpen(true);
-  }
-  function closeModal() {
-    setIsOpen(false);
-  }
-  function afterOpenModal() {}
   return (
     <Container isLike={isLike}>
       <Carousel
@@ -172,24 +211,15 @@ export default function CocktailInfo({ id }) {
         </svg>
       </div>
       <div className="stars">
-        <StarList rating={cocktail.rating}></StarList>
-        <h2>평균별점 {cocktail.rating}</h2>
-        <Button onClick={openModal}>평가하기</Button>
-        <Modal
-          isOpen={modalIsOpen}
-          onAfterOpen={afterOpenModal}
-          onRequestClose={closeModal}
-          style={customStyles}
-          contentLabel="Example Modal"
-        >
-          <h2>hello</h2>
-          <StarList></StarList>
-          <button onClick={closeModal}>닫기</button>
-        </Modal>
+        <h1>평균별점 {ratingList[id] ? ratingList[id].avrRate : "0.0"}</h1>
+        <HoverStarList setStarSelected={setStarSelected}></HoverStarList>
+        <h2>{statusMessage}</h2>
       </div>
       <div className="ingredients">
         <ButtonList
           all
+          buttonSelected={buttonSelected}
+          setButtonSelected={setButtonSelected}
           buttonList={cocktail.ingredients.split(",")}
         ></ButtonList>
       </div>

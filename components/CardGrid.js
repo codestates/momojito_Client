@@ -74,12 +74,13 @@ function Card({ index, type, i }) {
   const router = useRouter();
   const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
   const { user, setUser } = useContext(ThemeContext).userContext;
+  const { ratingList } = useContext(ThemeContext).ratingContext;
   const cocktail = db[index];
 
   const handleClick = (e) => {
     if (isDesktop) {
       setUser({ ...user, pastquery: index });
-      router.push(`/?cocktailId=${index}`, `/cocktails/${index}`);
+      router.push(`${router.asPath}?cocktailId=${index}`);
     } else {
       router.push(`/cocktails/${index}`);
     }
@@ -130,7 +131,9 @@ function Card({ index, type, i }) {
       {type === "ranking" ? <H1>No. {i + 1}</H1> : ""}
       <H1>{cocktail.koreanName}</H1>
       <H1 className="last">{cocktail.name}</H1>
-      <StarList rating={cocktail.rating}></StarList>
+      <StarList
+        rating={ratingList[index] ? Number(ratingList[index].avrRate) : 0}
+      ></StarList>
     </Container>
   );
 }
