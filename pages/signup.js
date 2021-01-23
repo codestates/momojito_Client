@@ -208,14 +208,6 @@ export default function SignUp() {
     }
   }
 
-  function handleNaver() {
-    axios.post();
-  }
-
-  function handleKakao() {
-    axios.post();
-  }
-
   return (
     <PageUtils>
       <Outer>
