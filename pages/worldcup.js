@@ -3,8 +3,9 @@ import db from "../public/cocktaildb";
 import styled from "styled-components";
 import React, { useReducer, useRef, useState } from "react";
 import { useSpring, useSprings, animated } from "react-spring";
+import { useRouter } from "next/router";
 
-const cards = Array.from({ length: 4 }, (_, i) => i).map(
+const cards = Array.from({ length: 8 }, (_, i) => i).map(
   (v) => `/cocktails/${v}.png`
 );
 
@@ -45,7 +46,7 @@ const messageMaker = (message, state) => {
   } else if (state.deck.length === 8) {
     return "8강";
   } else if (state.deck.length === 4) {
-    return "준결승";
+    return "4강";
   } else if (state.deck.length === 2) {
     return "결승";
   } else if (state.deck.length === 1) {
@@ -84,6 +85,7 @@ function reducer(state, action) {
         table: [],
         leftGone: [],
         rightGone: [],
+        message: `${2 ** Math.ceil(Math.sqrt(cards.length))}강`,
       };
     default:
       throw new Error();
@@ -92,7 +94,7 @@ function reducer(state, action) {
 
 const to = (i) => ({
   x: 0,
-  y: i * -4,
+  y: i * -2,
   scale: 1,
   rotate: -10 + Math.random() * 20,
   delay: i * 100,
@@ -103,7 +105,7 @@ const initialState = {
   table: [],
   leftGone: [],
   rightGone: [],
-  message: `${2 ** Math.ceil(cards.length / 2)}강`,
+  message: `${2 ** Math.ceil(Math.sqrt(cards.length))}강`,
 };
 
 const Title = styled.h1`
@@ -125,10 +127,14 @@ export default function WorldCup() {
     from: from(i),
   }));
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [initial, setInitial] = useState(true);
   const [finished, setFinished] = useState(false);
+  const [result, setResult] = useState(-1);
+  const router = useRouter();
   const observed = useRef(null);
   React.useEffect(() => {
-    if (state.deck.length === cards.length) {
+    if (initial) {
+      setInitial(false);
       return;
     }
     set((i) => {
@@ -142,6 +148,7 @@ export default function WorldCup() {
         const scale = 1.5;
         const rotate = 0;
         setFinished(true);
+        setResult(state.deck[0]);
         return {
           x,
           y,
@@ -167,8 +174,8 @@ export default function WorldCup() {
         : isRightGone
         ? 2 * w
         : 0;
-      const y = isDeck ? 0 : 200;
-      const zIndex = 1;
+      const y = isDeck ? 0 : 300;
+      const zIndex = state.deck.includes(i) ? state.deck.indexOf(i) + 1 : 1;
       return {
         x,
         y,
@@ -179,11 +186,12 @@ export default function WorldCup() {
   }, [state]);
 
   const handleClick = (e, i) => {
+    if (finished) return;
     if (state.table.length === 0) {
       dispatch({ type: "deal" });
     } else if (state.table[0] === i) {
       dispatch({ type: "select_left" });
-    } else {
+    } else if (state.table[1] === i) {
       dispatch({ type: "select_right" });
     }
   };
@@ -213,11 +221,20 @@ export default function WorldCup() {
         ))}
         {finished ? (
           <div className="bottom">
-            <FadeinHeading handleClick={() => {}}>
+            <FadeinHeading
+              handleClick={() => {
+                dispatch({ type: "reset" });
+                setFinished(false);
+              }}
+            >
               다시 해보시겠어요?
             </FadeinHeading>
-            <FadeinHeading handleClick={() => {}}>
-              칵테일 더 알아보기
+            <FadeinHeading
+              handleClick={() => {
+                router.push(`/cocktails/${result}`);
+              }}
+            >
+              {`${db[result].koreanName} 더 알아보기`}
             </FadeinHeading>
           </div>
         ) : (
@@ -228,10 +245,14 @@ export default function WorldCup() {
   );
 }
 
-function FadeinHeading({ children }) {
+function FadeinHeading({ children, handleClick }) {
   const props = useSpring({
     opacity: 1,
     from: { opacity: 0 },
   });
-  return <animated.h1 style={props}>{children}</animated.h1>;
+  return (
+    <animated.h1 style={props} onClick={handleClick}>
+      {children}
+    </animated.h1>
+  );
 }
