@@ -4,9 +4,9 @@ const ButtonM = styled.button`
   margin: 10px 5px 0px 5px;
   font-size: 16px;
   padding: 0.5rem 0.75rem;
-  border-radius: 0.25rem;
+  border-radius: 30px;
   border-color: ${(props) => props.theme.main};
-  border-width: 2px;
+  border-width: 0px;
   background: ${(props) => {
     if (props.selected) return props.theme.main;
     else return "white";

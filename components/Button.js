@@ -5,13 +5,18 @@ const Button = styled.button`
   font-size: ${(props) => (props.s ? props.s : "")};
   padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
-  border-color: green;
   border-width: 0px;
   background: ${(props) => {
     if (props.selected) return props.theme.main;
-    else return props.theme.grey;
+    else return '#E8F5EC';
   }};
-  color: white;
+  color: ${(props) => {
+    if (props.selected) return 'white';
+  }};
+  &:hover {
+    background: limegreen;
+    color: white;
+  }
   z-index: 10;
   cursor: pointer;
 `;
