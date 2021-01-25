@@ -22,7 +22,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    bottom: 5%;
+    top: 430px;
     .btn {
       height: 50px;
       width: 240px;
@@ -48,12 +48,8 @@ const Card = styled(animated.div)`
   background-repeat: no-repeat;
   background-position: 50% 25%;
   top: 100px;
-  width: 30%;
-  height: 30%;
-  min-width: 150px;
-  min-height: 200px;
-  max-width: 200px;
-  /* max-height: 300px; */
+  width: 150px;
+  height: 200px;
   border-radius: 10px;
   --tw-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
@@ -334,10 +330,11 @@ function FadeinHeading({ children, handleClick }) {
       {children}
     </Versus>
   );
+  s;
 }
 
 const Versus = styled(animated.h1)`
   position: absolute;
   font-size: 3.5rem;
-  top: 65%;
+  top: 475px;
 `;
