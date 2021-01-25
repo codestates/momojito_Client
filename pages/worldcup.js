@@ -22,7 +22,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    top: 550px;
+    bottom: 5%;
     .btn {
       height: 50px;
       width: 240px;
@@ -154,12 +154,6 @@ const Name = styled.h1`
   font-size: 1rem;
 `;
 
-const Versus = styled.div`
-  position: absolute;
-  font-size: 3.5rem;
-  top: 65%;
-`;
-
 const KakaoLink = styled.div`
   display: flex;
   justify-content: center;
@@ -180,6 +174,7 @@ export default function WorldCup() {
   const [initial, setInitial] = useState(true);
   const [finished, setFinished] = useState(false);
   const [result, setResult] = useState(-1);
+  const [dealt, setDealt] = useState(false);
   const router = useRouter();
   const observed = useRef(null);
   React.useEffect(() => {
@@ -187,6 +182,7 @@ export default function WorldCup() {
       setInitial(false);
       setTimeout(() => {
         dispatch({ type: "deal" });
+        setDealt(true);
       }, 2200);
       return;
     }
@@ -246,13 +242,17 @@ export default function WorldCup() {
     if (finished) return;
     if (state.table[0] === i) {
       dispatch({ type: "select_left" });
+      setDealt(false);
       setTimeout(() => {
         dispatch({ type: "deal" });
+        setDealt(true);
       }, 1000);
     } else if (state.table[1] === i) {
       dispatch({ type: "select_right" });
+      setDealt(false);
       setTimeout(() => {
         dispatch({ type: "deal" });
+        setDealt(true);
       }, 1000);
     }
   };
@@ -280,29 +280,32 @@ export default function WorldCup() {
             <Name>{db[i].koreanName}</Name>
           </Card>
         ))}
+        {dealt && !finished ? <FadeinHeading>VS</FadeinHeading> : ""}
         {finished ? (
           <div className="bottom">
             <button className="btn">
-              <FadeinHeading
-                handleClick={() => {
+              <h1
+                onClick={() => {
                   dispatch({ type: "reset" });
+                  setFinished(false);
+                  setDealt(false);
                   setTimeout(() => {
                     dispatch({ type: "deal" });
+                    setDealt(true);
                   }, 1000);
-                  setFinished(false);
                 }}
               >
                 다시 해보시겠어요?
-              </FadeinHeading>
+              </h1>
             </button>
             <button className="btn">
-              <FadeinHeading
-                handleClick={() => {
+              <h1
+                onClick={() => {
                   router.push(`/cocktails/${result}`);
                 }}
               >
                 {`${db[result].koreanName} 상세정보 보기`}
-              </FadeinHeading>
+              </h1>
             </button>
             <KakaoLink>
               <p>카카오톡으로 공유하기</p>
@@ -314,7 +317,7 @@ export default function WorldCup() {
             </KakaoLink>
           </div>
         ) : (
-          <Versus>VS</Versus>
+          ""
         )}
       </Container>
     </PageUtils>
@@ -327,8 +330,14 @@ function FadeinHeading({ children, handleClick }) {
     from: { opacity: 0 },
   });
   return (
-    <animated.h1 style={props} onClick={handleClick}>
+    <Versus style={props} onClick={handleClick}>
       {children}
-    </animated.h1>
+    </Versus>
   );
 }
+
+const Versus = styled(animated.h1)`
+  position: absolute;
+  font-size: 3.5rem;
+  top: 65%;
+`;
