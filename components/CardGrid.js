@@ -47,8 +47,28 @@ const Container = styled.div`
 
   .abs {
     position: absolute;
-    left: 65%;
-    top: 40%;
+    right: 10%;
+    top: 5%;
+  }
+
+  .ranking {
+    position: relative;
+    background-color: limegreen;
+    opacity: 0.4;
+    border-radius: 50%;
+    padding: 10px;
+    width: 10px;
+    height: 10px;
+    top: 5%;
+    left: 5%;
+    color: white ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    p {
+      font-size: 14px;
+      margin-top: 3px;
+    }
   }
 `;
 const H1 = styled.h1`
@@ -113,6 +133,7 @@ function Card({ index, type, i }) {
 
   return (
     <Container>
+      {type === "ranking" ? <div className="ranking"><p>{i + 1}</p></div> : ""}
       <div className="imagecontainer">
         <img
           style={{ cursor: "pointer" }}
@@ -128,7 +149,7 @@ function Card({ index, type, i }) {
       ) : (
         ""
       )}
-      {type === "ranking" ? <H1>No. {i + 1}</H1> : ""}
+      
       <H1>{cocktail.koreanName}</H1>
       <H1 className="last">{cocktail.name}</H1>
       <StarList
