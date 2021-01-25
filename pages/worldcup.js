@@ -4,7 +4,7 @@ import styled from "styled-components";
 import React, { useReducer, useRef, useState } from "react";
 import { useSpring, useSprings, animated } from "react-spring";
 import { useRouter } from "next/router";
-
+import KakaoShareButton from "../components/KakaoShareButton";
 const cards = Array.from({ length: 8 }, (_, i) => i).map(
   (v) => `/cocktails/${v}.png`
 );
@@ -19,7 +19,26 @@ const Container = styled.div`
 
   .bottom {
     position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     top: 550px;
+    .btn {
+      height: 50px;
+      width: 240px;
+      margin-top: 10px;
+      cursor: pointer;
+      background-color: white;
+
+      &:hover {
+        background-color: limegreen;
+        color: white;
+      }
+      &:active {
+        background-color: green;
+        color: white;
+      }
+    }
   }
 `;
 const Card = styled(animated.div)`
@@ -27,17 +46,25 @@ const Card = styled(animated.div)`
   background-color: white;
   background-size: auto 70%;
   background-repeat: no-repeat;
-  background-position: center center;
+  background-position: 50% 25%;
   top: 100px;
-  width: 40%;
+  width: 30%;
+  height: 30%;
+  min-width: 150px;
+  min-height: 200px;
   max-width: 200px;
-  height: 40%;
-  max-height: 300px;
+  /* max-height: 300px; */
   border-radius: 10px;
   --tw-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
     var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  cursor: pointer;
+  &:hover {
+    /* background-color:#B5EBB7; */
+    background-color: #edfbd5;
+    color: black;
+  }
 `;
 
 const messageMaker = (message, state) => {
@@ -112,16 +139,36 @@ const initialState = {
 };
 
 const Title = styled.h1`
-  font-size: 1.5rem;
+  font-weight: bold;
+  font-size: 24px;
   padding: 2rem;
 `;
 
 const Name = styled.h1`
   position: absolute;
-  bottom: 20px;
+  text-align: center;
+  bottom: 25px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 0.75rem;
+  width: 100%;
+  font-size: 1rem;
+`;
+
+const Versus = styled.div`
+  position: absolute;
+  font-size: 3.5rem;
+  top: 65%;
+`;
+
+const KakaoLink = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  p {
+    align-self: center;
+    font-size: 14px;
+    margin-right: 10px;
+  }
 `;
 
 export default function WorldCup() {
@@ -172,9 +219,13 @@ export default function WorldCup() {
       const x = isDeck
         ? 0
         : isTableLeft
-        ? -w / 3
+        ? w > 1024
+          ? -200
+          : -w / 3
         : isTableRight
-        ? w / 3
+        ? w > 1024
+          ? 200
+          : w / 3
         : isLeftGone
         ? -2 * w
         : isRightGone
@@ -208,7 +259,7 @@ export default function WorldCup() {
   return (
     <PageUtils page="worldcup">
       <Container ref={observed}>
-        <Title>{`칵테일 이상형 월드컵 ${
+        <Title>{`🍸 칵테일 이상형 월드컵 ${
           finished ? "우승!" : state.message
         }`}</Title>
         {props.map(({ x, y, rotate, scale, zIndex }, i) => (
@@ -231,27 +282,39 @@ export default function WorldCup() {
         ))}
         {finished ? (
           <div className="bottom">
-            <FadeinHeading
-              handleClick={() => {
-                dispatch({ type: "reset" });
-                setTimeout(() => {
-                  dispatch({ type: "deal" });
-                }, 1000);
-                setFinished(false);
-              }}
-            >
-              다시 해보시겠어요?
-            </FadeinHeading>
-            <FadeinHeading
-              handleClick={() => {
-                router.push(`/cocktails/${result}`);
-              }}
-            >
-              {`${db[result].koreanName} 더 알아보기`}
-            </FadeinHeading>
+            <button className="btn">
+              <FadeinHeading
+                handleClick={() => {
+                  dispatch({ type: "reset" });
+                  setTimeout(() => {
+                    dispatch({ type: "deal" });
+                  }, 1000);
+                  setFinished(false);
+                }}
+              >
+                다시 해보시겠어요?
+              </FadeinHeading>
+            </button>
+            <button className="btn">
+              <FadeinHeading
+                handleClick={() => {
+                  router.push(`/cocktails/${result}`);
+                }}
+              >
+                {`${db[result].koreanName} 상세정보 보기`}
+              </FadeinHeading>
+            </button>
+            <KakaoLink>
+              <p>카카오톡으로 공유하기</p>
+              <KakaoShareButton
+                title="나의 술알못 테스트 결과는?"
+                desc={result.text}
+                imgurl="http://mud-kage.kakao.co.kr/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg"
+              ></KakaoShareButton>
+            </KakaoLink>
           </div>
         ) : (
-          ""
+          <Versus>VS</Versus>
         )}
       </Container>
     </PageUtils>
