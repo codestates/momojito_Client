@@ -6,11 +6,12 @@ import PageUtils from "../components/PageUtils";
 import DefaultButton from "../components/DafaultButton";
 import NaverButton from "../components/NaverButton";
 import KakaoButton from "../components/KakaoButton";
-import FacebookButton from "../components/FacebookButton";
 
 const SignInText = styled.div`
   text-align: center;
   margin-block-start: 30%;
+  font-size: 30px;
+  font-weight: 500;
 `;
 const InputText = styled.input`
   display: flex;
@@ -155,6 +156,12 @@ export default function Login() {
             });
             localStorage.setItem("accessToken", res.data.data.accessToken);
             router.push("/");
+          })
+          .catch((err) => {
+            if (err) {
+              router.push("/signin");
+              alert("소셜로그인이 실패하였습니다");
+            }
           });
       }
     }
@@ -214,13 +221,8 @@ export default function Login() {
             카카오 계정으로 로그인
             <div className="blank"></div>
           </KakaoButton>
-          <FacebookButton>
-            <img src="/facebook.png" width="20px" alt=""></img>
-            페이스북 계정으로 로그인
-            <div className="blank"></div>
-          </FacebookButton>
           <Bottom>
-            <h1>회원이 아니신가요?</h1>
+            <h1>다른 이메일로 가입하시려면?</h1>
             <h2 onClick={redirection}>회원가입</h2>
           </Bottom>
         </Inner>

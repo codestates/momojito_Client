@@ -260,7 +260,7 @@ export default function ChangeInfo() {
       return;
     }
     setMessage();
-    setMessage();
+    setNickname();
     setIsChangeNickname();
     setValidatePassword();
     setValidateNickname();
@@ -328,37 +328,39 @@ export default function ChangeInfo() {
   }
 
   function updateNickname() {
-    axios
-      .post(
-        "https://server.momo-jito.com/mypage/nicknameChange",
-        {
-          nickname,
-          headers: {
-            Authorization: `Bearer ${user.accessToken}`,
-          },
-        },
-        {
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        if (res.status === 200) {
-          setUser({
-            userInfo: {
-              nickname: nickname,
+    if (nickname) {
+      axios
+        .post(
+          "https://server.momo-jito.com/mypage/nicknameChange",
+          {
+            nickname,
+            headers: {
+              Authorization: `Bearer ${user.accessToken}`,
             },
-          });
-          setValidateNickname("닉네임이 성공적으로 변경되었습니다");
-        }
-      })
-      .catch((err) => {
-        if (err.response.status === 400) {
-          setValidateNickname("이미 존재하는 닉네임 입니다");
-        } else {
-          setMessage(`${err}`);
-          openModal();
-        }
-      });
+          },
+          {
+            withCredentials: true,
+          }
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            setUser({
+              userInfo: {
+                nickname: nickname,
+              },
+            });
+            setValidateNickname("닉네임이 성공적으로 변경되었습니다");
+          }
+        })
+        .catch((err) => {
+          if (err.response.status === 400) {
+            setValidateNickname("이미 존재하는 닉네임 입니다");
+          } else {
+            setMessage(`${err}`);
+            openModal();
+          }
+        });
+    }
   }
 
   function updatePassword() {
@@ -413,7 +415,7 @@ export default function ChangeInfo() {
   const onSubmit = () => {
     const formData = new FormData();
     formData.append("uploadImg", content);
-
+    console.log("content->", content);
     setMessage("이미지를 업로드 하는 중입니다");
     openModal();
 
@@ -422,6 +424,7 @@ export default function ChangeInfo() {
         withCredentials: true,
       })
       .then((res) => {
+        console.log("res", res);
         setUploadedImg({ filePath: res.data.imageUrl });
         setUser({ userInfo: { profile: res.data.imageUrl } });
       });
@@ -520,12 +523,8 @@ export default function ChangeInfo() {
           이메일 <span>{user.userInfo.email}</span>
         </Email>
         <Nickname>
-          닉네임{" "}
-          {!user.userInfo.nickname ? (
-            <span>내닉네임</span>
-          ) : (
-            <span>{user.userInfo.nickname}</span>
-          )}
+          닉네임
+          <span>{user.userInfo.nickname}</span>
           <ButtonDiv2>
             <button onClick={clickNicknameChange}>변경하기</button>
           </ButtonDiv2>
