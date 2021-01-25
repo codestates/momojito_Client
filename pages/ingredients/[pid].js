@@ -48,7 +48,8 @@ const StyledModal = styled(ReactModalAdapter)`
     bottom: 75px;
     right: 0px;
     left: auto;
-    width: 375px;
+    width: 35%;
+    height: 100%;
   }
 `;
 export default function Post() {
