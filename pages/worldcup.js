@@ -59,6 +59,9 @@ const messageMaker = (message, state) => {
 function reducer(state, action) {
   switch (action.type) {
     case "deal":
+      if (state.deck.length === 1) {
+        return state;
+      }
       return {
         ...state,
         deck: state.deck.slice(0, state.deck.length - 2),
@@ -135,6 +138,9 @@ export default function WorldCup() {
   React.useEffect(() => {
     if (initial) {
       setInitial(false);
+      setTimeout(() => {
+        dispatch({ type: "deal" });
+      }, 2200);
       return;
     }
     set((i) => {
@@ -187,12 +193,16 @@ export default function WorldCup() {
 
   const handleClick = (e, i) => {
     if (finished) return;
-    if (state.table.length === 0) {
-      dispatch({ type: "deal" });
-    } else if (state.table[0] === i) {
+    if (state.table[0] === i) {
       dispatch({ type: "select_left" });
+      setTimeout(() => {
+        dispatch({ type: "deal" });
+      }, 1000);
     } else if (state.table[1] === i) {
       dispatch({ type: "select_right" });
+      setTimeout(() => {
+        dispatch({ type: "deal" });
+      }, 1000);
     }
   };
   return (
@@ -224,6 +234,9 @@ export default function WorldCup() {
             <FadeinHeading
               handleClick={() => {
                 dispatch({ type: "reset" });
+                setTimeout(() => {
+                  dispatch({ type: "deal" });
+                }, 1000);
                 setFinished(false);
               }}
             >
