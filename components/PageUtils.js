@@ -16,13 +16,13 @@ const Body = styled.div`
   background: ${(props) =>
     props.page === "quiz"
       ? "linear-gradient(90deg, rgba(215,246,193,1) 0%, rgba(194,251,240,1) 100%);"
-      : "white;"};
+      : ""};
 
   // 스카이, 핑크 gradient
   background: ${(props) =>
     props.page === "worldcup"
       ? "linear-gradient(35deg, #CCFFFF, #FFCCCC);"
-      : "white;"};
+      : ""};
 
   flex: 1;
   overflow: auto;

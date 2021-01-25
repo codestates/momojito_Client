@@ -18,6 +18,7 @@ export default function MyPage() {
   return (
     <PageUtils>
       <ButtonList
+        page="mypage"
         buttonList={["회원정보 수정", "My 칵테일", "로그아웃"]}
         buttonSelected={buttonSelected}
         setButtonSelected={setButtonSelected}

@@ -48,7 +48,8 @@ const StyledModal = styled(ReactModalAdapter)`
     bottom: 75px;
     right: 0px;
     left: auto;
-    width: 375px;
+    width: 35%;
+    height: 100%;
   }
 `;
 
@@ -76,15 +77,17 @@ export default function Home() {
       <Carousel
         carouselList={[
           {
-            url: 'url("/bar1.jpeg");',
-            heading: "당신의 칵잘알 퀴즈 점수는?",
+            url: 'url("/bar0.png");',
+            heading: "당신의 칵잘알 점수는?",
+            sub: "재미 있는 퀴즈와 함께 칵테일 지식을 업그레이드 하세요!",
             handleClick: (e) => {
               router.push("/quiz");
             },
           },
           {
-            url: 'url("/bar2.jpeg");',
+            url: 'url("/bar2.png");',
             heading: "칵테일 이상형 월드컵 16강",
+            sub: "당신의 최애 칵테일을 알고 싶으신가요?",
             handleClick: (e) => {
               router.push("/worldcup");
             },
@@ -92,15 +95,12 @@ export default function Home() {
         ]}
       ></Carousel>
       <ButtonList
-        buttonList={["클래식 칵테일", "재료별 칵테일", "인기 TOP 10"]}
+        page="main"
+        buttonList={["인기 TOP 10", "재료별 칵테일", "전체 보기"]}
         buttonSelected={buttonSelected}
         setButtonSelected={setButtonSelected}
       ></ButtonList>
       {buttonSelected === 0 ? (
-        <CardGrid indexList={dbIndexList}></CardGrid>
-      ) : buttonSelected === 1 ? (
-        <Ingredientsfilter db={db}></Ingredientsfilter>
-      ) : (
         <CardGrid
           indexList={ratingList
             .slice()
@@ -109,6 +109,10 @@ export default function Home() {
             .map((v) => v.id)}
           type="ranking"
         ></CardGrid>
+      ) : buttonSelected === 1 ? (
+        <Ingredientsfilter db={db}></Ingredientsfilter>
+      ) : (
+        <CardGrid indexList={dbIndexList}></CardGrid>
       )}
     </PageUtils>
   );
