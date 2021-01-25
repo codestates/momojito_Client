@@ -2,7 +2,7 @@ import ButtonL from "../components/ButtonL";
 import styled, { css } from "styled-components";
 import SwiperCore, { Navigation, Pagination, Autoplay } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-import {FaArrowAltCircleRight} from 'react-icons/fa'
+import { FaArrowAltCircleRight } from "react-icons/fa";
 
 SwiperCore.use([Navigation, Pagination, Autoplay]);
 const Divwithbg = styled.div`
@@ -17,7 +17,7 @@ const Divwithbg = styled.div`
       : props.url};
   background-size: cover;
   width: ${(props) => (props.heading ? "100%" : "375px")};
-  height: ${(props) => (props.heading ? "400px" : "375px")};
+  height: ${(props) => (props.sub || !props.heading ? "400px" : "250px")};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -46,9 +46,15 @@ const Divwithbg = styled.div`
   }
 `;
 
-function Slide({ url, heading, sub, buttonText = "지금바로 GO! 🍹", handleClick }) {
+function Slide({
+  url,
+  heading,
+  sub,
+  buttonText = "지금바로 GO! 🍹",
+  handleClick,
+}) {
   return (
-    <Divwithbg url={url} heading={heading}>
+    <Divwithbg url={url} heading={heading} sub={sub}>
       {heading ? (
         <div className="">
           <h1>{heading}</h1>
