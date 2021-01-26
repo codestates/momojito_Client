@@ -44,8 +44,6 @@ export default function PageUtils({ children, page }) {
         <Sidebar></Sidebar>
         <Body page={page}>{children}</Body>
       </Divider>
-      {page === "signin" ? <WaveBackground></WaveBackground> : <></>}
-      {page === "signup" ? <WaveBackground></WaveBackground> : <></>}
       <Footer></Footer>
     </Root>
   );

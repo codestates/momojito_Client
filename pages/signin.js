@@ -228,6 +228,7 @@ export default function Login() {
             <h2 onClick={redirection}>회원가입</h2>
           </Bottom>
         </Inner>
+        <WaveBackground></WaveBackground>
       </Outer>
     </PageUtils>
   );

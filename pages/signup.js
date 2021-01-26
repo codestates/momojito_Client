@@ -8,6 +8,7 @@ import HoverButton from "../components/HoverButton";
 import DefaultButton from "../components/DefaultButton";
 import NaverButton from "../components/NaverButton";
 import KakaoButton from "../components/KakaoButton";
+import WaveBackground from "../components/WaveBackground";
 
 const SignUpText = styled.div`
   text-align: center;
@@ -276,6 +277,7 @@ export default function SignUp() {
             회원가입
           </DefaultButton>
         </Inner>
+        <WaveBackground></WaveBackground>
       </Outer>
     </PageUtils>
   );

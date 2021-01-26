@@ -1,6 +1,8 @@
 import styled from "styled-components";
 
 const WaveStyle = styled.svg`
+  position: absolute;
+  bottom: 0;
   .editorial {
     display: block;
     width: 100%;
@@ -12,6 +14,9 @@ const WaveStyle = styled.svg`
     position: absolute;
     left: 0px;
     float: left;
+  }
+  @media (max-height: 600px) {
+    display: none;
   }
 
   .parallax1 > use {
