@@ -6,6 +6,7 @@ import PageUtils from "../components/PageUtils";
 import DefaultButton from "../components/DefaultButton";
 import NaverButton from "../components/NaverButton";
 import KakaoButton from "../components/KakaoButton";
+import WaveBackground from "../components/WaveBackground";
 
 const SignInText = styled.div`
   text-align: center;
@@ -51,6 +52,7 @@ const Outer = styled.div`
   align-items: flex-start;
   justify-content: center;
   height: 100%;
+  /* margin-bottom: -7.3rem; //Outer밖에 있는 svg가 너무 내려가있어서 올릴 때 사용 */
 `;
 const Inner = styled.div``;
 
