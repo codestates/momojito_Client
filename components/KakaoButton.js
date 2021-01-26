@@ -15,6 +15,7 @@ const KakaoButton = styled.button`
   }
   :hover {
     cursor: pointer;
+    background-color: rgba(255, 232, 18, 0.75);
   }
   background-color: #ffe812;
   color: black;

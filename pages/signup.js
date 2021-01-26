@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import PageUtils from "../components/PageUtils";
 import Modal from "react-modal";
 import HoverButton from "../components/HoverButton";
-import DefaultButton from "../components/DafaultButton";
+import DefaultButton from "../components/DefaultButton";
 import NaverButton from "../components/NaverButton";
 import KakaoButton from "../components/KakaoButton";
 
