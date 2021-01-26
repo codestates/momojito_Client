@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 import Footer from "./Footer";
 import Header from "./Header";
@@ -35,13 +36,28 @@ const Root = styled.div`
   height: 100vh;
 `;
 
+const Invisible = styled.div`
+  display: none;
+  @media (min-width: 1024px) {
+    display: block;
+  }
+  position: absolute;
+  width: 200px;
+  height: 100%;
+  z-index: 1;
+`;
+
 export default function PageUtils({ children, page }) {
+  const [visible, setVisible] = useState(false);
   return (
     <Root>
       <Header></Header>
+      <Invisible onMouseOver={(e) => setVisible(true)}></Invisible>
       <Divider>
-        <Sidebar></Sidebar>
-        <Body page={page}>{children}</Body>
+        {visible ? <Sidebar></Sidebar> : ""}
+        <Body onMouseOver={(e) => setVisible(false)} page={page}>
+          {children}
+        </Body>
       </Divider>
       <Footer></Footer>
     </Root>

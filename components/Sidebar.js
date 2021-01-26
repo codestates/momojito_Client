@@ -5,6 +5,7 @@ const Container = styled.div`
   display: none;
   padding: 1rem;
   border-right: 1px solid rgba(219, 219, 219);
+  z-index: 2;
   @media (min-width: 1024px) {
     display: block;
   }
