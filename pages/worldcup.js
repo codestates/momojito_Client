@@ -5,6 +5,7 @@ import React, { useReducer, useRef, useState } from "react";
 import { useSpring, useSprings, animated } from "react-spring";
 import { useRouter } from "next/router";
 import KakaoShareButton from "../components/KakaoShareButton";
+import Comments from "../components/Comments";
 const cards = Array.from({ length: 8 }, (_, i) => i).map(
   (v) => `/cocktails/${v}.png`
 );
@@ -19,10 +20,17 @@ const Container = styled.div`
 
   .bottom {
     position: absolute;
+    width: 100%;
+    top: 550px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    top: 550px;
+
+    .buttonDiv {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
     .btn {
       height: 50px;
       width: 240px;
@@ -38,6 +46,10 @@ const Container = styled.div`
         background-color: green;
         color: white;
       }
+    }
+
+    .comments {
+      width: 600px;
     }
   }
 `;
@@ -256,6 +268,7 @@ export default function WorldCup() {
       }, 1000);
     }
   };
+  const [commentOn, setCommentOn] = useState(false);
   return (
     <PageUtils page="worldcup">
       <Container ref={observed}>
@@ -282,36 +295,48 @@ export default function WorldCup() {
         ))}
         {finished ? (
           <div className="bottom">
-            <button className="btn">
-              <FadeinHeading
-                handleClick={() => {
-                  dispatch({ type: "reset" });
-                  setTimeout(() => {
-                    dispatch({ type: "deal" });
-                  }, 1000);
-                  setFinished(false);
+            <div className="buttonDiv">
+              <button className="btn">
+                <FadeinHeading
+                  handleClick={() => {
+                    dispatch({ type: "reset" });
+                    setTimeout(() => {
+                      dispatch({ type: "deal" });
+                    }, 1000);
+                    setFinished(false);
+                  }}
+                >
+                  다시 해보시겠어요?
+                </FadeinHeading>
+              </button>
+              <button className="btn">
+                <FadeinHeading
+                  handleClick={() => {
+                    router.push(`/cocktails/${result}`);
+                  }}
+                >
+                  {`${db[result].koreanName} 상세정보 보기`}
+                </FadeinHeading>
+              </button>
+              <button
+                onClick={() => {
+                  setCommentOn(!commentOn);
                 }}
+                className="btn"
+                selected=""
               >
-                다시 해보시겠어요?
-              </FadeinHeading>
-            </button>
-            <button className="btn">
-              <FadeinHeading
-                handleClick={() => {
-                  router.push(`/cocktails/${result}`);
-                }}
-              >
-                {`${db[result].koreanName} 상세정보 보기`}
-              </FadeinHeading>
-            </button>
-            <KakaoLink>
-              <p>카카오톡으로 공유하기</p>
-              <KakaoShareButton
-                title="나의 술알못 테스트 결과는?"
-                desc={result.text}
-                imgurl="http://mud-kage.kakao.co.kr/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg"
-              ></KakaoShareButton>
-            </KakaoLink>
+                코멘트 남기기 (4)
+              </button>
+              <KakaoLink>
+                <p>카카오톡으로 공유하기</p>
+                <KakaoShareButton
+                  title="나의 술알못 테스트 결과는?"
+                  desc={result.text}
+                  imgurl="http://mud-kage.kakao.co.kr/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg"
+                ></KakaoShareButton>
+              </KakaoLink>
+            </div>
+            {commentOn ? <Comments className="comments" /> : ""}
           </div>
         ) : (
           <Versus>VS</Versus>

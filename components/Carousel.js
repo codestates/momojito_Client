@@ -73,12 +73,13 @@ function Slide({
 export default function Carousel({ carouselList }) {
   return (
     <Swiper autoplay={{ delay: 5000 }}>
-      {carouselList.map(({ url, heading, sub, buttonText, handleClick }) => (
+      {carouselList.map(({ url, heading, sub, redirectTo, buttonText, handleClick }) => (
         <SwiperSlide key={url}>
           <Slide
             url={url}
             heading={heading}
             sub={sub}
+            redirectTo={redirectTo}
             buttonText={buttonText}
             handleClick={handleClick}
           ></Slide>
