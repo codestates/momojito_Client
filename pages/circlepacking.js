@@ -2,7 +2,7 @@ import * as d3 from "d3";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import PageUtils from "../components/Pageutils";
+import PageUtils from "../components/PageUtils";
 import data from "../public/cocktailcircle.json";
 
 const width = 938;
@@ -86,6 +86,7 @@ export default function CirclePacking() {
       .attr("width", 200)
       .style("opacity", (d) => (d.parent === root ? 1 : 0))
       .style("display", (d) => (d.parent === root ? "inline" : "none"))
+      .style("pointer-events", () => "none")
       .attr("xlink:href", (d) =>
         d.data.value ? `/cocktails/${d.data.value}.png` : ""
       );
@@ -129,10 +130,19 @@ export default function CirclePacking() {
         })
         .transition(transition)
         .style("fill-opacity", (d) =>
-          d.parent === focus || d === focus ? 1 : 0
+          d.parent === focus || d === focus || d.children?.includes(focus)
+            ? 1
+            : 0
         )
         .on("start", function (d) {
-          if (d.parent === focus || d === focus) this.style.display = "inline";
+          if (d.parent === focus || d === focus || d.children?.includes(focus))
+            this.style.display = "inline";
+        })
+        .on("end", function (d) {
+          if (
+            !(d.parent === focus || d === focus || d.children?.includes(focus))
+          )
+            this.style.display = "none";
         });
 
       label
