@@ -5,6 +5,7 @@ import React, { useReducer, useRef, useState } from "react";
 import { useSpring, useSprings, animated } from "react-spring";
 import { useRouter } from "next/router";
 import KakaoShareButton from "../components/KakaoShareButton";
+import Comments from "../components/Comments";
 const cards = Array.from({ length: 8 }, (_, i) => i).map(
   (v) => `/cocktails/${v}.png`
 );
@@ -19,10 +20,12 @@ const Container = styled.div`
 
   .bottom {
     position: absolute;
+    width: 100%;
+    top: 430px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    top: 430px;
+
     .btn {
       height: 50px;
       width: 240px;
@@ -38,6 +41,10 @@ const Container = styled.div`
         background-color: green;
         color: white;
       }
+    }
+
+    .comments {
+      width: 600px;
     }
   }
 `;
@@ -256,6 +263,7 @@ export default function WorldCup() {
       }, 1000);
     }
   };
+  const [commentOn, setCommentOn] = useState(false);
   return (
     <PageUtils page="worldcup">
       <Container ref={observed}>
@@ -305,6 +313,15 @@ export default function WorldCup() {
             >
               <h1>{`${db[result].koreanName} 상세정보 보기`}</h1>
             </button>
+            <button
+                onClick={() => {
+                  setCommentOn(!commentOn);
+                }}
+                className="btn"
+                selected=""
+              >
+                코멘트 남기기
+              </button>
             <KakaoLink>
               <p>카카오톡으로 공유하기</p>
               <KakaoShareButton
@@ -313,6 +330,7 @@ export default function WorldCup() {
                 imgurl="http://mud-kage.kakao.co.kr/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg"
               ></KakaoShareButton>
             </KakaoLink>
+            {commentOn ? <Comments page="worldcup" className="comments" /> : ""}
           </div>
         ) : (
           ""
