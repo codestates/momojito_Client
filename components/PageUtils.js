@@ -55,7 +55,7 @@ export default function PageUtils({ children, page }) {
       <Header></Header>
       <Invisible onMouseOver={(e) => setVisible(true)}></Invisible>
       <Divider>
-        {visible ? <Sidebar></Sidebar> : ""}
+        <Sidebar visible={visible}></Sidebar>
         <Body onMouseOver={(e) => setVisible(false)} page={page}>
           {children}
         </Body>

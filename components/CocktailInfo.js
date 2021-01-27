@@ -122,7 +122,11 @@ export default function CocktailInfo({ id }) {
             if (res.status === 200) {
               setRatingList([
                 ...ratingList.slice(0, id),
-                { ...ratingList[id], avrRate: res.data.rate },
+                {
+                  ...ratingList[id],
+                  avrRate: res.data.rate,
+                  number: res.data.number ? res.data.number : res.data.numbers,
+                },
                 ...ratingList.slice(id + 1),
               ]);
               setStatusMessage("성공적입니다.");
@@ -208,7 +212,10 @@ export default function CocktailInfo({ id }) {
         <h2>{heartMessage}</h2>
       </div>
       <div className="stars">
-        <h1>평균별점 {ratingList[id] ? ratingList[id].avrRate : "0.0"}</h1>
+        <h1>
+          평균별점 {ratingList[id] ? ratingList[id].avrRate : "0.0"} (
+          {ratingList[id] ? ratingList[id].number : ""}명)
+        </h1>
         <HoverStarList setStarSelected={setStarSelected}></HoverStarList>
         <h2>{statusMessage}</h2>
       </div>
