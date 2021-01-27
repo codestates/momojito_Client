@@ -50,7 +50,7 @@ export default function Home() {
             .slice()
             .sort((a, b) => Number(b.avrRate) - Number(a.avrRate))
             .slice(0, 10)
-            .map((v) => v.id)}
+            .map((v) => v.id - 1)}
           type="ranking"
         ></CardGrid>
       ) : buttonSelected === 1 ? (
