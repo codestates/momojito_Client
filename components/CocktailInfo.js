@@ -17,8 +17,7 @@ const Container = styled.div`
     height: 375px;
     margin-bottom: 0.5rem;
   }
-  .nameheart,
-  .signature {
+  .nameheart {
     display: flex;
     align-items: center;
     text-align: left;
@@ -26,12 +25,13 @@ const Container = styled.div`
     padding: 0.5rem 1rem;
     svg {
       margin-left: 1rem;
-      width: 15px;
-      height: 15px;
+      width: 20px;
+      height: 20px;
     }
-    button {
-      margin-left: 1rem;
-      margin-bottom: 0.5rem;
+    h2 {
+      margin-top: 4px;
+      font-size: 1rem;
+      margin-left: 0.5rem;
     }
   }
   .stars {
@@ -97,6 +97,7 @@ export default function CocktailInfo({ id }) {
   const [buttonSelected, setButtonSelected] = useState(-1);
   const [starSelected, setStarSelected] = useState(-1);
   const [statusMessage, setStatusMessage] = useState("");
+  const [heartMessage, setHeartMessage] = useState("");
   useEffect(() => {
     if (buttonSelected !== -1) {
       const ingredientslist = cocktail.ingredients
@@ -121,7 +122,11 @@ export default function CocktailInfo({ id }) {
             if (res.status === 200) {
               setRatingList([
                 ...ratingList.slice(0, id),
-                { ...ratingList[id], avrRate: res.data.rate },
+                {
+                  ...ratingList[id],
+                  avrRate: res.data.rate,
+                  number: res.data.number ? res.data.number : res.data.numbers,
+                },
                 ...ratingList.slice(id + 1),
               ]);
               setStatusMessage("성공적입니다.");
@@ -135,10 +140,13 @@ export default function CocktailInfo({ id }) {
     }
   }, [starSelected]);
   useEffect(() => {
+    if (heartMessage !== "") {
+      setTimeout(() => setHeartMessage(""), 3000);
+    }
     if (statusMessage !== "") {
       setTimeout(() => setStatusMessage(""), 3000);
     }
-  }, [statusMessage]);
+  }, [statusMessage, heartMessage]);
   useEffect(() => {
     //여기에 props로 받은 Id가 포함되어 있으면, isLike -> true
     if (user.myCocktailList.includes(id) === true) {
@@ -158,6 +166,7 @@ export default function CocktailInfo({ id }) {
           // '받은 응답코드' 200 이면 추가,  201이면 삭제
           if (res.status === 200) {
             user.myCocktailList.push(id);
+            setHeartMessage("저장되었습니다.");
           } else if (res.status === 201) {
             user.myCocktailList.splice(user.myCocktailList.indexOf(id), 1);
           }
@@ -183,16 +192,6 @@ export default function CocktailInfo({ id }) {
           },
         ]}
       ></Carousel>
-      {cocktail.barname ? (
-        <div className="signature">
-          <h1>{cocktail.barname}</h1>
-          <div className="barloc">
-            <Button s="0.5rem">{cocktail.barlocation}</Button>
-          </div>
-        </div>
-      ) : (
-        ""
-      )}
       <div className="nameheart">
         <h1>{`${cocktail.koreanName}(${cocktail.name})`}</h1>
         <svg
@@ -210,9 +209,13 @@ export default function CocktailInfo({ id }) {
             d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
           />
         </svg>
+        <h2>{heartMessage}</h2>
       </div>
       <div className="stars">
-        <h1>평균별점 {ratingList[id] ? ratingList[id].avrRate : "0.0"}</h1>
+        <h1>
+          평균별점 {ratingList[id] ? ratingList[id].avrRate : "0.0"} (
+          {ratingList[id] ? ratingList[id].number : ""}명)
+        </h1>
         <HoverStarList setStarSelected={setStarSelected}></HoverStarList>
         <h2>{statusMessage}</h2>
       </div>

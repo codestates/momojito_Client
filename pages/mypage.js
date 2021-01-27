@@ -5,7 +5,7 @@ import ButtonList from "../components/ButtonList";
 import CardGrid from "../components/CardGrid";
 import ChangeInfo from "../components/ChangeInfo";
 import { useRouter } from "next/router";
-import axios from "axios";
+import CocktailModal from "../components/CocktailModal";
 export default function MyPage() {
   const router = useRouter();
   const { user, setUser } = useContext(ThemeContext).userContext;
@@ -17,6 +17,7 @@ export default function MyPage() {
   }, [buttonSelected]);
   return (
     <PageUtils>
+      <CocktailModal></CocktailModal>
       <ButtonList
         page="mypage"
         buttonList={["회원정보 수정", "My 칵테일", "로그아웃"]}
