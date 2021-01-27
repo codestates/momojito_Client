@@ -15,6 +15,7 @@ const DeafultButton = styled.button`
   }
   :hover {
     cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.75);
   }
   justify-content: center;
   background-color: #000000;

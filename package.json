@@ -19,6 +19,7 @@
     "react-modal": "^3.12.1",
     "react-responsive": "^8.2.0",
     "react-spring": "^9.0.0-rc.3",
+    "react-transition-group": "^4.4.1",
     "styled-components": "^5.2.1",
     "styled-reset": "^4.3.4",
     "swiper": "^6.4.5"

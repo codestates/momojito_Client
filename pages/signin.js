@@ -3,9 +3,10 @@ import axios from "axios";
 import { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import PageUtils from "../components/PageUtils";
-import DefaultButton from "../components/DafaultButton";
+import DefaultButton from "../components/DefaultButton";
 import NaverButton from "../components/NaverButton";
 import KakaoButton from "../components/KakaoButton";
+import WaveBackground from "../components/WaveBackground";
 
 const SignInText = styled.div`
   text-align: center;
@@ -51,8 +52,13 @@ const Outer = styled.div`
   align-items: flex-start;
   justify-content: center;
   height: 100%;
+  /* margin-bottom: -7.3rem; //Outer밖에 있는 svg가 너무 내려가있어서 올릴 때 사용 */
 `;
 const Inner = styled.div``;
+
+const WaveContainer = styled.div`
+  display: block;
+`;
 
 export default function Login() {
   const { user, setUser } = useContext(ThemeContext).userContext;
@@ -195,38 +201,41 @@ export default function Login() {
 
   return (
     <PageUtils>
-      <Outer>
-        <Inner>
-          <SignInText>로그인</SignInText>
-          <InputText
-            onChange={eTargetValueEmail}
-            placeholder="  이메일 주소를 입력해 주세요."
-            onKeyDown={onKeyDown}
-          ></InputText>
-          <InputText
-            onChange={eTargetValuePassword}
-            placeholder="  비밀번호를 입력해 주세요."
-            type="password"
-            onKeyDown={onKeyDown}
-          ></InputText>
-          <Validation>{!validate ? <div>ㅤ</div> : validate}</Validation>
-          <DefaultButton onClick={handleSignIn}>로그인</DefaultButton>
-          <NaverButton onClick={handleNaver}>
-            <img src="/naver.png" width="30px" alt=""></img>
-            네이버 계정으로 로그인
-            <div className="blank"></div>
-          </NaverButton>
-          <KakaoButton onClick={handleKakao}>
-            <img src="/kakao.png" width="25px" alt=""></img>
-            카카오 계정으로 로그인
-            <div className="blank"></div>
-          </KakaoButton>
-          <Bottom>
-            <h1>다른 이메일로 가입하시려면?</h1>
-            <h2 onClick={redirection}>회원가입</h2>
-          </Bottom>
-        </Inner>
-      </Outer>
+      <WaveContainer>
+        <Outer>
+          <Inner>
+            <SignInText>로그인</SignInText>
+            <InputText
+              onChange={eTargetValueEmail}
+              placeholder="  이메일 주소를 입력해 주세요."
+              onKeyDown={onKeyDown}
+            ></InputText>
+            <InputText
+              onChange={eTargetValuePassword}
+              placeholder="  비밀번호를 입력해 주세요."
+              type="password"
+              onKeyDown={onKeyDown}
+            ></InputText>
+            <Validation>{!validate ? <div>ㅤ</div> : validate}</Validation>
+            <DefaultButton onClick={handleSignIn}>로그인</DefaultButton>
+            <NaverButton onClick={handleNaver}>
+              <img src="/naver.png" width="30px" alt=""></img>
+              네이버 계정으로 로그인
+              <div className="blank"></div>
+            </NaverButton>
+            <KakaoButton onClick={handleKakao}>
+              <img src="/kakao.png" width="25px" alt=""></img>
+              카카오 계정으로 로그인
+              <div className="blank"></div>
+            </KakaoButton>
+            <Bottom>
+              <h1>다른 이메일로 가입하시려면?</h1>
+              <h2 onClick={redirection}>회원가입</h2>
+            </Bottom>
+          </Inner>
+        </Outer>
+        <WaveBackground></WaveBackground>
+      </WaveContainer>
     </PageUtils>
   );
 }
