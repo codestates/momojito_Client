@@ -7,12 +7,11 @@ import ProgressBar from "../components/ProgressBar";
 import Head from "next/head";
 import KakaoShareButton from "../components/KakaoShareButton";
 
-
 const QuizHeader = styled.div`
   margin-top: 70px;
   font-size: 24px;
   text-align: center;
-  font-weight: bold; 
+  font-weight: bold;
   // color: grey;
 `;
 
@@ -27,9 +26,7 @@ const StatusBar = styled.div`
   }
 `;
 
-const QuizDiv = styled.div`
-
-`
+const QuizDiv = styled.div``;
 
 const QuizBody = styled.div`
   margin-top: 30px;
@@ -40,7 +37,7 @@ const QuizBody = styled.div`
   .quiz-content {
     width: 80%;
   }
-  
+
   .question {
     max-width: 600px;
     position: relative;
@@ -49,7 +46,7 @@ const QuizBody = styled.div`
     text-align: center;
 
     border-radius: 20px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 
     border: 1px solid #c2bdbd;
     display: flex;
@@ -84,7 +81,7 @@ const AnswerBtn = styled.button`
   padding-left: 25px;
   border: 1px solid #c2bdbd;
   background-color: white;
-  box-shadow: 0 5px 5px rgba(0,0,0,0.19), 0 3px 3px rgba(0,0,0,0.23);
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.19), 0 3px 3px rgba(0, 0, 0, 0.23);
   border-radius: 8px;
   cursor: pointer;
 
@@ -169,7 +166,8 @@ function Answer({
   const { text, isAnswer } = answer;
   return (
     <AnswerBtn
-      onClick={() => {
+      onClick={(e) => {
+        e.target.blur();
         if (isAnswer === true) {
           setScore(totalScore + score);
         }
@@ -193,7 +191,7 @@ const ResultBox = styled.div`
   height: 350px;
   // background-color: #edfbd5;
   background-color: white;
-  box-shadow: 0 5px 5px rgba(0,0,0,0.19), 0 3px 3px rgba(0,0,0,0.23);
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.19), 0 3px 3px rgba(0, 0, 0, 0.23);
   position: relative;
 
   display: flex;
