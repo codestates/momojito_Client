@@ -79,61 +79,6 @@ const messageMaker = (message, state) => {
   }
 };
 
-function reducer(state, action) {
-  switch (action.type) {
-    case "deal":
-      if (state.deck.length === 1) {
-        return state;
-      }
-      return {
-        ...state,
-        deck: state.deck.slice(0, state.deck.length - 2),
-        table: state.deck.slice(state.deck.length - 2),
-        message: messageMaker(state.message, state),
-      };
-    case "select_left":
-      return {
-        ...state,
-        deck: [state.table[0], ...state.deck],
-        table: [],
-        rightGone: [...state.rightGone, state.table[1]],
-      };
-    case "select_right":
-      return {
-        ...state,
-        deck: [state.table[1], ...state.deck],
-        table: [],
-        leftGone: [...state.leftGone, state.table[0]],
-      };
-    case "reset":
-      return {
-        deck: Array.from({ length: cards.length }, (_, i) => i),
-        table: [],
-        leftGone: [],
-        rightGone: [],
-        message: `${2 ** Math.ceil(Math.sqrt(cards.length))}강`,
-      };
-    default:
-      throw new Error();
-  }
-}
-
-const to = (i) => ({
-  x: 0,
-  y: i * -2,
-  scale: 1,
-  rotate: -10 + Math.random() * 20,
-  delay: i * 100,
-});
-const from = (i) => ({ x: 0, rot: 0, scale: 1.5, y: -1000 });
-const initialState = {
-  deck: Array.from({ length: cards.length }, (_, i) => i),
-  table: [],
-  leftGone: [],
-  rightGone: [],
-  message: `${2 ** Math.ceil(Math.sqrt(cards.length))}강`,
-};
-
 const Title = styled.h1`
   font-weight: bold;
   font-size: 24px;
@@ -161,12 +106,71 @@ const KakaoLink = styled.div`
   }
 `;
 
+const shuffle = (unshuffled) =>
+  unshuffled
+    .map((a) => ({ sort: Math.random(), value: a }))
+    .sort((a, b) => a.sort - b.sort)
+    .map((a) => a.value);
+
 export default function WorldCup() {
+  const [shuffled, setShuffled] = useState(
+    shuffle(Array.from({ length: 8 }, (v, i) => i))
+  );
   const [props, set] = useSprings(cards.length, (i) => ({
-    ...to(i),
-    from: from(i),
+    x: 0,
+    y: i * -2,
+    scale: 1,
+    rotate: -10 + Math.random() * 20,
+    delay: shuffled.indexOf(i) * 100,
+    zIndex: shuffled.indexOf(i),
+    from: { x: 0, rot: 0, scale: 1.5, y: -1000 },
   }));
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, {
+    deck: shuffled,
+    table: [],
+    leftGone: [],
+    rightGone: [],
+    message: `${2 ** Math.ceil(Math.sqrt(cards.length))}강`,
+  });
+  function reducer(state, action) {
+    switch (action.type) {
+      case "deal":
+        if (state.deck.length === 1) {
+          return state;
+        }
+        return {
+          ...state,
+          deck: state.deck.slice(0, state.deck.length - 2),
+          table: state.deck.slice(state.deck.length - 2),
+          message: messageMaker(state.message, state),
+        };
+      case "select_left":
+        return {
+          ...state,
+          deck: [state.table[0], ...state.deck],
+          table: [],
+          rightGone: [...state.rightGone, state.table[1]],
+        };
+      case "select_right":
+        return {
+          ...state,
+          deck: [state.table[1], ...state.deck],
+          table: [],
+          leftGone: [...state.leftGone, state.table[0]],
+        };
+      case "reset":
+        setShuffled(shuffle(Array.from({ length: 8 }, (v, i) => i)));
+        return {
+          deck: shuffled,
+          table: [],
+          leftGone: [],
+          rightGone: [],
+          message: `${2 ** Math.ceil(Math.sqrt(cards.length))}강`,
+        };
+      default:
+        throw new Error();
+    }
+  }
   const [initial, setInitial] = useState(true);
   const [finished, setFinished] = useState(false);
   const [result, setResult] = useState(-1);
@@ -279,29 +283,27 @@ export default function WorldCup() {
         {dealt && !finished ? <FadeinHeading>VS</FadeinHeading> : ""}
         {finished ? (
           <div className="bottom">
-            <button className="btn">
-              <h1
-                onClick={() => {
-                  dispatch({ type: "reset" });
-                  setFinished(false);
-                  setDealt(false);
-                  setTimeout(() => {
-                    dispatch({ type: "deal" });
-                    setDealt(true);
-                  }, 1000);
-                }}
-              >
-                다시 해보시겠어요?
-              </h1>
+            <button
+              className="btn"
+              onClick={() => {
+                dispatch({ type: "reset" });
+                setFinished(false);
+                setDealt(false);
+                setTimeout(() => {
+                  dispatch({ type: "deal" });
+                  setDealt(true);
+                }, 1000);
+              }}
+            >
+              <h1>다시 해보시겠어요?</h1>
             </button>
-            <button className="btn">
-              <h1
-                onClick={() => {
-                  router.push(`/cocktails/${result}`);
-                }}
-              >
-                {`${db[result].koreanName} 상세정보 보기`}
-              </h1>
+            <button
+              className="btn"
+              onClick={() => {
+                router.push(`/cocktails/${result}`);
+              }}
+            >
+              <h1>{`${db[result].koreanName} 상세정보 보기`}</h1>
             </button>
             <KakaoLink>
               <p>카카오톡으로 공유하기</p>
