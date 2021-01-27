@@ -43,7 +43,7 @@ const Invisible = styled.div`
     display: block;
   }
   position: absolute;
-  width: 200px;
+  width: 100px;
   height: 100%;
   z-index: 1;
 `;
