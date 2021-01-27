@@ -7,6 +7,7 @@ import ProgressBar from "../components/ProgressBar";
 import Head from "next/head";
 import KakaoShareButton from "../components/KakaoShareButton";
 
+
 const QuizHeader = styled.div`
   margin-top: 70px;
   font-size: 24px;
@@ -68,7 +69,7 @@ const QuizBody = styled.div`
   }
 `;
 const AnswerList = styled.div`
-  margin-top: 20px;
+  margin: 20px 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
