@@ -3,18 +3,9 @@ import styled from "styled-components";
 const WaveStyle = styled.svg`
   position: absolute;
   bottom: 0;
-  .editorial {
-    display: block;
-    width: 100%;
-    height: 60px;
-    max-height: 60px;
-    margin: 0;
-    z-index: 5;
-    bottom: 0;
-    position: absolute;
-    left: 0px;
-    float: left;
-  }
+  display: block;
+  width: 100%;
+  min-height: 150px;
   @media (max-height: 600px) {
     display: none;
   }
