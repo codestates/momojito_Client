@@ -2,7 +2,7 @@ import * as d3 from "d3";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import Pageutils from "../components/Pageutils";
+import PageUtils from "../components/Pageutils";
 import data from "../public/cocktailcircle.json";
 
 const width = 938;
@@ -45,6 +45,8 @@ export default function CirclePacking() {
       .data(root.descendants().slice(1))
       .join("circle")
       .attr("fill", (d) => (d.children ? color(d.depth) : "white"))
+      .style("fill-opacity", (d) => (d.parent === root ? 1 : 0))
+      .style("display", (d) => (d.parent === root ? "inline" : "none"))
       .on("mouseover", function () {
         d3.select(this).attr("stroke", "#000");
       })
@@ -63,7 +65,7 @@ export default function CirclePacking() {
 
     const label = svg
       .append("g")
-      .style("font", "50px sans-serif")
+      .style("font", "35px sans-serif")
       .attr("pointer-events", "none")
       .attr("text-anchor", "middle")
       .selectAll("text")
@@ -78,10 +80,12 @@ export default function CirclePacking() {
       .selectAll("image")
       .data(root.descendants())
       .join("image")
-      .attr("x", -40)
-      .attr("y", -40)
-      .attr("height", 75)
-      .attr("width", 75)
+      .attr("x", -100)
+      .attr("y", -100)
+      .attr("height", 200)
+      .attr("width", 200)
+      .style("opacity", (d) => (d.parent === root ? 1 : 0))
+      .style("display", (d) => (d.parent === root ? "inline" : "none"))
       .attr("xlink:href", (d) =>
         d.data.value ? `/cocktails/${d.data.value}.png` : ""
       );
@@ -119,6 +123,18 @@ export default function CirclePacking() {
           return (t) => zoomTo(i(t));
         });
 
+      node
+        .filter(function (d) {
+          return d.parent === focus || this.style.display === "inline";
+        })
+        .transition(transition)
+        .style("fill-opacity", (d) =>
+          d.parent === focus || d === focus ? 1 : 0
+        )
+        .on("start", function (d) {
+          if (d.parent === focus || d === focus) this.style.display = "inline";
+        });
+
       label
         .filter(function (d) {
           return d.parent === focus || this.style.display === "inline";
@@ -126,20 +142,31 @@ export default function CirclePacking() {
         .transition(transition)
         .style("fill-opacity", (d) => (d.parent === focus ? 1 : 0))
         .on("start", function (d) {
-          if (d.parent === focus) this.style.display = "inline";
+          if (d.parent === focus && !d.data.value)
+            this.style.display = "inline";
         })
         .on("end", function (d) {
           if (d.parent !== focus) this.style.display = "none";
+        });
+
+      image
+        .filter(function (d) {
+          return d.parent === focus || this.style.display === "inline";
+        })
+        .transition(transition)
+        .style("opacity", (d) => (d.parent === focus || d === focus ? 1 : 0))
+        .on("start", function (d) {
+          if (d.parent === focus || d === focus) this.style.display = "inline";
         });
     }
   }, []);
 
   return (
-    <Pageutils>
+    <PageUtils>
       <SVG
         ref={svgRef}
         viewBox={`-${width / 2} -${height / 2} ${width} ${height}`}
       ></SVG>
-    </Pageutils>
+    </PageUtils>
   );
 }
