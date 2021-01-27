@@ -35,6 +35,7 @@ const Root = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
+  max-height: -webkit-fill-available;
 `;
 
 const Invisible = styled.div`

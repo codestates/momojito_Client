@@ -6,12 +6,14 @@ const Container = styled.div`
   position: absolute;
   background-color: white;
   height: 100vh;
+  display: none;
   opacity: 0;
   padding: 1rem;
   border-right: 1px solid rgba(219, 219, 219);
   z-index: 2;
 
   @media (min-width: 1024px) {
+    display: block;
     opacity: ${({ state }) =>
       state === "entering" || state === "entered" ? 1 : 0};
     transition: transform 250ms ease-in-out;
