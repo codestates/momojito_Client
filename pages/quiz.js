@@ -7,6 +7,7 @@ import ProgressBar from "../components/ProgressBar";
 import Head from "next/head";
 import KakaoShareButton from "../components/KakaoShareButton";
 import Comments from "../components/Comments";
+import axios from "axios";
 
 const QuizHeader = styled.div`
   margin-top: 70px;
@@ -111,7 +112,7 @@ function quiz() {
       </Head>
       <QuizDiv>
         <QuizHeader>✏️ 칵테일 능력평가</QuizHeader>
-        {!isFinished ? (
+        {isFinished ? (
           <>
             <StatusBar>
               <div className="count">
@@ -334,7 +335,7 @@ function Result({ totalScore, setIsFinished, setCount, setScore, setQuiz }) {
           className="btn"
           selected=""
         >
-          코멘트 남기기 (4)
+          코멘트 남기기
         </button>
       </ButtonDiv>
       <KakaoLink>
@@ -345,7 +346,7 @@ function Result({ totalScore, setIsFinished, setCount, setScore, setQuiz }) {
           imgurl="http://mud-kage.kakao.co.kr/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg"
         ></KakaoShareButton>
       </KakaoLink>
-      {commentOn ? <Comments /> : ""}
+      {commentOn ? <Comments page="quiz" /> : ""}
     </ResultWrap>
   );
 }

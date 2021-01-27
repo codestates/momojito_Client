@@ -325,7 +325,7 @@ export default function WorldCup() {
                 className="btn"
                 selected=""
               >
-                코멘트 남기기 (4)
+                코멘트 남기기
               </button>
               <KakaoLink>
                 <p>카카오톡으로 공유하기</p>
@@ -336,7 +336,7 @@ export default function WorldCup() {
                 ></KakaoShareButton>
               </KakaoLink>
             </div>
-            {commentOn ? <Comments className="comments" /> : ""}
+            {commentOn ? <Comments page="worldcup" className="comments" /> : ""}
           </div>
         ) : (
           <Versus>VS</Versus>

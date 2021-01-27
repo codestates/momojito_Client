@@ -237,19 +237,19 @@ export default function CocktailInfo({ id }) {
               url: 'url("/bar0.jpeg");',
               heading: "JASE",
               buttonText: "홍대",
-              redirectTo: "http://naver.me/xswx3XPm"
+              handleClick: () => router.push("http://naver.me/xswx3XPm")
             },
             {
               url: 'url("/bar1.jpeg");',
               heading: "PAVOX",
               buttonText: "강남",
-              redirectTo: "http://naver.me/FXZhwzpB"
+              handleClick: () => router.push("http://naver.me/FXZhwzpB")
             },
             {
               url: 'url("/bar2.jpeg");',
               heading: "청춘예찬",
               buttonText: "성신여대",
-              redirectTo: "http://naver.me/GbE0DNQz"
+              handleClick: () => router.push("http://naver.me/GbE0DNQz")
             },
           ]}
         ></Carousel>

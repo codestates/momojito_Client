@@ -1,6 +1,8 @@
-import { useContext } from "react";
+import axios from "axios";
+import { useState, useEffect, useContext } from "react";
 import styled, { ThemeContext } from "styled-components";
-import ButtonM from "./ButtonM"
+import ButtonM from "./ButtonM";
+import Pagination from "./Pagination";
 
 const Wrap = styled.div`
   /* border: 1px solid black; */
@@ -12,19 +14,26 @@ const Wrap = styled.div`
   /* align-items: center; */
   .head {
   }
+
+  .lgn-msg {
+    margin: 20px 0px;
+    font-weight: bold;
+  }
 `;
 const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 10px 0px;
-  .input-nickname, .nickname {
+  .input-nickname,
+  .nickname {
     align-self: flex-start;
     width: 150px;
   }
 
   .input-text {
     margin-top: 10px;
+    padding: 10px 0px 0px 10px;
     width: 100%;
     height: 50px;
   }
@@ -34,60 +43,86 @@ const Form = styled.form`
     align-self: flex-end;
   }
 `;
-function Comments({commentsData}) {
+function Comments({ page }) {
   const { user, setUser } = useContext(ThemeContext).userContext;
-  const commentData = [
-    {
-      nickname: "영권",
-      profile:
-        "https://static.toiimg.com/thumb/msid-67586673,width-800,height-600,resizemode-75,imgsize-3918697,pt-32,y_pad-40/67586673.jpg",
-      date: "2021년 1월 25일",
-      text: "와 개지리는데요??",
-    },
-    {
-      nickname: "민구",
-      profile:
-        "https://static.toiimg.com/thumb/msid-67586673,width-800,height-600,resizemode-75,imgsize-3918697,pt-32,y_pad-40/67586673.jpg",
-      date: "2021년 1월 25일",
-      text: "지렷다",
-    },
-    {
-      nickname: "정로",
-      profile:
-        "https://static.toiimg.com/thumb/msid-67586673,width-800,height-600,resizemode-75,imgsize-3918697,pt-32,y_pad-40/67586673.jpg",
-      date: "2021년 1월 25일",
-      text: "ㅋㅋㅋㅋㅋ굳이요",
-    },
-    {
-      nickname: "도현",
-      profile:
-        "https://static.toiimg.com/thumb/msid-67586673,width-800,height-600,resizemode-75,imgsize-3918697,pt-32,y_pad-40/67586673.jpg",
-      date: "2021년 1월 25일",
-      text: "ㅁㄹㅇㄴㄹㅁㅁㅇㄹㄴ",
-    },
-  ];
+  const [text, setText] = useState("");
+  const [commentsData, setCommentsData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [commentsPerPage, setCommentsPerPage] = useState(5);
+
+  useEffect(() => {
+    // 코멘트 받아오기
+    const getComments = async () => {
+      setLoading(true);
+      const res = await axios.get(
+        `https://server.momo-jito.com/comment/get/?contents=${page}`
+      );
+      setCommentsData(res.data.data);
+      setLoading(false);
+    };
+    
+    getComments();
+  }, []);
+
+  // Get current comments
+  const indexOfLastComment = currentPage * commentsPerPage; // 5
+  const indexOfFirstComment = indexOfLastComment - commentsPerPage; // 1
+  const currentComments = commentsData.slice(
+    indexOfFirstComment,
+    indexOfLastComment
+  );
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber)
+
+
+  const textHandler = (e) => {
+    setText(e.target.value);
+  };
+
+  const postComment = async (e) => {
+    e.preventDefault();
+    const res = await axios
+      .post(
+        `https://server.momo-jito.com/comment/create/?contents=${page}`,
+        { text: text },
+        { withCredentials: true }
+      ).then(alert('댓글 작성 완료!'))
+      .catch(alert);
+ 
+    setCommentsData([res.data.data[0], ...commentsData]);
+    setText("")
+  };
 
   return (
     <Wrap>
-      <div className="head">{commentData.length}개의 Comment</div>
-      <Form>
-         {user.isLogin? 
-         <div className="nickname">
-            닉네임:  {user.userInfo.nickname}
-         </div>
-         :
-         <input
-           className="input-nickname"
-           placeholder="닉네임"
-         ></input>
-         } 
-        <textarea className="input-text" placeholder="코멘트를 입력해주세요"></textarea>
-        <ButtonM className="submit-btn">코멘트 작성</ButtonM>
-        {/* <button className="submit-btn">코멘트 작성</button> */}
-      </Form>
-      {commentData.map((data) => {
-        return <Comment data={data}></Comment>;
+      <div className="head">{commentsData.length}개의 댓글</div>
+      {user.isLogin ? (
+        <Form>
+          <div className="nickname">닉네임: {user.userInfo.nickname}</div>
+          <textarea
+            onChange={textHandler}
+            value={text}
+            className="input-text"
+            placeholder="코멘트를 입력해주세요"
+          ></textarea>
+          <ButtonM onClick={postComment} className="submit-btn">
+            댓글 작성
+          </ButtonM>
+          {/* <button className="submit-btn">코멘트 작성</button> */}
+        </Form>
+      ) : (
+        <div className="lgn-msg">댓글을 남기시려면 로그인해주세요</div>
+      )}
+      {currentComments.map((data, idx) => {
+        return <Comment key={idx} data={data}></Comment>;
       })}
+      <Pagination
+        commentsPerPage={commentsPerPage}
+        totalComments={commentsData.length}
+        paginate={paginate}
+      />
     </Wrap>
   );
 }
@@ -117,7 +152,6 @@ const CommentWrap = styled.div`
 `;
 
 function Comment({ data }) {
-  console.log(data);
   const { nickname, profile, date, text } = data;
   return (
     <CommentWrap>
