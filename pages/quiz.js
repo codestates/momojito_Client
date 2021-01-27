@@ -7,8 +7,6 @@ import ProgressBar from "../components/ProgressBar";
 import Head from "next/head";
 import KakaoShareButton from "../components/KakaoShareButton";
 import Comments from "../components/Comments";
-import axios from "axios";
-
 const QuizHeader = styled.div`
   margin-top: 70px;
   font-size: 24px;
@@ -112,7 +110,7 @@ function quiz() {
       </Head>
       <QuizDiv>
         <QuizHeader>✏️ 칵테일 능력평가</QuizHeader>
-        {isFinished ? (
+        {!isFinished ? (
           <>
             <StatusBar>
               <div className="count">
@@ -176,7 +174,8 @@ function Answer({
   const { text, isAnswer } = answer;
   return (
     <AnswerBtn
-      onClick={() => {
+      onClick={(e) => {
+        e.target.blur();
         if (isAnswer === true) {
           setScore(totalScore + score);
         }

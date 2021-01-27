@@ -15,6 +15,7 @@ const NaverButton = styled.button`
   }
   :hover {
     cursor: pointer;
+    background-color: rgba(35, 179, 102, 0.75);
   }
   background-color: #23b366;
   color: white;
