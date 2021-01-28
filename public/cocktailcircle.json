@@ -3,6 +3,7 @@
  "children": [
   {
    "name": "보드카",
+   "value": "vodka",
    "children": [
     {
      "name": "블루라군", "value": 16
@@ -18,14 +19,12 @@
      },
      {
       "name": "롱아일랜드아이스티", "value": 8
-     },
-     {
-      "name": "에스프레소마티니", "value": 0
      }
    ]
   },
   {
     "name": "진",
+    "value": "gin",
     "children": [
      {
       "name": "진토닉", "value": 6
@@ -43,6 +42,7 @@
    },
    {
     "name": "럼",
+    "value": "rum",
     "children": [
      {
       "name": "모히토", "value": 5
@@ -60,6 +60,7 @@
    },
    {
     "name": "데킬라",
+    "value": "tequila",
     "children": [
      {
       "name": "마가리타", "value": 2
@@ -74,13 +75,14 @@
    },
   {
    "name": "리큐르",
+   "value": "liquor",
    "children": [
-    {"name": "깔루아", "children": [{"name": "깔루아밀크", "value": 12}]},
-    {"name": "피치스냅스", "children": [{"name": "피치크러시", "value": 20}, {"name": "섹스온더비치", "value": 10}]},
-    {"name": "블루큐라소", "children": [{"name": "블루라군", "value": 16}]},
-    {"name": "미도리", "children": [{"name": "미도리샤워", "value": 15}, {"name": "준벅", "value": 11}]},
-    {"name": "트리플섹", "children": [{"name": "롱아일랜드아이스티", "value": 8}, {"name": "코스모폴리탄", "value": 3}]},
-    {"name": "크램드바나나", "children": [{"name": "준벅", "value": 11}]}
+    {"name": "깔루아", "value": "kahlua", "children": [{"name": "깔루아밀크", "value": 12}]},
+    {"name": "피치스냅스", "value": "peach-schnapps", "children": [{"name": "피치크러시", "value": 20}, {"name": "섹스온더비치", "value": 10}]},
+    {"name": "블루큐라소", "value": "blue-curacao", "children": [{"name": "블루라군", "value": 16}]},
+    {"name": "미도리", "value": "midori", "children": [{"name": "미도리샤워", "value": 15}, {"name": "준벅", "value": 11}]},
+    {"name": "트리플섹", "value": "triple-sec", "children": [{"name": "롱아일랜드아이스티", "value": 8}, {"name": "코스모폴리탄", "value": 3}]},
+    {"name": "크램드바나나", "value": "creme-de-bananes", "children": [{"name": "준벅", "value": 11}]}
    ]
   }
  ]

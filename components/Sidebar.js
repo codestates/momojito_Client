@@ -57,6 +57,9 @@ export default function Sidebar({ visible }) {
           <div onClick={(e) => router.push("/")} className="big">
             Homepage
           </div>
+          <div onClick={(e) => router.push("/map")} className="big">
+            Cocktail Map
+          </div>
           <div onClick={(e) => router.push("/quiz")} className="big">
             Cocktail Quiz
           </div>
