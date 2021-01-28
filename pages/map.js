@@ -7,11 +7,14 @@ import data from "../public/cocktailcircle.json";
 
 const width = 938;
 const height = 938;
-const color = d3
-  .scaleLinear()
-  .domain([0, 5])
-  .range(["hsl(152,80%,80%)", "hsl(228,30%,40%)"])
-  .interpolate(d3.interpolateHcl);
+const customColor = (i) => [][i];
+const color = customColor(0)
+  ? customColor
+  : d3
+      .scaleLinear()
+      .domain([0, 5])
+      .range(["hsl(152,80%,80%)", "hsl(228,30%,40%)"])
+      .interpolate(d3.interpolateHcl);
 const pack = (data) =>
   d3.pack().size([width, height]).padding(5)(
     d3
@@ -31,7 +34,7 @@ const SVG = styled.svg`
   cursor: "pointer";
 `;
 
-export default function CirclePacking() {
+export default function Map() {
   const router = useRouter();
   const svgRef = useRef();
   useEffect(() => {
@@ -55,18 +58,17 @@ export default function CirclePacking() {
       })
       .on("click", (event, d) => {
         if (focus !== d) {
-          if (d.data.value) {
+          if (!d.data.children) {
             setTimeout(() => router.push(`/cocktails/${d.data.value}`), 1000);
           }
           zoom(event, d);
         }
         event.stopPropagation();
       });
-
     const label = svg
       .append("g")
-      .style("font", "35px sans-serif")
-      .attr("pointer-events", "none")
+      .style("font-family", "sans-serif")
+      .style("pointer-events", "none")
       .attr("text-anchor", "middle")
       .selectAll("text")
       .data(root.descendants())
@@ -74,16 +76,11 @@ export default function CirclePacking() {
       .style("fill-opacity", (d) => (d.parent === root ? 1 : 0))
       .style("display", (d) => (d.parent === root ? "inline" : "none"))
       .text((d) => d.data.name);
-
     const image = svg
       .append("g")
       .selectAll("image")
       .data(root.descendants())
       .join("image")
-      .attr("x", -100)
-      .attr("y", -100)
-      .attr("height", 200)
-      .attr("width", 200)
       .style("opacity", (d) => (d.parent === root ? 1 : 0))
       .style("display", (d) => (d.parent === root ? "inline" : "none"))
       .style("pointer-events", () => "none")
@@ -109,7 +106,14 @@ export default function CirclePacking() {
         "transform",
         (d) => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`
       );
+
       node.attr("r", (d) => d.r * k);
+      label.attr("y", (d) => d.r * k * 0.65);
+      label.attr("font-size", (d) => d.r * k * 0.2);
+      image.attr("width", (d) => d.r * k);
+      image.attr("height", (d) => d.r * k);
+      image.attr("x", (d) => d.r * -k * 0.5);
+      image.attr("y", (d) => d.r * -k * 0.75);
     }
     function zoom(event, d) {
       const focus0 = focus;
@@ -150,13 +154,11 @@ export default function CirclePacking() {
           return d.parent === focus || this.style.display === "inline";
         })
         .transition(transition)
-        .style("fill-opacity", (d) => (d.parent === focus ? 1 : 0))
+        .style("fill-opacity", (d) =>
+          d.parent === focus || (d == focus && !focus.children) ? 1 : 0
+        )
         .on("start", function (d) {
-          if (d.parent === focus && !d.data.value)
-            this.style.display = "inline";
-        })
-        .on("end", function (d) {
-          if (d.parent !== focus) this.style.display = "none";
+          if (d.parent === focus || !d.children) this.style.display = "inline";
         });
 
       image
@@ -164,7 +166,9 @@ export default function CirclePacking() {
           return d.parent === focus || this.style.display === "inline";
         })
         .transition(transition)
-        .style("opacity", (d) => (d.parent === focus || d === focus ? 1 : 0))
+        .style("opacity", (d) =>
+          d.parent === focus || (d == focus && !focus.children) ? 1 : 0
+        )
         .on("start", function (d) {
           if (d.parent === focus || d === focus) this.style.display = "inline";
         });
