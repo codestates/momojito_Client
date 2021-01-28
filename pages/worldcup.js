@@ -1,11 +1,13 @@
 import PageUtils from "../components/PageUtils";
 import db from "../public/cocktaildb";
-import styled from "styled-components";
-import React, { useReducer, useRef, useState } from "react";
+import styled, { ThemeContext } from "styled-components";
+import React, { useContext, useReducer, useRef, useState } from "react";
 import { useSpring, useSprings, animated } from "react-spring";
 import { useRouter } from "next/router";
 import KakaoShareButton from "../components/KakaoShareButton";
 import Comments from "../components/Comments";
+import { useMediaQuery } from "react-responsive";
+import CocktailModal from "../components/CocktailModal";
 const cards = Array.from({ length: 8 }, (_, i) => i).map(
   (v) => `/cocktails/${v}.png`
 );
@@ -120,6 +122,8 @@ const shuffle = (unshuffled) =>
     .map((a) => a.value);
 
 export default function WorldCup() {
+  const { user, setUser } = useContext(ThemeContext).userContext;
+  const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
   const [shuffled, setShuffled] = useState(
     shuffle(Array.from({ length: 8 }, (v, i) => i))
   );
@@ -266,6 +270,7 @@ export default function WorldCup() {
   const [commentOn, setCommentOn] = useState(false);
   return (
     <PageUtils page="worldcup">
+      <CocktailModal></CocktailModal>
       <Container ref={observed}>
         <Title>{`🍸 칵테일 이상형 월드컵 ${
           finished ? "우승!" : state.message
@@ -308,20 +313,26 @@ export default function WorldCup() {
             <button
               className="btn"
               onClick={() => {
-                router.push(`/cocktails/${result}`);
+                const index = result;
+                if (isDesktop) {
+                  setUser({ ...user, pastquery: index });
+                  router.push(`${router.asPath}?cocktailId=${index}`);
+                } else {
+                  router.push(`/cocktails/${index}`);
+                }
               }}
             >
               <h1>{`${db[result].koreanName} 상세정보 보기`}</h1>
             </button>
             <button
-                onClick={() => {
-                  setCommentOn(!commentOn);
-                }}
-                className="btn"
-                selected=""
-              >
-                코멘트 남기기
-              </button>
+              onClick={() => {
+                setCommentOn(!commentOn);
+              }}
+              className="btn"
+              selected=""
+            >
+              코멘트 남기기
+            </button>
             <KakaoLink>
               <p>카카오톡으로 공유하기</p>
               <KakaoShareButton
