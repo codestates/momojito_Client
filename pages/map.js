@@ -1,10 +1,11 @@
 import * as d3 from "d3";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import { useContext, useEffect, useRef, useState } from "react";
+import styled, { ThemeContext } from "styled-components";
 import PageUtils from "../components/PageUtils";
 import data from "../public/cocktailcircle.json";
-
+import CocktailModal from "../components/CocktailModal";
+import { useMediaQuery } from "react-responsive";
 const width = 938;
 const height = 938;
 const customColor = (i) => [][i];
@@ -22,9 +23,7 @@ const pack = (data) =>
       .sum((d) => 100)
       .sort((a, b) => b.value - a.value)
   );
-
 const root = pack(data);
-
 const SVG = styled.svg`
   display: block;
   margin: 0;
@@ -36,6 +35,8 @@ const SVG = styled.svg`
 
 export default function Map() {
   const router = useRouter();
+  const { user, setUser } = useContext(ThemeContext).userContext;
+  const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
   const svgRef = useRef();
   useEffect(() => {
     let focus = root;
@@ -59,7 +60,13 @@ export default function Map() {
       .on("click", (event, d) => {
         if (focus !== d) {
           if (!d.data.children) {
-            setTimeout(() => router.push(`/cocktails/${d.data.value}`), 1000);
+            const index = d.data.value;
+            if (isDesktop) {
+              setUser({ ...user, pastquery: index });
+              router.push(`${router.asPath}?cocktailId=${index}`);
+            } else {
+              router.push(`/cocktails/${index}`);
+            }
           }
           zoom(event, d);
         }
@@ -177,6 +184,7 @@ export default function Map() {
 
   return (
     <PageUtils>
+      <CocktailModal></CocktailModal>
       <SVG
         ref={svgRef}
         viewBox={`-${width / 2} -${height / 2} ${width} ${height}`}
