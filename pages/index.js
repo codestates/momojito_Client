@@ -22,6 +22,14 @@ export default function Home() {
         carouselList={[
           {
             url: 'url("/bar0.png");',
+            heading: "칵테일 탐방 하실래요?",
+            sub: "칵테일 지도를 누비며 그 속으로 빠져보세요.",
+            handleClick: (e) => {
+              router.push("/map");
+            },
+          },
+          {
+            url: 'url("/bar1.png");',
             heading: "당신의 칵잘알 점수는?",
             sub: "재미 있는 퀴즈와 함께 칵테일 지식을 업그레이드 하세요!",
             handleClick: (e) => {
