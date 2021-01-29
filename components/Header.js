@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import styled, { ThemeContext } from "styled-components";
 import Button from "./Button";
 import Logout from "./Logout";
@@ -67,6 +67,7 @@ const StyledModal = styled(ReactModalAdapter)`
 export default function Header() {
   const { user, setUser } = useContext(ThemeContext).userContext;
   const router = useRouter();
+
   return (
     <Container>
       <StyledModal isOpen={!!router.query.logout}>

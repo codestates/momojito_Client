@@ -22,6 +22,7 @@ const InputText = styled.input`
   margin-block-start: 1rem;
   border-radius: 0.25rem;
   border: 1px solid grey;
+  padding-left: 10px;
 `;
 const Validation = styled.div`
   display: flex;
@@ -202,16 +203,16 @@ export default function Login() {
           <SignInText>로그인</SignInText>
           <InputText
             onChange={eTargetValueEmail}
-            placeholder="  이메일 주소를 입력해 주세요."
+            placeholder="이메일 주소를 입력해 주세요."
             onKeyDown={onKeyDown}
           ></InputText>
           <InputText
             onChange={eTargetValuePassword}
-            placeholder="  비밀번호를 입력해 주세요."
+            placeholder="비밀번호를 입력해 주세요."
             type="password"
             onKeyDown={onKeyDown}
           ></InputText>
-          <Validation>{!validate ? <div>ㅤ</div> : validate}</Validation>
+          <Validation>{!validate ? <></> : validate}</Validation>
           <DefaultButton onClick={handleSignIn}>로그인</DefaultButton>
           <NaverButton onClick={handleNaver}>
             <img src="/naver.png" width="30px" alt=""></img>
