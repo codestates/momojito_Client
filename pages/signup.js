@@ -6,8 +6,6 @@ import PageUtils from "../components/PageUtils";
 import Modal from "react-modal";
 import HoverButton from "../components/HoverButton";
 import DefaultButton from "../components/DefaultButton";
-import NaverButton from "../components/NaverButton";
-import KakaoButton from "../components/KakaoButton";
 import WaveBackground from "../components/WaveBackground";
 
 const SignUpText = styled.div`
@@ -25,6 +23,7 @@ const InputText = styled.input`
   margin-block-start: 1rem;
   border-radius: 0.25rem;
   border: 1px solid grey;
+  padding-left: 10px;
 `;
 
 const Validation = styled.div`
@@ -68,7 +67,7 @@ const CheckImageDiv = styled.div`
   span {
     position: absolute; //
     top: 0;
-    margin-top: 1.3rem;
+    margin-top: 1.5rem;
     right: 15px;
   }
   img {
@@ -230,13 +229,13 @@ export default function SignUp() {
           <InputText
             className="email"
             onChange={eTargetValueEmail}
-            placeholder="  사용하실 이메일 주소를 입력해주세요."
+            placeholder="사용하실 이메일 주소를 입력해주세요."
             onKeyDown={onKeyDown}
           ></InputText>
           <InputText
             className="nickname"
             onChange={eTargetValueNickname}
-            placeholder="  사용하실 닉네임을 입력해주세요."
+            placeholder="사용하실 닉네임을 입력해주세요."
             maxLength="8"
             onKeyDown={onKeyDown}
           ></InputText>
@@ -244,7 +243,7 @@ export default function SignUp() {
             className="password"
             type="password"
             onChange={eTargetValuePassword}
-            placeholder="  사용하실 패스워드를 입력해 주세요."
+            placeholder="사용하실 패스워드를 입력해 주세요."
             onKeyDown={onKeyDown}
           ></InputText>
           <Div>
@@ -253,7 +252,7 @@ export default function SignUp() {
                 className="passwordCheck"
                 type="password"
                 onChange={eTargetValuePasswordCheck}
-                placeholder="  패스워드를 다시 입력해 주세요."
+                placeholder="패스워드를 다시 입력해 주세요."
                 onKeyDown={onKeyDown}
               ></InputText>
               <span>
@@ -262,7 +261,7 @@ export default function SignUp() {
             </CheckImageDiv>
           </Div>
 
-          <Validation>{!validate ? <div>ㅤ</div> : validate}</Validation>
+          <Validation>{!validate ? <></> : validate}</Validation>
 
           <Checkbox>
             <input type="checkbox" className="checkbox"></input>

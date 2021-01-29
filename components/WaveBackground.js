@@ -7,6 +7,7 @@ const WaveStyle = styled.svg`
   width: 100%;
   min-height: 150px;
   @media (max-height: 600px) {
+    //화면이 위아래로 좁아졌을 때 wave svg가 침범할 수 있는 범위 설정
     display: none;
   }
 

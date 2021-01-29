@@ -10,6 +10,8 @@ const Container = styled.div`
 `;
 const H1 = styled.h1`
   padding: 1rem;
+  padding-top: 25%;
+  color: #31c460;
 `;
 export default function Logout() {
   const router = useRouter();

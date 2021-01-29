@@ -184,6 +184,7 @@ const InputText = styled.input`
   margin-block-start: 1rem;
   border-radius: 0.25rem;
   border: 1px solid grey;
+  padding-left: 10px;
 `;
 
 const Div = styled.div`
@@ -200,7 +201,7 @@ const CheckImageDiv = styled.div`
   span {
     position: absolute; //
     top: 0;
-    margin-top: 1.3rem;
+    margin-top: 1.5rem;
     right: 15px;
   }
   img {
@@ -458,7 +459,7 @@ export default function ChangeInfo() {
             <InputText
               maxLength="8"
               onChange={eTargetValueNickname}
-              placeholder="  변경할 닉네임을 입력해 주세요"
+              placeholder="변경할 닉네임을 입력해 주세요"
             ></InputText>
           ) : (
             <></>
@@ -533,13 +534,13 @@ export default function ChangeInfo() {
         <InputText
           type="password"
           onChange={eTargetValueCurrentPassword}
-          placeholder="  현재 비밀번호"
+          placeholder="현재 비밀번호"
           className="currentPassword"
         />
         <InputText
           type="password"
           onChange={eTargetValuePassword}
-          placeholder="  새 비밀번호"
+          placeholder="새 비밀번호"
           className="newPassword"
         />
         <Div>
@@ -547,7 +548,7 @@ export default function ChangeInfo() {
             <InputText
               type="password"
               onChange={eTargetValuePasswordCheck}
-              placeholder="  새 비밀번호 확인"
+              placeholder="새 비밀번호 확인"
               className="newPasswordCheck"
             />
             <span>{validateCheck ? <img src="/check.png"></img> : <></>}</span>
