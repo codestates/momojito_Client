@@ -8,7 +8,7 @@ import CocktailModal from "../components/CocktailModal";
 import { useMediaQuery } from "react-responsive";
 const width = 938;
 const height = 938;
-const customColor = (i) => [][i];
+const customColor = (i) => ["#A3F5CF", "#73D7CA", "#9CF4E5"][i];
 const color = customColor(0)
   ? customColor
   : d3
