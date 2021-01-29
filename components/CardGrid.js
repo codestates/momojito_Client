@@ -6,6 +6,7 @@ import Button from "./Button";
 import StarList from "./StarList";
 import db from "../public/cocktaildb";
 import axios from "axios";
+import { isSafari } from "react-device-detect";
 
 const Container_card = styled.div`
   display: grid;
@@ -61,7 +62,7 @@ const Container = styled.div`
     height: 10px;
     top: 5%;
     left: 5%;
-    color: white ;
+    color: white;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -98,7 +99,7 @@ function Card({ index, type, i }) {
   const cocktail = db[index];
 
   const handleClick = (e) => {
-    if (isDesktop) {
+    if (isDesktop && !isSafari) {
       setUser({ ...user, pastquery: index });
       router.push(`${router.asPath}?cocktailId=${index}`);
     } else {
@@ -133,7 +134,13 @@ function Card({ index, type, i }) {
 
   return (
     <Container>
-      {type === "ranking" ? <div className="ranking"><p>{i + 1}</p></div> : ""}
+      {type === "ranking" ? (
+        <div className="ranking">
+          <p>{i + 1}</p>
+        </div>
+      ) : (
+        ""
+      )}
       <div className="imagecontainer">
         <img
           style={{ cursor: "pointer" }}
@@ -149,7 +156,7 @@ function Card({ index, type, i }) {
       ) : (
         ""
       )}
-      
+
       <H1>{cocktail.koreanName}</H1>
       <H1 className="last">{cocktail.name}</H1>
       <StarList

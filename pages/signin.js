@@ -7,6 +7,7 @@ import DefaultButton from "../components/DefaultButton";
 import NaverButton from "../components/NaverButton";
 import KakaoButton from "../components/KakaoButton";
 import WaveBackground from "../components/WaveBackground";
+import { isSafari } from "react-device-detect";
 
 const SignInText = styled.div`
   text-align: center;
@@ -221,8 +222,12 @@ export default function Login() {
               type="password"
               onKeyDown={onKeyDown}
             ></InputText>
-            <Validation>{!validate ? <></> : validate}</Validation>
-            <DefaultButton onClick={handleSignIn}>로그인</DefaultButton>
+            <Validation>{!validate ? <div>ㅤ</div> : validate}</Validation>
+            {!isSafari ? (
+              <DefaultButton onClick={handleSignIn}>로그인</DefaultButton>
+            ) : (
+              ""
+            )}
             <NaverButton onClick={handleNaver}>
               <img src="/naver.png" width="30px" alt=""></img>
               네이버 계정으로 로그인
@@ -233,10 +238,14 @@ export default function Login() {
               카카오 계정으로 로그인
               <div className="blank"></div>
             </KakaoButton>
-            <Bottom>
-              <h1>다른 이메일로 가입하시려면?</h1>
-              <h2 onClick={redirection}>회원가입</h2>
-            </Bottom>
+            {!isSafari ? (
+              <Bottom>
+                <h1>다른 이메일로 가입하시려면?</h1>
+                <h2 onClick={redirection}>회원가입</h2>
+              </Bottom>
+            ) : (
+              ""
+            )}
           </Inner>
         </Outer>
         <WaveBackground></WaveBackground>
