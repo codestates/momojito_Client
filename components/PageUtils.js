@@ -3,7 +3,6 @@ import styled from "styled-components";
 import Footer from "./Footer";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
-import WaveBackground from "./WaveBackground";
 
 const Divider = styled.div`
   flex: 1;

@@ -23,6 +23,7 @@ const InputText = styled.input`
   margin-block-start: 1rem;
   border-radius: 0.25rem;
   border: 1px solid grey;
+  padding-left: 10px;
 `;
 const Validation = styled.div`
   display: flex;
@@ -181,13 +182,17 @@ export default function Login() {
   }, [user]);
 
   function handleNaver() {
-    window.location.assign(
-      "https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=PTisZDNi6hMVQyFoFNm6&redirect_uri=https://server.momo-jito.com/auth/navercallback&state=rara"
+    window.open(
+      "https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=PTisZDNi6hMVQyFoFNm6&redirect_uri=https://server.momo-jito.com/auth/navercallback&state=rara",
+      "_blank",
+      "width=500,height=700,scrollbars=yes,resizable=no"
     );
   }
   function handleKakao() {
-    window.location.assign(
-      `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=f03c58d925a4fe0e1fdd2e3ea7617c09&redirect_uri=https://server.momo-jito.com/auth/kakaocallback`
+    window.open(
+      `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=f03c58d925a4fe0e1fdd2e3ea7617c09&redirect_uri=https://server.momo-jito.com/auth/kakaocallback`,
+      "_blank",
+      "width=500,height=700,scrollbars=yes,resizable=no"
     );
   }
 
@@ -208,12 +213,12 @@ export default function Login() {
             <SignInText>로그인</SignInText>
             <InputText
               onChange={eTargetValueEmail}
-              placeholder="  이메일 주소를 입력해 주세요."
+              placeholder="이메일 주소를 입력해 주세요."
               onKeyDown={onKeyDown}
             ></InputText>
             <InputText
               onChange={eTargetValuePassword}
-              placeholder="  비밀번호를 입력해 주세요."
+              placeholder="비밀번호를 입력해 주세요."
               type="password"
               onKeyDown={onKeyDown}
             ></InputText>
