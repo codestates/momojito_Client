@@ -181,13 +181,17 @@ export default function Login() {
   }, [user]);
 
   function handleNaver() {
-    window.location.assign(
-      "https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=PTisZDNi6hMVQyFoFNm6&redirect_uri=https://server.momo-jito.com/auth/navercallback&state=rara"
+    window.open(
+      "https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=PTisZDNi6hMVQyFoFNm6&redirect_uri=https://server.momo-jito.com/auth/navercallback&state=rara",
+      "_blank",
+      "width=500,height=700,scrollbars=yes,resizable=no"
     );
   }
   function handleKakao() {
-    window.location.assign(
-      `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=f03c58d925a4fe0e1fdd2e3ea7617c09&redirect_uri=https://server.momo-jito.com/auth/kakaocallback`
+    window.open(
+      `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=f03c58d925a4fe0e1fdd2e3ea7617c09&redirect_uri=https://server.momo-jito.com/auth/kakaocallback`,
+      "_blank",
+      "width=500,height=700,scrollbars=yes,resizable=no"
     );
   }
 
@@ -202,37 +206,39 @@ export default function Login() {
 
   return (
     <PageUtils>
-      <Outer>
-        <Inner>
-          <SignInText>로그인</SignInText>
-          <InputText
-            onChange={eTargetValueEmail}
-            placeholder="이메일 주소를 입력해 주세요."
-            onKeyDown={onKeyDown}
-          ></InputText>
-          <InputText
-            onChange={eTargetValuePassword}
-            placeholder="비밀번호를 입력해 주세요."
-            type="password"
-            onKeyDown={onKeyDown}
-          ></InputText>
-          <Validation>{!validate ? <></> : validate}</Validation>
-          <DefaultButton onClick={handleSignIn}>로그인</DefaultButton>
-          <NaverButton onClick={handleNaver}>
-            <img src="/naver.png" width="30px" alt=""></img>
-            네이버 계정으로 로그인
-            <div className="blank"></div>
-          </NaverButton>
-          <KakaoButton onClick={handleKakao}>
-            <img src="/kakao.png" width="25px" alt=""></img>
-            카카오 계정으로 로그인
-            <div className="blank"></div>
-          </KakaoButton>
-          <Bottom>
-            <h1>다른 이메일로 가입하시려면?</h1>
-            <h2 onClick={redirection}>회원가입</h2>
-          </Bottom>
-        </Inner>
+      <WaveContainer>
+        <Outer>
+          <Inner>
+            <SignInText>로그인</SignInText>
+            <InputText
+              onChange={eTargetValueEmail}
+              placeholder="이메일 주소를 입력해 주세요."
+              onKeyDown={onKeyDown}
+            ></InputText>
+            <InputText
+              onChange={eTargetValuePassword}
+              placeholder="비밀번호를 입력해 주세요."
+              type="password"
+              onKeyDown={onKeyDown}
+            ></InputText>
+            <Validation>{!validate ? <></> : validate}</Validation>
+            <DefaultButton onClick={handleSignIn}>로그인</DefaultButton>
+            <NaverButton onClick={handleNaver}>
+              <img src="/naver.png" width="30px" alt=""></img>
+              네이버 계정으로 로그인
+              <div className="blank"></div>
+            </NaverButton>
+            <KakaoButton onClick={handleKakao}>
+              <img src="/kakao.png" width="25px" alt=""></img>
+              카카오 계정으로 로그인
+              <div className="blank"></div>
+            </KakaoButton>
+            <Bottom>
+              <h1>다른 이메일로 가입하시려면?</h1>
+              <h2 onClick={redirection}>회원가입</h2>
+            </Bottom>
+          </Inner>
+        </Outer>
         <WaveBackground></WaveBackground>
       </WaveContainer>
     </PageUtils>

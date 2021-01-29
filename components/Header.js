@@ -61,6 +61,8 @@ const StyledModal = styled(ReactModalAdapter)`
     background-color: white;
     position: absolute;
     inset: 40%;
+    width: 300px;
+    height: 200px;
   }
 `;
 
