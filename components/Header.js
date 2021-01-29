@@ -105,9 +105,9 @@ function LogoPart() {
       }}
     >
       <img
-        onClick={(e) => {
-          router.push("/");
-        }}
+        // onClick={(e) => {
+        //   router.push("/");
+        // }}
         className="logo-img"
         src="logo.png"
         alt="no-img"

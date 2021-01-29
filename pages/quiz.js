@@ -76,19 +76,15 @@ const AnswerBtn = styled.button`
   margin-top: 5px;
   max-width: 600px;
   width: 100%;
-  height: 30px;
-  text-align: left;
-  padding-left: 25px;
+  height: 50px;
+  text-align: center;
+  /* padding-left: 25px; */
   border: 1px solid #c2bdbd;
   background-color: white;
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.19), 0 3px 3px rgba(0, 0, 0, 0.23);
   border-radius: 8px;
   cursor: pointer;
 
-  // &:hover {
-  //   border-color: #36cc3c;
-  //   background-color: #edfbd5;
-  // }
   &:active {
     border-color: #36cc3c;
     background-color: #edfbd5;
@@ -324,9 +320,9 @@ function Result({ totalScore, setIsFinished, setCount, setScore, setQuiz }) {
         >
           다시 도전하기
         </button>
-        <button className="btn" selected="">
+        {/* <button className="btn" selected="">
           칵테일 추천받기
-        </button>
+        </button> */}
         <button
           onClick={() => {
             setCommentOn(!commentOn);
