@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const DeafultButton = styled.button`
+const DefaultButton = styled.button`
   display: flex;
   align-items: center;
   border-radius: 0.25rem;
@@ -23,4 +23,4 @@ const DeafultButton = styled.button`
   color: white;
 `;
 
-export default DeafultButton;
+export default DefaultButton;
