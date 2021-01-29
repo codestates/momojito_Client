@@ -1,57 +1,12 @@
-import { useState, useEffect, useContext } from "react";
-import axios from "axios";
+import { useState, useContext } from "react";
 import PageUtils from "../components/PageUtils";
 import CardGrid from "../components/CardGrid";
 import ButtonList from "../components/ButtonList";
 import Carousel from "../components/Carousel";
-import CocktailInfo from "../components/CocktailInfo";
 import { useRouter } from "next/router";
-import Modal from "react-modal";
 import db from "../public/cocktaildb";
-import styled, { ThemeContext } from "styled-components";
-Modal.setAppElement("#__next");
-
-function ReactModalAdapter({ className, ...props }) {
-  const contentClassName = `${className}__content`;
-  const overlayClassName = `${className}__overlay`;
-  return (
-    <Modal
-      portalClassName={className}
-      className={contentClassName}
-      overlayClassName={overlayClassName}
-      {...props}
-    />
-  );
-}
-
-const StyledModal = styled(ReactModalAdapter)`
-  &__overlay {
-    background-color: rgba(255, 255, 255, 0);
-    z-index: 10;
-    position: fixed;
-    inset: 0;
-    transform: translateX(+375px);
-    transition: all 250ms ease-in-out;
-    &.ReactModal__Overlay--after-open {
-      transform: translateX(0px);
-    }
-    &.ReactModal__Overlay--before-close {
-      transform: translateX(+375px);
-    }
-  }
-
-  &__content {
-    overflow: auto;
-    background-color: white;
-    position: absolute;
-    top: 75px;
-    bottom: 75px;
-    right: 0px;
-    left: auto;
-    width: 35%;
-    height: 100%;
-  }
-`;
+import { ThemeContext } from "styled-components";
+import CocktailModal from "../components/CocktailModal";
 
 export default function Home() {
   const [buttonSelected, setButtonSelected] = useState(0);
@@ -62,18 +17,7 @@ export default function Home() {
 
   return (
     <PageUtils>
-      <StyledModal
-        closeTimeoutMS={250}
-        isOpen={!!router.query.cocktailId}
-        onRequestClose={() => router.push("/")}
-        contentLabel="Cocktail Modal"
-      >
-        <CocktailInfo
-          id={
-            router.query.cocktailId ? router.query.cocktailId : user.pastquery
-          }
-        ></CocktailInfo>
-      </StyledModal>
+      <CocktailModal></CocktailModal>
       <Carousel
         carouselList={[
           {
@@ -106,7 +50,7 @@ export default function Home() {
             .slice()
             .sort((a, b) => Number(b.avrRate) - Number(a.avrRate))
             .slice(0, 10)
-            .map((v) => v.id)}
+            .map((v) => v.id - 1)}
           type="ranking"
         ></CardGrid>
       ) : buttonSelected === 1 ? (

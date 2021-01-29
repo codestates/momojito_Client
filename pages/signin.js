@@ -57,6 +57,10 @@ const Outer = styled.div`
 `;
 const Inner = styled.div``;
 
+const WaveContainer = styled.div`
+  display: block;
+`;
+
 export default function Login() {
   const { user, setUser } = useContext(ThemeContext).userContext;
   const router = useRouter();
@@ -230,7 +234,7 @@ export default function Login() {
           </Bottom>
         </Inner>
         <WaveBackground></WaveBackground>
-      </Outer>
+      </WaveContainer>
     </PageUtils>
   );
 }

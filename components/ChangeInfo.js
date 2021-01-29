@@ -459,7 +459,7 @@ export default function ChangeInfo() {
             <InputText
               maxLength="8"
               onChange={eTargetValueNickname}
-              placeholder="  변경할 닉네임을 입력해 주세요"
+              placeholder="변경할 닉네임을 입력해 주세요"
             ></InputText>
           ) : (
             <></>

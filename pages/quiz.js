@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PageUtils from "../components/PageUtils";
 import quizdata from "../public/quizdb";
 import styled from "styled-components";
@@ -6,12 +6,12 @@ import { useRouter } from "next/router";
 import ProgressBar from "../components/ProgressBar";
 import Head from "next/head";
 import KakaoShareButton from "../components/KakaoShareButton";
-
+import Comments from "../components/Comments";
 const QuizHeader = styled.div`
   margin-top: 70px;
   font-size: 24px;
   text-align: center;
-  font-weight: bold; 
+  font-weight: bold;
   // color: grey;
 `;
 
@@ -26,9 +26,7 @@ const StatusBar = styled.div`
   }
 `;
 
-const QuizDiv = styled.div`
-
-`
+const QuizDiv = styled.div``;
 
 const QuizBody = styled.div`
   margin-top: 30px;
@@ -39,7 +37,7 @@ const QuizBody = styled.div`
   .quiz-content {
     width: 80%;
   }
-  
+
   .question {
     max-width: 600px;
     position: relative;
@@ -48,7 +46,7 @@ const QuizBody = styled.div`
     text-align: center;
 
     border-radius: 20px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 
     border: 1px solid #c2bdbd;
     display: flex;
@@ -68,7 +66,7 @@ const QuizBody = styled.div`
   }
 `;
 const AnswerList = styled.div`
-  margin-top: 20px;
+  margin: 20px 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -83,7 +81,7 @@ const AnswerBtn = styled.button`
   padding-left: 25px;
   border: 1px solid #c2bdbd;
   background-color: white;
-  box-shadow: 0 5px 5px rgba(0,0,0,0.19), 0 3px 3px rgba(0,0,0,0.23);
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.19), 0 3px 3px rgba(0, 0, 0, 0.23);
   border-radius: 8px;
   cursor: pointer;
 
@@ -100,10 +98,11 @@ const AnswerBtn = styled.button`
 function quiz() {
   const [count, setCount] = useState(0);
   const [totalScore, setScore] = useState(0);
-  const [resultOn, setResultOn] = useState(false);
-  const percentage = (count / quizdata.length) * 100;
+  const [isFinished, setIsFinished] = useState(false);
+  const [quiz, setQuiz] = useState([...quizdata])
+  const percentage = (count / quiz.length) * 100;
+  let q = quiz[count];
 
-  let q = quizdata[count];
   return (
     <PageUtils page="quiz">
       <Head>
@@ -111,11 +110,11 @@ function quiz() {
       </Head>
       <QuizDiv>
         <QuizHeader>✏️ 칵테일 능력평가</QuizHeader>
-        {!resultOn ? (
+        {!isFinished ? (
           <>
             <StatusBar>
               <div className="count">
-                {q.id}/{quizdata.length}
+                {count}/{quizdata.length}
               </div>
 
               <ProgressBar percentage={percentage}></ProgressBar>
@@ -131,16 +130,17 @@ function quiz() {
               </div>
               <div className="quiz-content">
                 <AnswerList>
-                  {q.answers.map((answer) => {
+                  {q.answers.map((answer, idx) => {
                     return (
                       <Answer
+                        key={idx}
                         count={count}
                         setCount={setCount}
                         answer={answer}
                         score={q.score}
                         totalScore={totalScore}
                         setScore={setScore}
-                        setResultOn={setResultOn}
+                        setIsFinished={setIsFinished}
                       ></Answer>
                     );
                   })}
@@ -149,7 +149,13 @@ function quiz() {
             </QuizBody>
           </>
         ) : (
-          <Result totalScore={totalScore}></Result>
+          <Result
+            totalScore={totalScore}
+            setIsFinished={setIsFinished}
+            setCount={setCount}
+            setScore={setScore}
+            setQuiz={setQuiz}
+          ></Result>
         )}
       </QuizDiv>
     </PageUtils>
@@ -163,12 +169,13 @@ function Answer({
   score,
   totalScore,
   setScore,
-  setResultOn,
+  setIsFinished,
 }) {
   const { text, isAnswer } = answer;
   return (
     <AnswerBtn
-      onClick={() => {
+      onClick={(e) => {
+        e.target.blur();
         if (isAnswer === true) {
           setScore(totalScore + score);
         }
@@ -176,7 +183,7 @@ function Answer({
         if (quizdata[count]) {
           setCount(count);
         } else {
-          setResultOn(true);
+          setIsFinished(true);
         }
       }}
     >
@@ -185,6 +192,13 @@ function Answer({
   );
 }
 
+const ResultWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  /* width: 600px; */
+  align-items: center;
+`;
+
 const ResultBox = styled.div`
   margin: auto;
   margin-top: 30px;
@@ -192,7 +206,7 @@ const ResultBox = styled.div`
   height: 350px;
   // background-color: #edfbd5;
   background-color: white;
-  box-shadow: 0 5px 5px rgba(0,0,0,0.19), 0 3px 3px rgba(0,0,0,0.23);
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.19), 0 3px 3px rgba(0, 0, 0, 0.23);
   position: relative;
 
   display: flex;
@@ -258,8 +272,8 @@ const KakaoLink = styled.div`
   }
 `;
 
-function Result({ totalScore }) {
-  const router = useRouter();
+function Result({ totalScore, setIsFinished, setCount, setScore, setQuiz }) {
+  const [commentOn, setCommentOn] = useState(false);
   const resultData = [
     {
       id: "1",
@@ -281,8 +295,16 @@ function Result({ totalScore }) {
     result = resultData[1];
   }
 
+  const shuffleArray = array => {
+    for (let i = 0; i < array.length; i++) {
+      let j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  };
+  
   return (
-    <>
+    <ResultWrap>
       <ResultBox>
         <h2 className="score-text">Score</h2>
         <div className="score">{totalScore}</div>
@@ -293,14 +315,26 @@ function Result({ totalScore }) {
         <button
           className="btn"
           selected=""
-          onClick={
-            () => (document.location.href = "/quiz") /*router.push("/quiz")*/
-          }
+          onClick={() => /*(document.location.href = "/quiz")*/ {
+            setIsFinished(false);
+            setCount(0);
+            setScore(0);
+            setQuiz(shuffleArray(quizdata));
+          }}
         >
           다시 도전하기
         </button>
         <button className="btn" selected="">
           칵테일 추천받기
+        </button>
+        <button
+          onClick={() => {
+            setCommentOn(!commentOn);
+          }}
+          className="btn"
+          selected=""
+        >
+          코멘트 남기기
         </button>
       </ButtonDiv>
       <KakaoLink>
@@ -311,7 +345,8 @@ function Result({ totalScore }) {
           imgurl="http://mud-kage.kakao.co.kr/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg"
         ></KakaoShareButton>
       </KakaoLink>
-    </>
+      {commentOn ? <Comments page="quiz" /> : ""}
+    </ResultWrap>
   );
 }
 

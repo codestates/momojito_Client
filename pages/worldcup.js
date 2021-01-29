@@ -1,10 +1,13 @@
 import PageUtils from "../components/PageUtils";
 import db from "../public/cocktaildb";
-import styled from "styled-components";
-import React, { useReducer, useRef, useState } from "react";
+import styled, { ThemeContext } from "styled-components";
+import React, { useContext, useReducer, useRef, useState } from "react";
 import { useSpring, useSprings, animated } from "react-spring";
 import { useRouter } from "next/router";
-
+import KakaoShareButton from "../components/KakaoShareButton";
+import Comments from "../components/Comments";
+import { useMediaQuery } from "react-responsive";
+import CocktailModal from "../components/CocktailModal";
 const cards = Array.from({ length: 8 }, (_, i) => i).map(
   (v) => `/cocktails/${v}.png`
 );
@@ -19,7 +22,32 @@ const Container = styled.div`
 
   .bottom {
     position: absolute;
-    top: 550px;
+    width: 100%;
+    top: 430px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .btn {
+      height: 50px;
+      width: 240px;
+      margin-top: 10px;
+      cursor: pointer;
+      background-color: white;
+
+      &:hover {
+        background-color: limegreen;
+        color: white;
+      }
+      &:active {
+        background-color: green;
+        color: white;
+      }
+    }
+
+    .comments {
+      width: 600px;
+    }
   }
 `;
 const Card = styled(animated.div)`
@@ -27,17 +55,21 @@ const Card = styled(animated.div)`
   background-color: white;
   background-size: auto 70%;
   background-repeat: no-repeat;
-  background-position: center center;
+  background-position: 50% 25%;
   top: 100px;
-  width: 40%;
-  max-width: 200px;
-  height: 40%;
-  max-height: 300px;
+  width: 150px;
+  height: 200px;
   border-radius: 10px;
   --tw-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
     var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  cursor: pointer;
+  &:hover {
+    /* background-color:#B5EBB7; */
+    background-color: #edfbd5;
+    color: black;
+  }
 `;
 
 const messageMaker = (message, state) => {
@@ -56,83 +88,104 @@ const messageMaker = (message, state) => {
   }
 };
 
-function reducer(state, action) {
-  switch (action.type) {
-    case "deal":
-      if (state.deck.length === 1) {
-        return state;
-      }
-      return {
-        ...state,
-        deck: state.deck.slice(0, state.deck.length - 2),
-        table: state.deck.slice(state.deck.length - 2),
-        message: messageMaker(state.message, state),
-      };
-    case "select_left":
-      return {
-        ...state,
-        deck: [state.table[0], ...state.deck],
-        table: [],
-        rightGone: [...state.rightGone, state.table[1]],
-      };
-    case "select_right":
-      return {
-        ...state,
-        deck: [state.table[1], ...state.deck],
-        table: [],
-        leftGone: [...state.leftGone, state.table[0]],
-      };
-    case "reset":
-      return {
-        deck: Array.from({ length: cards.length }, (_, i) => i),
-        table: [],
-        leftGone: [],
-        rightGone: [],
-        message: `${2 ** Math.ceil(Math.sqrt(cards.length))}강`,
-      };
-    default:
-      throw new Error();
-  }
-}
-
-const to = (i) => ({
-  x: 0,
-  y: i * -2,
-  scale: 1,
-  rotate: -10 + Math.random() * 20,
-  delay: i * 100,
-});
-const from = (i) => ({ x: 0, rot: 0, scale: 1.5, y: -1000 });
-const initialState = {
-  deck: Array.from({ length: cards.length }, (_, i) => i),
-  table: [],
-  leftGone: [],
-  rightGone: [],
-  message: `${2 ** Math.ceil(Math.sqrt(cards.length))}강`,
-};
-
 const Title = styled.h1`
-  font-size: 1.5rem;
+  font-weight: bold;
+  font-size: 24px;
   padding: 2rem;
 `;
 
 const Name = styled.h1`
   position: absolute;
-  bottom: 20px;
+  text-align: center;
+  bottom: 25px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 0.75rem;
+  width: 100%;
+  font-size: 1rem;
 `;
 
+const KakaoLink = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  p {
+    align-self: center;
+    font-size: 14px;
+    margin-right: 10px;
+  }
+`;
+
+const shuffle = (unshuffled) =>
+  unshuffled
+    .map((a) => ({ sort: Math.random(), value: a }))
+    .sort((a, b) => a.sort - b.sort)
+    .map((a) => a.value);
+
 export default function WorldCup() {
+  const { user, setUser } = useContext(ThemeContext).userContext;
+  const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
+  const [shuffled, setShuffled] = useState(
+    shuffle(Array.from({ length: 8 }, (v, i) => i))
+  );
   const [props, set] = useSprings(cards.length, (i) => ({
-    ...to(i),
-    from: from(i),
+    x: 0,
+    y: i * -2,
+    scale: 1,
+    rotate: -10 + Math.random() * 20,
+    delay: shuffled.indexOf(i) * 100,
+    zIndex: shuffled.indexOf(i),
+    from: { x: 0, rot: 0, scale: 1.5, y: -1000 },
   }));
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, {
+    deck: shuffled,
+    table: [],
+    leftGone: [],
+    rightGone: [],
+    message: `${2 ** Math.ceil(Math.sqrt(cards.length))}강`,
+  });
+  function reducer(state, action) {
+    switch (action.type) {
+      case "deal":
+        if (state.deck.length === 1) {
+          return state;
+        }
+        return {
+          ...state,
+          deck: state.deck.slice(0, state.deck.length - 2),
+          table: state.deck.slice(state.deck.length - 2),
+          message: messageMaker(state.message, state),
+        };
+      case "select_left":
+        return {
+          ...state,
+          deck: [state.table[0], ...state.deck],
+          table: [],
+          rightGone: [...state.rightGone, state.table[1]],
+        };
+      case "select_right":
+        return {
+          ...state,
+          deck: [state.table[1], ...state.deck],
+          table: [],
+          leftGone: [...state.leftGone, state.table[0]],
+        };
+      case "reset":
+        setShuffled(shuffle(Array.from({ length: 8 }, (v, i) => i)));
+        return {
+          deck: shuffled,
+          table: [],
+          leftGone: [],
+          rightGone: [],
+          message: `${2 ** Math.ceil(Math.sqrt(cards.length))}강`,
+        };
+      default:
+        throw new Error();
+    }
+  }
   const [initial, setInitial] = useState(true);
   const [finished, setFinished] = useState(false);
   const [result, setResult] = useState(-1);
+  const [dealt, setDealt] = useState(false);
   const router = useRouter();
   const observed = useRef(null);
   React.useEffect(() => {
@@ -140,6 +193,7 @@ export default function WorldCup() {
       setInitial(false);
       setTimeout(() => {
         dispatch({ type: "deal" });
+        setDealt(true);
       }, 2200);
       return;
     }
@@ -172,9 +226,13 @@ export default function WorldCup() {
       const x = isDeck
         ? 0
         : isTableLeft
-        ? -w / 3
+        ? w > 1024
+          ? -200
+          : -w / 3
         : isTableRight
-        ? w / 3
+        ? w > 1024
+          ? 200
+          : w / 3
         : isLeftGone
         ? -2 * w
         : isRightGone
@@ -195,20 +253,26 @@ export default function WorldCup() {
     if (finished) return;
     if (state.table[0] === i) {
       dispatch({ type: "select_left" });
+      setDealt(false);
       setTimeout(() => {
         dispatch({ type: "deal" });
+        setDealt(true);
       }, 1000);
     } else if (state.table[1] === i) {
       dispatch({ type: "select_right" });
+      setDealt(false);
       setTimeout(() => {
         dispatch({ type: "deal" });
+        setDealt(true);
       }, 1000);
     }
   };
+  const [commentOn, setCommentOn] = useState(false);
   return (
     <PageUtils page="worldcup">
+      <CocktailModal></CocktailModal>
       <Container ref={observed}>
-        <Title>{`칵테일 이상형 월드컵 ${
+        <Title>{`🍸 칵테일 이상형 월드컵 ${
           finished ? "우승!" : state.message
         }`}</Title>
         {props.map(({ x, y, rotate, scale, zIndex }, i) => (
@@ -229,26 +293,55 @@ export default function WorldCup() {
             <Name>{db[i].koreanName}</Name>
           </Card>
         ))}
+        {dealt && !finished ? <FadeinHeading>VS</FadeinHeading> : ""}
         {finished ? (
           <div className="bottom">
-            <FadeinHeading
-              handleClick={() => {
+            <button
+              className="btn"
+              onClick={() => {
                 dispatch({ type: "reset" });
+                setFinished(false);
+                setDealt(false);
                 setTimeout(() => {
                   dispatch({ type: "deal" });
+                  setDealt(true);
                 }, 1000);
-                setFinished(false);
               }}
             >
-              다시 해보시겠어요?
-            </FadeinHeading>
-            <FadeinHeading
-              handleClick={() => {
-                router.push(`/cocktails/${result}`);
+              <h1>다시 해보시겠어요?</h1>
+            </button>
+            <button
+              className="btn"
+              onClick={() => {
+                const index = result;
+                if (isDesktop) {
+                  setUser({ ...user, pastquery: index });
+                  router.push(`${router.asPath}?cocktailId=${index}`);
+                } else {
+                  router.push(`/cocktails/${index}`);
+                }
               }}
             >
-              {`${db[result].koreanName} 더 알아보기`}
-            </FadeinHeading>
+              <h1>{`${db[result].koreanName} 상세정보 보기`}</h1>
+            </button>
+            <button
+              onClick={() => {
+                setCommentOn(!commentOn);
+              }}
+              className="btn"
+              selected=""
+            >
+              코멘트 남기기
+            </button>
+            <KakaoLink>
+              <p>카카오톡으로 공유하기</p>
+              <KakaoShareButton
+                title="나의 술알못 테스트 결과는?"
+                desc={result.text}
+                imgurl="http://mud-kage.kakao.co.kr/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg"
+              ></KakaoShareButton>
+            </KakaoLink>
+            {commentOn ? <Comments page="worldcup" className="comments" /> : ""}
           </div>
         ) : (
           ""
@@ -264,8 +357,15 @@ function FadeinHeading({ children, handleClick }) {
     from: { opacity: 0 },
   });
   return (
-    <animated.h1 style={props} onClick={handleClick}>
+    <Versus style={props} onClick={handleClick}>
       {children}
-    </animated.h1>
+    </Versus>
   );
+  s;
 }
+
+const Versus = styled(animated.h1)`
+  position: absolute;
+  font-size: 3.5rem;
+  top: 475px;
+`;
