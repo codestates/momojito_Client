@@ -92,7 +92,7 @@ export default function Map() {
       .style("display", (d) => (d.parent === root ? "inline" : "none"))
       .style("pointer-events", () => "none")
       .attr("xlink:href", (d) =>
-        d.data.value ? `/cocktails/${d.data.value}.png` : ""
+        d.data.value || d.data.value === 0 ? `/cocktails/${d.data.value}.png` : ""
       );
 
     zoomTo([root.x, root.y, root.r * 2]);

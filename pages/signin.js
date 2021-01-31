@@ -182,17 +182,13 @@ export default function Login() {
   }, [user]);
 
   function handleNaver() {
-    window.open(
-      "https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=PTisZDNi6hMVQyFoFNm6&redirect_uri=https://server.momo-jito.com/auth/navercallback&state=rara",
-      "_blank",
-      "width=500,height=700,scrollbars=yes,resizable=no"
+    window.location.assign(
+      "https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=PTisZDNi6hMVQyFoFNm6&redirect_uri=https://server.momo-jito.com/auth/navercallback&state=rara"
     );
   }
   function handleKakao() {
-    window.open(
-      `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=f03c58d925a4fe0e1fdd2e3ea7617c09&redirect_uri=https://server.momo-jito.com/auth/kakaocallback`,
-      "_blank",
-      "width=500,height=700,scrollbars=yes,resizable=no"
+    window.location.assign(
+      `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=f03c58d925a4fe0e1fdd2e3ea7617c09&redirect_uri=https://server.momo-jito.com/auth/kakaocallback`
     );
   }
 
