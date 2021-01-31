@@ -237,19 +237,19 @@ export default function CocktailInfo({ id }) {
         <Carousel
           carouselList={[
             {
-              url: 'url("/bar0.jpeg");',
+              url: 'url("/bar0.png");',
               heading: "JASE",
               buttonText: "홍대",
               handleClick: () => router.push("http://naver.me/xswx3XPm")
             },
             {
-              url: 'url("/bar1.jpeg");',
+              url: 'url("/bar1.png");',
               heading: "PAVOX",
               buttonText: "강남",
               handleClick: () => router.push("http://naver.me/FXZhwzpB")
             },
             {
-              url: 'url("/bar2.jpeg");',
+              url: 'url("/bar2.png");',
               heading: "청춘예찬",
               buttonText: "성신여대",
               handleClick: () => router.push("http://naver.me/GbE0DNQz")
